@@ -2,40 +2,40 @@
   "taskId": "experiential-hierarchy",
   "ads": [
     {
-      "id": "pepsi-thirsty-for-more",
-      "label": "Pepsi Thirsty For More",
-      "position": "경험적 위계 광고 사례",
-      "brand": "Pepsi",
-      "campaign": "Thirsty For More with David Beckham",
-      "publishedAt": "2025-04-25",
-      "medium": "글로벌 브랜드 필름",
-      "watchUrl": "https://www.youtube.com/watch?v=EX5Vzp0G6JA",
-      "summary": "브랜드를 먼저 느끼고 즐기고 나서 태도가 형성되도록 설계된 감각적 경험 중심 광고로 경험적 위계를 잘 보여준다.",
-      "keywords": ["경험 우선", "감정 반응", "라이프스타일"],
-      "conceptSummary": "경험적 위계는 소비자가 먼저 느끼고, 그 경험을 바탕으로 태도를 만들며, 그 다음 인지적 정당화를 덧붙이는 흐름을 뜻한다.",
+      "id": "paris-baguette-ordinary-day-cake",
+      "label": "파리바게뜨 아주 보통날의 케이크",
+      "position": "경험적 위계 광고",
+      "brand": "파리바게뜨",
+      "campaign": "아주 보통날의 케이크",
+      "publishedAt": "2025-06-30",
+      "medium": "베이커리 브랜드 TVCF",
+      "watchUrl": "https://www.tvcf.co.kr/play/ah06846-986276",
+      "summary": "제품 정보보다 감정적 호감과 일상의 경험 가치를 먼저 제안해 태도를 형성하는 경험적 위계 사례다.",
+      "keywords": ["경험적 위계", "감정 선행", "일상 경험"],
+      "conceptSummary": "경험적 위계는 소비자가 먼저 느끼고, 그다음 행동하거나 경험한 뒤에 태도를 굳혀 간다는 흐름을 설명한다. 저항 없는 경험과 정서적 호감이 태도 형성의 출발점이 된다.",
       "conceptBullets": [
-        "정보보다 감각적·정서적 경험이 태도 형성의 출발점이 된다.",
-        "브랜드 선택 이유가 논리보다 느낌과 분위기에서 먼저 만들어진다.",
-        "특히 쾌락적 소비나 라이프스타일 브랜드에서 자주 나타난다."
+        "인지보다 감정과 경험의 순서가 앞선다.",
+        "제품은 문제 해결 도구가 아니라 생활 감정의 매개가 된다.",
+        "광고는 설명보다 분위기와 경험 장면을 통해 태도를 만든다."
       ],
-      "caseSummary": "Thirsty For More는 David Beckham을 통해 모험, 스타일, 순간의 즐거움을 강조하며 Pepsi를 경험의 일부로 배치한다.",
+      "caseSummary": "파리바게뜨 광고는 특별한 날이 아니라 '보통날'에도 케이크를 곁들이는 감정을 제안한다. 소비자는 제품 특징을 따지기 전에 평범한 하루가 조금 더 따뜻해지는 장면에 먼저 공감한다.",
       "caseBullets": [
-        "광고는 제품의 세부 속성보다 느낌 좋은 장면과 태도에 집중한다.",
-        "시청자는 Pepsi를 분석하기보다 분위기와 라이프스타일을 먼저 체험한다.",
-        "브랜드가 즐거운 순간에 자연스럽게 스며드는 구성이 핵심이다."
+        "광고가 케이크를 행사 음식이 아니라 일상의 정서 경험으로 재배치한다.",
+        "호감과 공감이 정보 처리보다 먼저 작동하는 연출을 쓴다.",
+        "케이크를 사는 행동이 작은 감정 실천처럼 느껴지게 만든다."
       ],
-      "implementationAnalysis": "이 광고에서 태도는 제품 정보를 따져 형성되지 않는다. 먼저 경험을 통해 호감이 생기고, 이후 Pepsi가 그 경험을 대표하는 브랜드로 자리 잡는 경험적 위계가 작동한다.",
+      "implementationAnalysis": "이 광고는 기능이나 가격 정보로 태도를 만드는 방식이 아니다. 먼저 감정적으로 좋은 경험을 상상하게 하고, 그 감정이 케이크 소비 태도로 이어지게 만든다는 점에서 경험적 위계에 잘 맞는다.",
       "implementationBullets": [
-        "느낌과 분위기가 정보보다 앞서 소비자 반응을 이끈다.",
-        "브랜드 호감이 감정적 경험을 통해 형성된다.",
-        "구매 이유가 객관적 설명보다 '그 장면의 일부가 되고 싶다'는 감각에 가깝다."
+        "감정적 호감이 행동 의도의 선행 조건처럼 작동한다.",
+        "제품의 객관 정보보다 생활 속 경험 장면이 설득을 담당한다.",
+        "태도 형성의 출발점을 느낌과 분위기에 두는 구조가 분명하다."
       ],
-      "duplicateCheck": "동일 브랜드의 다른 과제 사례와도 캠페인을 분리했고, forum blacklist에 Beckham 편은 포함되지 않았다.",
+      "duplicateCheck": "eCampus forum 318977 기준 사용 광고 13건과 대조했으며, 동일 브랜드·캠페인 조합은 포함되지 않는다.",
       "sources": [
         {
-          "label": "PepsiCo Newsroom",
-          "url": "https://www.pepsico.com/newsroom/press-releases/2025/pepsi-is-back-with-a-new-chapter-of-thirsty-for-more-featuring-david-beckham",
-          "note": "2025-04-25 공식 발표"
+          "label": "TVCF",
+          "url": "https://www.tvcf.co.kr/play/ah06846-986276",
+          "note": "광고 시청 및 기본 정보"
         }
       ]
     }

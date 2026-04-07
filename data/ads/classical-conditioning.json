@@ -2,40 +2,40 @@
   "taskId": "classical-conditioning",
   "ads": [
     {
-      "id": "pepsi-tailgate-crashers",
-      "label": "Pepsi Tailgate Crashers",
-      "position": "고전적 조건화 광고 사례",
-      "brand": "Pepsi",
-      "campaign": "Tailgate Crashers",
-      "publishedAt": "2025-09-03",
-      "medium": "디지털 캠페인 / NFL 시즌 프로모션",
-      "watchUrl": "https://vimeo.com/1162193387",
-      "summary": "브랜드를 경기 전 tailgate의 흥분, 음식, 축제 분위기와 반복 결합해 Pepsi만 봐도 game day 즐거움이 떠오르게 하는 고전적 조건화 사례다.",
-      "keywords": ["고전적 조건화", "축제 자극", "정서 연합"],
-      "conceptSummary": "고전적 조건화는 본래 정서 반응을 일으키는 무조건자극과 브랜드를 반복 결합해, 나중에는 브랜드만으로도 비슷한 정서 반응이 발생하게 만드는 과정이다.",
+      "id": "the-misic-janginramen-scoville",
+      "label": "The 미식 장인라면 스코빌",
+      "position": "고전적 조건화 광고",
+      "brand": "The 미식 장인라면",
+      "campaign": "고추의 맛으로 꽉 채운 스코빌! (6s 범퍼)",
+      "publishedAt": "2024-03-22",
+      "medium": "라면 브랜드 TVCF",
+      "watchUrl": "https://www.tvcf.co.kr/play/bh03691-939541",
+      "summary": "매운맛의 감각적 흥분을 무조건자극으로 쓰고 이를 브랜드와 반복 결합하는 고전적 조건화 사례다.",
+      "keywords": ["고전적 조건화", "무조건자극", "매운맛 연상"],
+      "conceptSummary": "고전적 조건화는 원래 반응을 일으키는 무조건자극과 중립자극을 반복 결합해, 나중에는 중립자극만으로도 비슷한 반응을 유도하는 학습 원리다. 광고에서는 브랜드가 중립자극 역할을 맡는다.",
       "conceptBullets": [
-        "광고는 즐거움, 흥분, 맛처럼 본래 반응을 일으키는 자극을 활용한다.",
-        "브랜드는 그 자극과 반복적으로 함께 등장하며 정서 연합을 형성한다.",
-        "반응의 핵심은 인지적 추론보다 자동적 연상이다."
+        "핵심은 자연스럽게 반응을 일으키는 자극을 브랜드와 붙이는 것이다.",
+        "반복 노출이 쌓이면 브랜드만 봐도 유사한 감정이나 기대가 생긴다.",
+        "모델이나 음악 외에도 맛, 향, 촉감 같은 감각 자극이 무조건자극이 될 수 있다."
       ],
-      "caseSummary": "Pepsi는 NFL 시즌 개막과 tailgate 파티 맥락을 결합해 경기 전 흥분, 음식, 응원 열기 같은 자극을 브랜드와 묶는다.",
+      "caseSummary": "The 미식 장인라면 광고는 고추의 매운맛과 강렬한 자극감을 전면에 두고, 그 감각을 브랜드와 짧고 강하게 결합한다. 여기서 소비자 반응을 일으키는 무조건자극은 모델이 아니라 매운맛 자체다.",
       "caseBullets": [
-        "무조건자극은 연예인 자체보다 game day의 집단적 흥분과 파티 감각이다.",
-        "브랜드 노출이 경기 전 기대감과 함께 반복되며 정서 연합을 만든다.",
-        "Pepsi를 보는 순간 tailgate의 즐거운 상태가 함께 호출되도록 설계된다."
+        "매운맛을 상상하게 만드는 비주얼과 표현이 즉각적 감각 반응을 이끈다.",
+        "브랜드명이 그 감각 자극과 같은 순간에 반복 제시된다.",
+        "짧은 범퍼 광고 형식이어서 자극-브랜드 결합을 압축적으로 강화한다."
       ],
-      "implementationAnalysis": "이 사례는 제품 속성 설명보다 축제 감정의 이식에 가깝다. 따라서 무조건자극을 'game day의 흥분과 미식 상황'으로 보면 모델이나 음악이 아닌 다른 자극으로 조건형성을 설명할 수 있다.",
+      "implementationAnalysis": "이 사례는 과제 조건에 맞게 모델이나 음악이 아닌 감각적 맛 자극을 무조건자극으로 사용한다. 소비자는 광고를 반복해서 접하며 브랜드명과 매운맛의 흥분을 함께 학습하게 된다.",
       "implementationBullets": [
-        "조건형성의 핵심 자극이 NFL 시즌의 감정적 분위기에 있다.",
-        "브랜드가 반복 노출되며 긍정 정서를 빌려온다.",
-        "소비자는 Pepsi를 마실 때 경기 전 축제 감각을 쉽게 연상한다."
+        "무조건자극은 사람이나 배경음이 아니라 매운맛 연상 그 자체다.",
+        "브랜드를 감각 자극과 짧고 강하게 결합해 조건 형성을 노린다.",
+        "고전적 조건화의 자극 결합 구조를 설명하기에 예시가 명확하다."
       ],
-      "duplicateCheck": "forum 게시 이력의 코카콜라, 버거킹 등 식음료 사례와 직접 캠페인명이 겹치지 않고, NFL 테마 Pepsi 사례도 확인되지 않았다.",
+      "duplicateCheck": "eCampus forum 318977 기준 사용 광고 13건과 대조했으며, 동일 브랜드·캠페인 조합은 포함되지 않는다.",
       "sources": [
         {
-          "label": "PepsiCo Newsroom",
-          "url": "https://www.pepsico.com/newsroom/press-releases/2025/pepsi-unleashes-pepsi-tailgate-crashers-with-josh-allen-and-justin-jefferson-to-fuel-the-2025-nfl-season-with-flavor",
-          "note": "2025-09-03 공식 발표"
+          "label": "TVCF",
+          "url": "https://www.tvcf.co.kr/play/bh03691-939541",
+          "note": "광고 시청 및 기본 정보"
         }
       ]
     }

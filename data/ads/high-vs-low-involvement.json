@@ -2,78 +2,78 @@
   "taskId": "high-vs-low-involvement",
   "ads": [
     {
-      "id": "volvo-our-volvo-story",
-      "label": "Volvo Our Volvo Story",
-      "position": "고관여 광고 사례",
-      "brand": "Volvo Cars",
-      "campaign": "Our Volvo Story",
-      "publishedAt": "2025-07-22",
-      "medium": "브랜드 캠페인 / 장기 고려 구매",
-      "watchUrl": "https://vimeo.com/1103359971",
-      "summary": "안전, 역사, 신뢰 같은 고위험 구매 기준을 길게 축적하며 소비자가 충분히 숙고하도록 만드는 고관여 광고다.",
-      "keywords": ["숙고", "위험 지각", "신뢰 축적"],
-      "conceptSummary": "고관여 광고는 가격, 위험, 사용 기간이 큰 제품을 다룰 때 소비자가 긴 탐색과 비교를 수행한다는 전제를 가진다.",
+      "id": "lg-styler-pajamas",
+      "label": "LG 스타일러 오브제컬렉션",
+      "position": "고관여 광고",
+      "brand": "LG전자",
+      "campaign": "LG 스타일러 오브제컬렉션 | 깨끗할 거라는 기대에 걸지말고 스타일러에 바로 걸자 [잠옷] 편",
+      "publishedAt": "2025-04-15",
+      "medium": "가전제품 TVCF",
+      "watchUrl": "https://www.tvcf.co.kr/play/ah15408-978260",
+      "summary": "위생, 관리 편의, 생활 효율 등 여러 판단 기준을 차분히 검토하게 만드는 고관여 광고다.",
+      "keywords": ["고관여", "위생 관리", "생활가전"],
+      "conceptSummary": "고관여 광고는 구매 비용과 사용 기간, 인지된 위험이 큰 제품일수록 정보 탐색과 비교가 길어진다는 전제를 둔다. 그래서 광고도 설득보다 검토 보조의 성격을 띠는 경우가 많다.",
       "conceptBullets": [
-        "광고는 단기 반응보다 신뢰와 확신 축적을 목표로 한다.",
-        "브랜드 역사, 품질, 안전 같은 고관여 단서가 중요해진다.",
-        "메시지는 단순 재미보다 고려 이유를 차곡차곡 쌓는 방식으로 간다."
+        "소비자는 기능과 효용, 유지 편의성을 따져보며 결정한다.",
+        "광고는 즉각 반응보다 납득 가능한 이유 축적에 초점을 둔다.",
+        "메시지는 구체적 사용 상황과 문제 해결 장면을 통해 전달된다."
       ],
-      "caseSummary": "Volvo는 70년의 존재감과 안전 유산, 브랜드 스토리를 결합해 차량 구매를 신중한 선택으로 프레이밍한다.",
+      "caseSummary": "스타일러 광고는 잠옷처럼 매일 입는 옷의 위생 문제를 생활 장면에서 꺼내오고, 그 문제를 해결하는 기기로 제품을 위치시킨다. 감성적 이미지보다 생활 관리의 타당성을 설명하는 흐름이 선명하다.",
       "caseBullets": [
-        "캠페인 명 자체가 제품보다 브랜드 서사를 길게 읽게 만든다.",
-        "안전과 역사라는 판단 기준이 감성보다 앞에 배치된다.",
-        "즉시 할인보다 브랜드를 오래 믿을 이유를 설계한다."
+        "잠옷 관리라는 구체적 사용 맥락을 제시해 필요성을 현실화한다.",
+        "제품이 있어야 하는 이유를 생활 문제 해결 관점에서 정리한다.",
+        "즉흥 구매보다 '있으면 편하고 위생적이겠다'는 판단을 축적하게 만든다."
       ],
-      "implementationAnalysis": "고관여 소비자는 구매 전 장기적 리스크를 검토한다. Volvo는 바로 그 점을 겨냥해 브랜드 유산과 신뢰를 정보 자산처럼 제시한다.",
+      "implementationAnalysis": "가전은 가격과 사용 기간이 길어 판단 부담이 크다. 이 광고는 바로 그 부담을 전제로 제품의 필요성과 사용 가치를 설명하므로, 저관여 제품처럼 단순 반복 노출보다 고관여식 문제 해결 설계에 가깝다.",
       "implementationBullets": [
-        "광고가 제공하는 핵심 효익은 즉흥적 재미보다 확신이다.",
-        "구매를 장기적 의사결정으로 정의해 메시지 밀도를 높인다.",
-        "브랜드 스토리를 판단 근거로 전환하는 점이 고관여적이다."
+        "사용 상황을 세분화해 제품 필요성을 논리적으로 축적한다.",
+        "광고의 메시지 밀도가 높고 정보성 문장이 설득의 중심이다.",
+        "소비자에게 '왜 사야 하는가'를 설명하는 구조가 뚜렷하다."
       ],
-      "duplicateCheck": "forum 318977 기준 기존 사용 광고 13건과 대조했고 Volvo Our Volvo Story는 중복되지 않는다.",
+      "duplicateCheck": "eCampus forum 318977 기준 사용 광고 13건과 대조했으며, 동일 브랜드·캠페인 조합은 포함되지 않는다.",
       "sources": [
         {
-          "label": "Volvo Cars US Media",
-          "url": "https://www.media.volvocars.com/us/en-us/media/pressreleases/351984/volvo-cars-launches-our-volvo-story-campaign-and-sweepstakes-to-celebrate-70-years-of-impact-in-the",
-          "note": "2025-07-22 공식 발표"
+          "label": "TVCF",
+          "url": "https://www.tvcf.co.kr/play/ah15408-978260",
+          "note": "광고 시청 및 기본 정보"
         }
       ]
     },
     {
-      "id": "snickers-halftime-hunger",
-      "label": "SNICKERS Halftime Hunger",
-      "position": "저관여 광고 사례",
-      "brand": "SNICKERS",
-      "campaign": "Josh Allen halftime hunger",
+      "id": "jeju-samdasoo-spring-sea",
+      "label": "제주삼다수 봄바다에서 좋아마심",
+      "position": "저관여 광고",
+      "brand": "제주삼다수",
+      "campaign": "봄바다에서 삼다수 좋아마심",
       "publishedAt": "2025-06-03",
-      "medium": "시즌성 디지털 캠페인",
-      "watchUrl": "https://www.adsoftheworld.com/campaigns/halftime-hunger",
-      "summary": "배고프면 SNICKERS라는 단순한 연상과 즉시 구매 가능한 해결책을 짧고 강하게 남기는 저관여 광고다.",
-      "keywords": ["간단 연상", "즉시 구매", "반복 메시지"],
-      "conceptSummary": "저관여 광고는 소비자가 긴 비교 없이 습관적 또는 간편하게 구매하는 상황을 전제로 하며, 메시지도 단순 반복형이 많다.",
+      "medium": "생수 브랜드 TVCF",
+      "watchUrl": "https://www.tvcf.co.kr/play/983344",
+      "summary": "가벼운 분위기와 친숙한 노출로 브랜드를 떠올리게 만드는 전형적인 저관여 광고다.",
+      "keywords": ["저관여", "친숙성", "반복 노출"],
+      "conceptSummary": "저관여 광고는 구매 위험이 낮고 선택이 습관적으로 이루어지는 제품에서 자주 쓰인다. 이 경우 소비자는 세부 정보보다 익숙함, 호감, 기억 용이성에 더 크게 반응한다.",
       "conceptBullets": [
-        "제품군이 익숙하고 위험이 낮기 때문에 상세 정보량이 적다.",
-        "광고는 짧은 카피와 기억하기 쉬운 연결고리에 집중한다.",
-        "즉각적 구매 전환을 노리는 간단한 상황 제시가 유효하다."
+        "복잡한 비교보다 눈에 익는 이미지와 분위기가 중요하다.",
+        "광고는 강한 정보 설득보다 브랜드 상기와 친숙성 형성에 유리하다.",
+        "짧고 직관적인 메시지 구조가 효과적이다."
       ],
-      "caseSummary": "SNICKERS는 하프타임 허기를 Josh Allen과 연결해, 경기 중 배고플 때 바로 집어드는 간식이라는 상황 연상을 반복한다.",
+      "caseSummary": "제주삼다수 광고는 봄바다의 청량한 분위기와 가벼운 카피를 통해 브랜드를 일상적이고 기분 좋은 선택으로 자리잡게 한다. 물의 성분표를 길게 설명하지 않고, 마시고 싶은 기분을 먼저 만든다.",
       "caseBullets": [
-        "메시지가 한 문장으로 요약될 만큼 단순하다.",
-        "긴 제품 설명 없이 '배고플 때 해결책'이라는 연상만 강화한다.",
-        "시즌성 화제성과 익숙한 브랜드 자산을 활용해 빠른 기억을 유도한다."
+        "청량한 계절감과 정서적 호감이 메시지 전면에 배치된다.",
+        "브랜드를 어렵게 판단할 대상이 아니라 익숙한 생활 선택으로 제시한다.",
+        "세부 비교 정보 없이도 쉽게 기억되는 장면과 톤을 활용한다."
       ],
-      "implementationAnalysis": "저관여 제품은 깊은 숙고 대신 회상 가능성과 구매 편의가 중요하다. 이 광고는 바로 그 특성에 맞춰 단순하고 반복 가능한 행동 단서를 만든다.",
+      "implementationAnalysis": "생수는 소비자가 장시간 정보를 탐색하기보다 익숙한 브랜드를 빠르게 고르기 쉬운 범주다. 이 광고는 바로 그 지점을 겨냥해 정서적 친숙성과 반복 상기를 중심으로 설계된 저관여 광고라고 볼 수 있다.",
       "implementationBullets": [
-        "상세 스펙이 아니라 상황-해결 연결만 남긴다.",
-        "브랜드 회상을 빠르게 만드는 단순 메시지 구조를 택한다.",
-        "소비자의 판단 부담을 낮추고 즉시 선택을 유도한다."
+        "구매 결정을 단순화하기 위해 청량한 이미지와 짧은 카피를 쓴다.",
+        "브랜드 선택을 깊은 검토가 아닌 습관적 선택의 연장선으로 둔다.",
+        "세부 기능보다 기분 좋은 연상과 기억 용이성을 강화한다."
       ],
-      "duplicateCheck": "기존 eCampus 게시글의 OREO, Burger King, Coke 등 간식류 사례와도 직접 겹치지 않도록 별도 캠페인으로 선별했다.",
+      "duplicateCheck": "eCampus forum 318977 기준 사용 광고 13건과 대조했으며, 동일 브랜드·캠페인 조합은 포함되지 않는다.",
       "sources": [
         {
-          "label": "Mars Newsroom",
-          "url": "https://www.mars.com/news-and-stories/press-releases-statements/snickers-drafts-josh-allen-satisfy-halftime-hunger",
-          "note": "2025-06-03 공식 발표"
+          "label": "TVCF",
+          "url": "https://www.tvcf.co.kr/play/983344",
+          "note": "광고 시청 및 기본 정보"
         }
       ]
     }

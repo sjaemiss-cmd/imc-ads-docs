@@ -2,40 +2,40 @@
   "taskId": "semantic-encoding",
   "ads": [
     {
-      "id": "bath-body-works-come-back-to-your-senses",
-      "label": "Bath & Body Works Come Back To Your Senses",
-      "position": "의미적 부호화 광고 사례",
-      "brand": "Bath & Body Works",
-      "campaign": "Come Back To Your Senses",
-      "publishedAt": "2025-05-02",
-      "medium": "브랜드 캠페인 / 디지털",
-      "watchUrl": "https://vimeo.com/1090275929",
-      "summary": "향을 단순 냄새가 아니라 기억, 기분, 장소와 연결되는 의미 단위로 번역해 소비자가 더 오래 기억하도록 돕는 의미적 부호화형 광고다.",
-      "keywords": ["의미 연결", "기억 단서", "연상 강화"],
-      "conceptSummary": "의미적 부호화는 정보를 단순 반복이 아니라 기존 지식, 맥락, 감정, 범주와 연결해 저장하는 방식이다. 의미 연결이 많을수록 기억이 더 잘 남는다.",
+      "id": "mega-coffee-breaking-news-strawberry",
+      "label": "메가MGC커피 딸기 FOOH 속보",
+      "position": "의미적 부호화 광고",
+      "brand": "메가MGC커피",
+      "campaign": "속보입니다. 치직.. 치직... 도시 하늘에서 딸기들이 목격 되었습니다! FOOH",
+      "publishedAt": "2025-01-16",
+      "medium": "커피 브랜드 TVCF",
+      "watchUrl": "https://www.tvcf.co.kr/play/bh18913-970399",
+      "summary": "낯익은 뉴스 속보 형식을 빌려 메시지 의미를 빠르게 연결시키는 의미적 부호화 사례다.",
+      "keywords": ["의미적 부호화", "뉴스 프레임", "기억 강화"],
+      "conceptSummary": "의미적 부호화는 단순 반복보다 의미 있는 범주와 맥락에 연결할 때 단기기억 정보가 더 잘 처리된다는 설명이다. 소비자는 익숙한 스키마와 연결된 정보를 더 쉽게 이해하고 기억한다.",
       "conceptBullets": [
-        "새로운 자극을 익숙한 이야기나 범주와 연결할수록 기억이 쉬워진다.",
-        "단순한 감각 정보보다 '무엇을 떠올리게 하는가'가 핵심이다.",
-        "광고는 제품을 하나의 의미망 안에 배치해 회상을 강화할 수 있다."
+        "의미 있는 맥락은 정보 처리 부담을 줄이고 기억을 돕는다.",
+        "익숙한 형식과 연결되면 새 정보도 빠르게 해석된다.",
+        "광고는 제품명을 외우게 하기보다 의미 틀에 얹어 기억하게 만들 수 있다."
       ],
-      "caseSummary": "Bath & Body Works는 향을 기분 전환, 계절감, 추억 회상 같은 심리적 맥락과 연결하며 '향=의미 있는 순간'으로 재구성한다.",
+      "caseSummary": "메가MGC커피는 딸기 메뉴 소식을 일반 광고 형식이 아니라 '속보'처럼 전달한다. 소비자는 이 형식을 보는 순간 새로운 제품 소식을 전하는 뉴스 상황으로 해석하며 메시지를 의미적으로 부호화한다.",
       "caseBullets": [
-        "향 자체보다 그 향이 불러오는 기억과 감정을 이야기 소재로 사용한다.",
-        "소비자는 제품명을 냄새보다 특정 장면과 연결해 기억하게 된다.",
-        "브랜드가 향을 감각 정보가 아니라 기억의 바로가기처럼 다룬다."
+        "속보 문법은 긴 설명 없이도 '중요한 새 소식'이라는 의미 틀을 활성화한다.",
+        "딸기 메뉴 정보가 단순 제품컷이 아니라 사건처럼 처리된다.",
+        "FOOH 연출이 더해져 낯선 장면을 의미 있는 이벤트로 기억하게 만든다."
       ],
-      "implementationAnalysis": "이 광고가 구현하는 것은 향의 물리적 특성보다 연상 구조다. 즉 소비자가 향을 맡을 때마다 관련 장면과 감정이 함께 활성화되도록 의미적 부호화를 설계한다.",
+      "implementationAnalysis": "광고는 제품 정보를 뉴스라는 익숙한 의미 틀에 연결해 기억 부담을 줄인다. 그래서 단순한 시각 자극보다, '속보처럼 들려온 딸기 소식'이라는 해석 단위로 정보가 저장되기 쉬운 구조다.",
       "implementationBullets": [
-        "제품 정보를 감정·상황·기억과 결합해 의미 밀도를 높인다.",
-        "회상 단서를 풍부하게 만들어 단기 노출 후에도 기억 잔존을 높인다.",
-        "설명보다 연상망을 구축하는 방식이 의미적 부호화의 핵심이다."
+        "뉴스 속보 프레임이 의미적 부호화의 통로로 작동한다.",
+        "정보를 고립된 문장으로 제시하지 않고 익숙한 사건 맥락 안에 넣는다.",
+        "단기기억 증진 사례로 설명할 때 맥락 기반 기억 형성이 분명하게 드러난다."
       ],
-      "duplicateCheck": "forum 318977 기준 향 제품 사례는 있었지만 Bath & Body Works의 이 캠페인명은 없었고 직접 중복되지 않는다.",
+      "duplicateCheck": "eCampus forum 318977 기준 사용 광고 13건과 대조했으며, 동일 브랜드·캠페인 조합은 포함되지 않는다.",
       "sources": [
         {
-          "label": "Bath & Body Works Newsroom",
-          "url": "https://news.bbwinc.com/news/news-details/2025/Bath--Body-Works-Invites-Customers-to-Come-Back-To-Their-Senses-With-New-Brand-Campaign/default.aspx",
-          "note": "2025-05-02 공식 발표"
+          "label": "TVCF",
+          "url": "https://www.tvcf.co.kr/play/bh18913-970399",
+          "note": "광고 시청 및 기본 정보"
         }
       ]
     }

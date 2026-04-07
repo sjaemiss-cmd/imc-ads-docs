@@ -2,40 +2,40 @@
   "taskId": "sensory-stimulus",
   "ads": [
     {
-      "id": "billie-scratch-and-sniff",
-      "label": "Billie Scratch and Sniff the Pits",
-      "position": "오감 자극 광고 사례",
-      "brand": "Billie",
-      "campaign": "Scratch and Sniff the Pits",
-      "publishedAt": "2025-04-25",
-      "medium": "OOH / 향 체험형 옥외광고",
-      "watchUrl": "https://www.mediapost.com/publications/article/405356/billie-debuts-scratch-and-sniff-armpit-billboards.html",
-      "summary": "향을 직접 맡게 만드는 scratch-and-sniff 포맷으로 시각보다 후각 체험을 전면화한 오감 자극 광고다.",
-      "keywords": ["후각 자극", "체험형 OOH", "감각 몰입"],
-      "conceptSummary": "오감 자극 광고는 시각만이 아니라 냄새, 촉감, 청각처럼 특정 감각을 강하게 불러내 제품 경험을 더 직접적으로 인식하게 만든다.",
+      "id": "goobne-oven-basaak-drumstick",
+      "label": "굽네치킨 오븐바사삭 장각구이",
+      "position": "오감 자극 광고",
+      "brand": "굽네치킨",
+      "campaign": "장각구이로 돌아온 오븐바사삭_30s",
+      "publishedAt": "2025-06-18",
+      "medium": "치킨 브랜드 TVCF",
+      "watchUrl": "https://www.tvcf.co.kr/play/985756",
+      "summary": "바삭한 식감과 뜨거운 비주얼을 전면에 내세워 미각과 청각 상상을 동시에 자극하는 오감 중심 광고다.",
+      "keywords": ["미각 자극", "식감 연상", "푸드 비주얼"],
+      "conceptSummary": "감각 자극 광고는 오감 중 특정 감각을 강하게 흔들어 소비자의 즉각적 반응을 이끈다. 특히 식품 광고는 실제 맛을 보여줄 수 없기 때문에 소리, 질감, 클로즈업으로 감각 상상을 유도한다.",
       "conceptBullets": [
-        "소비자는 설명을 읽기 전에 감각 경험으로 제품을 추론한다.",
-        "특정 감각이 강할수록 광고 기억과 체험적 몰입이 높아질 수 있다.",
-        "제품 자체가 감각 소비재일수록 오감 자극 전략의 효율이 커진다."
+        "소비자는 실제 경험 없이도 시각과 청각 단서로 맛을 상상한다.",
+        "감각 자극은 제품 정보를 읽기 전에 반응을 먼저 끌어낸다.",
+        "광고는 설명보다 감각 연상 장면을 촘촘하게 배치한다."
       ],
-      "caseSummary": "Billie는 뉴욕 옥외광고에 armpit 이미지를 내세우고 관람자가 직접 긁어서 Coco Villa 향을 맡도록 설계했다.",
+      "caseSummary": "굽네치킨 광고는 장각구이와 오븐바사삭의 표면 질감, 뜨거운 온기, 먹는 순간의 바삭함을 강하게 부각한다. 화면과 소리가 함께 작동하면서 '맛있겠다'는 즉각 반응을 만든다.",
       "caseBullets": [
-        "광고를 보는 행위를 냄새를 맡는 체험으로 바꿔 후각을 핵심 접점으로 만든다.",
-        "탈취·향 제품이라는 카테고리 특성과 시향 욕구를 그대로 거리로 옮겼다.",
-        "보기만 하는 포스터가 아니라 만지고 냄새 맡는 인터랙션으로 전환된다."
+        "음식 표면의 결, 윤기, 바삭한 질감을 클로즈업으로 보여준다.",
+        "먹는 장면과 조리 장면을 통해 청각적 식감까지 떠올리게 한다.",
+        "정보 설명보다 감각 몰입을 우선시하는 편집이 두드러진다."
       ],
-      "implementationAnalysis": "이 사례는 '좋은 향이 난다'는 설명 대신 '직접 향을 맡아보게' 한다. 즉 메시지보다 감각 경험 자체가 광고의 본체가 되는 방식으로 오감 자극 개념을 구현한다.",
+      "implementationAnalysis": "이 광고는 제품 정보를 논리적으로 정리하기보다, 소비자의 감각 체계를 먼저 깨우는 방식으로 설계됐다. 오감 중 특히 시각과 미각 상상을 집중 자극하는 사례로 적합하다.",
       "implementationBullets": [
-        "후각이 광고 메시지 해석보다 먼저 작동하도록 설계됐다.",
-        "시향 경험이 제품 카테고리와 직접 연결돼 설득력이 높다.",
-        "자극이 제품 핵심 효익과 일치해 감각 마케팅의 완성도가 높다."
+        "클로즈업과 식감 중심 사운드로 감각적 반응을 선행시킨다.",
+        "맛의 설명을 텍스트가 아니라 장면 자체로 전달한다.",
+        "광고 효과를 기억보다 군침 도는 즉각 반응에서 확보한다."
       ],
-      "duplicateCheck": "forum 318977에서 확인한 기사용 광고 13건과 중복되지 않았고, deodorant 향 체험형 사례도 게시되지 않았다.",
+      "duplicateCheck": "eCampus forum 318977 기준 사용 광고 13건과 대조했으며, 동일 브랜드·캠페인 조합은 포함되지 않는다.",
       "sources": [
         {
-          "label": "MediaPost",
-          "url": "https://www.mediapost.com/publications/article/405356/billie-debuts-scratch-and-sniff-armpit-billboards.html",
-          "note": "2025-04-25 캠페인 보도"
+          "label": "TVCF",
+          "url": "https://www.tvcf.co.kr/play/985756",
+          "note": "광고 시청 및 기본 정보"
         }
       ]
     }
