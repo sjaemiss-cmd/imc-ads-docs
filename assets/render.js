@@ -173,6 +173,9 @@ function renderContent(content, task, ad, blacklist) {
           <h1>${escapeHtml(ad.label)}</h1>
           <p class="hero-subtitle">${escapeHtml(ad.brand)} / ${escapeHtml(ad.campaign)}</p>
           <p class="hero-summary">${escapeHtml(ad.summary)}</p>
+          <div class="hero-actions">
+            <a class="watch-button" href="${escapeHtml(ad.watchUrl)}" target="_blank" rel="noreferrer">광고 시청</a>
+          </div>
           <ul class="badge-list">${renderBadgeList(ad.keywords)}</ul>
         </div>
         <dl class="hero-meta">

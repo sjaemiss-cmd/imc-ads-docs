@@ -272,6 +272,28 @@ body {
   line-height: 1.7;
 }
 
+.hero-actions {
+  margin-top: 1rem;
+}
+
+.watch-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0.8rem 1.1rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 12px 24px rgba(21, 94, 99, 0.18);
+}
+
+.watch-button:hover {
+  filter: brightness(1.05);
+}
+
 .hero-meta {
   display: grid;
   gap: 0.75rem;
