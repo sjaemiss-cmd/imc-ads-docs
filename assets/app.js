@@ -1,96 +1,56 @@
-import { buildHash, resolveSelection } from './router.js';
+import { buildHash, parseHash, resolveSelection } from './router.js';
 import { loadAds, loadTasks } from './store.js';
 
-const sidebar = document.querySelector("[data-role='task-sidebar']");
-const tabs = document.querySelector("[data-role='ad-tabs']");
 const content = document.querySelector("[data-role='ad-content']");
 
-function renderSidebar(tasks, selection) {
-  if (!sidebar) {
-    return;
-  }
-
-  sidebar.innerHTML = tasks
-    .map(
-      (task) => `
-        <div class="task-link${task.id === selection.taskId ? ' is-active' : ''}">
-          <div class="task-group">${task.group}</div>
-          <div class="task-title">${task.title}</div>
-        </div>
-      `
-    )
-    .join('');
-}
-
-function renderTabs(task, selection) {
-  if (!tabs) {
-    return;
-  }
-
-  if (!task) {
-    tabs.innerHTML = '';
-    return;
-  }
-
-  if (!task.ads.length) {
-    tabs.innerHTML = '<div class="tab-empty">광고 데이터를 불러오는 중입니다.</div>';
-    return;
-  }
-
-  tabs.innerHTML = task.ads
-    .map(
-      (ad) => `
-        <a class="tab${ad.id === selection.adId ? ' is-active' : ''}" href="${buildHash(task.id, ad.id)}">
-          ${ad.label ?? ad.id}
-        </a>
-      `
-    )
-    .join('');
-}
-
-function renderContent({ task, ad }) {
+function renderPlaceholder(tasks, adsByTask, selection) {
   if (!content) {
     return;
   }
 
+  const task = tasks.find((entry) => entry.id === selection.taskId) ?? tasks[0] ?? null;
+  const adList = task ? adsByTask[task.id]?.ads ?? [] : [];
+  const ad = adList.find((entry) => entry.id === selection.adId) ?? null;
+
   if (!task) {
-    content.innerHTML = '<div class="placeholder">표시할 과제가 없습니다.</div>';
+    content.innerHTML = '<div class="placeholder">과제 정보를 불러오지 못했습니다.</div>';
     return;
   }
 
-  if (!ad) {
-    content.innerHTML = `
-      <div class="placeholder">
-        <h1>${task.title}</h1>
-        <p>${task.group}</p>
-        <p>광고 데이터가 아직 준비되지 않았습니다.</p>
-      </div>
-    `;
-    return;
-  }
+  const heading = ad ? `${task.title} / ${ad.label ?? ad.id}` : task.title;
+  const message = ad
+    ? '라우팅 상태가 연결되었습니다. 상세 렌더는 다음 단계에서 붙습니다.'
+    : '광고 데이터 준비 중입니다.';
 
   content.innerHTML = `
     <div class="placeholder">
-      <h1>${task.title}</h1>
+      <h1>${heading}</h1>
       <p>${task.group}</p>
-      <p>선택된 광고: ${ad.label ?? ad.id}</p>
-      <p>이 화면은 최소 상태 자리표시자입니다.</p>
+      <p>${message}</p>
+      <pre>${JSON.stringify(selection, null, 2)}</pre>
     </div>
   `;
 }
 
 async function bootstrap() {
   const tasks = await loadTasks();
-  const hydratedTasks = await loadAds(tasks);
+  const adsByTask = await loadAds(tasks);
 
   const render = () => {
-    const selection = resolveSelection(hydratedTasks, window.location.hash);
-    const task = hydratedTasks.find((entry) => entry.id === selection.taskId) ?? hydratedTasks[0] ?? null;
-    const ad = task?.ads?.find((entry) => entry.id === selection.adId) ?? task?.ads?.[0] ?? null;
+    const selection = resolveSelection(parseHash(window.location.hash), tasks, adsByTask);
+    const activeAds = selection.taskId ? adsByTask[selection.taskId]?.ads ?? [] : [];
+    const nextAdId = selection.adId ?? activeAds[0]?.id ?? null;
+    const nextHash = selection.taskId && nextAdId ? buildHash(selection.taskId, nextAdId) : null;
 
-    renderSidebar(hydratedTasks, selection);
-    renderTabs(task, selection);
-    renderContent({ task, ad });
+    if (nextHash && window.location.hash !== nextHash) {
+      window.location.hash = nextHash;
+      return;
+    }
+
+    renderPlaceholder(tasks, adsByTask, {
+      taskId: selection.taskId,
+      adId: nextAdId,
+    });
   };
 
   render();

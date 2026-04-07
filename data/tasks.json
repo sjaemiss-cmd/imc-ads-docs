@@ -5,7 +5,7 @@
     "title": "실증주의 vs 해석주의",
     "type": "comparison",
     "adCount": 2,
-    "adsFile": "../data/ads/positivism-vs-interpretivism.json"
+    "adsFile": "ads/positivism-vs-interpretivism.json"
   },
   {
     "id": "need-vs-cognitive",
@@ -13,7 +13,7 @@
     "title": "욕구기반 동기 vs 인지기반 동기",
     "type": "comparison",
     "adCount": 2,
-    "adsFile": "../data/ads/need-vs-cognitive.json"
+    "adsFile": "ads/need-vs-cognitive.json"
   },
   {
     "id": "high-vs-low-involvement",
@@ -21,7 +21,7 @@
     "title": "고관여 vs 저관여",
     "type": "comparison",
     "adCount": 2,
-    "adsFile": "../data/ads/high-vs-low-involvement.json"
+    "adsFile": "ads/high-vs-low-involvement.json"
   },
   {
     "id": "sensory-stimulus",
@@ -29,7 +29,7 @@
     "title": "감각 자극 광고",
     "type": "single",
     "adCount": 1,
-    "adsFile": "../data/ads/sensory-stimulus.json"
+    "adsFile": "ads/sensory-stimulus.json"
   },
   {
     "id": "attention-factor",
@@ -37,7 +37,7 @@
     "title": "자극물 자체의 주의 요인",
     "type": "single",
     "adCount": 1,
-    "adsFile": "../data/ads/attention-factor.json"
+    "adsFile": "ads/attention-factor.json"
   },
   {
     "id": "gestalt-grouping",
@@ -45,7 +45,7 @@
     "title": "게슈탈트 집단화 원리",
     "type": "single",
     "adCount": 1,
-    "adsFile": "../data/ads/gestalt-grouping.json"
+    "adsFile": "ads/gestalt-grouping.json"
   },
   {
     "id": "semantic-encoding",
@@ -53,7 +53,7 @@
     "title": "의미적 부호화",
     "type": "single",
     "adCount": 1,
-    "adsFile": "../data/ads/semantic-encoding.json"
+    "adsFile": "ads/semantic-encoding.json"
   },
   {
     "id": "procedural-memory",
@@ -61,7 +61,7 @@
     "title": "절차기억(스크립트)",
     "type": "single",
     "adCount": 1,
-    "adsFile": "../data/ads/procedural-memory.json"
+    "adsFile": "ads/procedural-memory.json"
   },
   {
     "id": "recognition-cue",
@@ -69,7 +69,7 @@
     "title": "재인 단서",
     "type": "single",
     "adCount": 1,
-    "adsFile": "../data/ads/recognition-cue.json"
+    "adsFile": "ads/recognition-cue.json"
   },
   {
     "id": "classical-conditioning",
@@ -77,7 +77,7 @@
     "title": "고전적 조건형성",
     "type": "single",
     "adCount": 1,
-    "adsFile": "../data/ads/classical-conditioning.json"
+    "adsFile": "ads/classical-conditioning.json"
   },
   {
     "id": "fixed-ratio-reinforcement",
@@ -85,7 +85,7 @@
     "title": "고정비율 강화",
     "type": "single",
     "adCount": 1,
-    "adsFile": "../data/ads/fixed-ratio-reinforcement.json"
+    "adsFile": "ads/fixed-ratio-reinforcement.json"
   },
   {
     "id": "experiential-hierarchy",
@@ -93,7 +93,7 @@
     "title": "경험적 위계",
     "type": "single",
     "adCount": 1,
-    "adsFile": "../data/ads/experiential-hierarchy.json"
+    "adsFile": "ads/experiential-hierarchy.json"
   },
   {
     "id": "multi-attribute-model",
@@ -101,7 +101,7 @@
     "title": "다속성 모형",
     "type": "single",
     "adCount": 1,
-    "adsFile": "../data/ads/multi-attribute-model.json"
+    "adsFile": "ads/multi-attribute-model.json"
   },
   {
     "id": "subjective-norm",
@@ -109,6 +109,6 @@
     "title": "주관적 규범",
     "type": "single",
     "adCount": 1,
-    "adsFile": "../data/ads/subjective-norm.json"
+    "adsFile": "ads/subjective-norm.json"
   }
 ]

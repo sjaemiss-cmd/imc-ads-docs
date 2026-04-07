@@ -1,5 +1,5 @@
-async function readJson(relativeUrl) {
-  const url = new URL(relativeUrl, import.meta.url);
+async function readJson(relativePath) {
+  const url = new URL(relativePath, import.meta.url);
 
   if (typeof process !== 'undefined' && process.versions?.node) {
     const [{ readFile }, { fileURLToPath }] = await Promise.all([
@@ -7,8 +7,7 @@ async function readJson(relativeUrl) {
       import('node:url'),
     ]);
 
-    const filePath = fileURLToPath(url);
-    return JSON.parse(await readFile(filePath, 'utf8'));
+    return JSON.parse(await readFile(fileURLToPath(url), 'utf8'));
   }
 
   const response = await fetch(url);
@@ -25,24 +24,16 @@ export async function loadTasks() {
 }
 
 export async function loadAds(tasks) {
-  const hydratedTasks = [];
+  const entries = await Promise.all(
+    tasks.map(async (task) => {
+      try {
+        const data = await readJson(`../data/${task.adsFile}`);
+        return [task.id, data];
+      } catch {
+        return [task.id, { taskId: task.id, ads: [] }];
+      }
+    })
+  );
 
-  for (const task of tasks) {
-    try {
-      const adsData = await readJson(task.adsFile);
-      const ads = Array.isArray(adsData?.ads) ? adsData.ads : [];
-
-      hydratedTasks.push({
-        ...task,
-        ads,
-      });
-    } catch {
-      hydratedTasks.push({
-        ...task,
-        ads: [],
-      });
-    }
-  }
-
-  return hydratedTasks;
+  return Object.fromEntries(entries);
 }
