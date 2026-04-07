@@ -7,8 +7,28 @@
     <link rel="stylesheet" href="./assets/styles.css" />
   </head>
   <body>
+    <div class="mobile-bar" data-role="mobile-bar">
+      <button
+        id="sidebar-toggle"
+        data-role="sidebar-toggle"
+        class="menu-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="task-sidebar"
+        aria-label="과제 메뉴 열기"
+      >
+        <span class="menu-toggle-icon" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+        <span class="menu-toggle-label">메뉴</span>
+      </button>
+      <div data-role="mobile-task-title" class="mobile-task-title"></div>
+    </div>
+    <button data-role="sidebar-backdrop" class="sidebar-backdrop" type="button" hidden aria-label="과제 메뉴 닫기"></button>
     <div class="app-shell">
-      <aside data-role="task-sidebar" class="sidebar"></aside>
+      <aside id="task-sidebar" data-role="task-sidebar" class="sidebar"></aside>
       <main class="main-pane">
         <nav data-role="ad-tabs" class="tabs"></nav>
         <section data-role="ad-content" class="content">
