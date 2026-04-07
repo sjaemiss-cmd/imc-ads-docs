@@ -1,0 +1,42 @@
+{
+  "taskId": "gestalt-grouping",
+  "ads": [
+    {
+      "id": "oreo-walks",
+      "label": "OREO Walks",
+      "position": "게슈탈트 집단화 원리 광고 사례",
+      "brand": "OREO",
+      "campaign": "OREO Walks",
+      "publishedAt": "2025-09-24",
+      "medium": "OOH / 쇼퍼블 옥외광고",
+      "summary": "횡단보도의 반복된 흰 줄을 OREO 쿠키의 크림층처럼 보이게 만들어 분리된 요소를 하나의 브랜드 대상으로 묶어 지각하게 한다.",
+      "keywords": ["집단화", "유사성", "근접성"],
+      "conceptSummary": "게슈탈트 집단화 원리는 사람의 지각이 분리된 요소를 각각 따로 보기보다 유사성, 근접성, 연속성 등을 기준으로 하나의 패턴으로 묶어 보는 경향을 뜻한다.",
+      "conceptBullets": [
+        "소비자는 개별 요소보다 '전체 형상'을 먼저 인식하는 경우가 많다.",
+        "유사한 형태나 리듬이 반복되면 하나의 묶음으로 지각된다.",
+        "광고는 이 원리를 이용해 최소한의 요소만으로도 브랜드 형상을 떠오르게 할 수 있다."
+      ],
+      "caseSummary": "OREO Walks는 도시 횡단보도 패턴에 브랜드 시각 자산을 겹쳐 넣어, 별도의 거대한 이미지 없이도 OREO를 떠올리게 만든다.",
+      "caseBullets": [
+        "반복된 줄과 원형 배치가 쿠키-크림-쿠키 구조를 연상시킨다.",
+        "거리의 실제 구조물을 브랜드 오브제로 재지각하게 만든다.",
+        "소비자는 횡단보도를 보는 동시에 OREO라는 전체 이미지를 완성한다."
+      ],
+      "implementationAnalysis": "광고가 개별 줄을 직접 OREO라고 설명하지 않아도 관람자는 스스로 묶어서 해석한다. 바로 그 점이 집단화 원리가 구현된 부분이다.",
+      "implementationBullets": [
+        "유사한 패턴의 반복이 하나의 브랜드 형상으로 결속된다.",
+        "설명보다 지각 조직화 과정이 브랜드 인식을 만든다.",
+        "평범한 도시 요소를 브랜드 자산으로 재해석하게 한다."
+      ],
+      "duplicateCheck": "forum의 OREO 관련 기존 게시 사례는 없었고, 동일 캠페인명도 blacklist에 포함되지 않는다.",
+      "sources": [
+        {
+          "label": "PR Newswire",
+          "url": "https://www.prnewswire.com/news-releases/vml-and-oreo-launch-oreo-walks-turning-crosswalks-into-shoppable-out-of-home-with-unmistakable-flavor-302565220.html",
+          "note": "2025-09-24 배포 기사"
+        }
+      ]
+    }
+  ]
+}

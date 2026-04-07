@@ -1,0 +1,42 @@
+{
+  "taskId": "classical-conditioning",
+  "ads": [
+    {
+      "id": "pepsi-tailgate-crashers",
+      "label": "Pepsi Tailgate Crashers",
+      "position": "고전적 조건화 광고 사례",
+      "brand": "Pepsi",
+      "campaign": "Tailgate Crashers",
+      "publishedAt": "2025-09-03",
+      "medium": "디지털 캠페인 / NFL 시즌 프로모션",
+      "summary": "브랜드를 경기 전 tailgate의 흥분, 음식, 축제 분위기와 반복 결합해 Pepsi만 봐도 game day 즐거움이 떠오르게 하는 고전적 조건화 사례다.",
+      "keywords": ["고전적 조건화", "축제 자극", "정서 연합"],
+      "conceptSummary": "고전적 조건화는 본래 정서 반응을 일으키는 무조건자극과 브랜드를 반복 결합해, 나중에는 브랜드만으로도 비슷한 정서 반응이 발생하게 만드는 과정이다.",
+      "conceptBullets": [
+        "광고는 즐거움, 흥분, 맛처럼 본래 반응을 일으키는 자극을 활용한다.",
+        "브랜드는 그 자극과 반복적으로 함께 등장하며 정서 연합을 형성한다.",
+        "반응의 핵심은 인지적 추론보다 자동적 연상이다."
+      ],
+      "caseSummary": "Pepsi는 NFL 시즌 개막과 tailgate 파티 맥락을 결합해 경기 전 흥분, 음식, 응원 열기 같은 자극을 브랜드와 묶는다.",
+      "caseBullets": [
+        "무조건자극은 연예인 자체보다 game day의 집단적 흥분과 파티 감각이다.",
+        "브랜드 노출이 경기 전 기대감과 함께 반복되며 정서 연합을 만든다.",
+        "Pepsi를 보는 순간 tailgate의 즐거운 상태가 함께 호출되도록 설계된다."
+      ],
+      "implementationAnalysis": "이 사례는 제품 속성 설명보다 축제 감정의 이식에 가깝다. 따라서 무조건자극을 'game day의 흥분과 미식 상황'으로 보면 모델이나 음악이 아닌 다른 자극으로 조건형성을 설명할 수 있다.",
+      "implementationBullets": [
+        "조건형성의 핵심 자극이 NFL 시즌의 감정적 분위기에 있다.",
+        "브랜드가 반복 노출되며 긍정 정서를 빌려온다.",
+        "소비자는 Pepsi를 마실 때 경기 전 축제 감각을 쉽게 연상한다."
+      ],
+      "duplicateCheck": "forum 게시 이력의 코카콜라, 버거킹 등 식음료 사례와 직접 캠페인명이 겹치지 않고, NFL 테마 Pepsi 사례도 확인되지 않았다.",
+      "sources": [
+        {
+          "label": "PepsiCo Newsroom",
+          "url": "https://www.pepsico.com/newsroom/press-releases/2025/pepsi-unleashes-pepsi-tailgate-crashers-with-josh-allen-and-justin-jefferson-to-fuel-the-2025-nfl-season-with-flavor",
+          "note": "2025-09-03 공식 발표"
+        }
+      ]
+    }
+  ]
+}

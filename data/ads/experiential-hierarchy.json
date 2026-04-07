@@ -1,0 +1,42 @@
+{
+  "taskId": "experiential-hierarchy",
+  "ads": [
+    {
+      "id": "pepsi-thirsty-for-more",
+      "label": "Pepsi Thirsty For More",
+      "position": "경험적 위계 광고 사례",
+      "brand": "Pepsi",
+      "campaign": "Thirsty For More with David Beckham",
+      "publishedAt": "2025-04-25",
+      "medium": "글로벌 브랜드 필름",
+      "summary": "브랜드를 먼저 느끼고 즐기고 나서 태도가 형성되도록 설계된 감각적 경험 중심 광고로 경험적 위계를 잘 보여준다.",
+      "keywords": ["경험 우선", "감정 반응", "라이프스타일"],
+      "conceptSummary": "경험적 위계는 소비자가 먼저 느끼고, 그 경험을 바탕으로 태도를 만들며, 그 다음 인지적 정당화를 덧붙이는 흐름을 뜻한다.",
+      "conceptBullets": [
+        "정보보다 감각적·정서적 경험이 태도 형성의 출발점이 된다.",
+        "브랜드 선택 이유가 논리보다 느낌과 분위기에서 먼저 만들어진다.",
+        "특히 쾌락적 소비나 라이프스타일 브랜드에서 자주 나타난다."
+      ],
+      "caseSummary": "Thirsty For More는 David Beckham을 통해 모험, 스타일, 순간의 즐거움을 강조하며 Pepsi를 경험의 일부로 배치한다.",
+      "caseBullets": [
+        "광고는 제품의 세부 속성보다 느낌 좋은 장면과 태도에 집중한다.",
+        "시청자는 Pepsi를 분석하기보다 분위기와 라이프스타일을 먼저 체험한다.",
+        "브랜드가 즐거운 순간에 자연스럽게 스며드는 구성이 핵심이다."
+      ],
+      "implementationAnalysis": "이 광고에서 태도는 제품 정보를 따져 형성되지 않는다. 먼저 경험을 통해 호감이 생기고, 이후 Pepsi가 그 경험을 대표하는 브랜드로 자리 잡는 경험적 위계가 작동한다.",
+      "implementationBullets": [
+        "느낌과 분위기가 정보보다 앞서 소비자 반응을 이끈다.",
+        "브랜드 호감이 감정적 경험을 통해 형성된다.",
+        "구매 이유가 객관적 설명보다 '그 장면의 일부가 되고 싶다'는 감각에 가깝다."
+      ],
+      "duplicateCheck": "동일 브랜드의 다른 과제 사례와도 캠페인을 분리했고, forum blacklist에 Beckham 편은 포함되지 않았다.",
+      "sources": [
+        {
+          "label": "PepsiCo Newsroom",
+          "url": "https://www.pepsico.com/newsroom/press-releases/2025/pepsi-is-back-with-a-new-chapter-of-thirsty-for-more-featuring-david-beckham",
+          "note": "2025-04-25 공식 발표"
+        }
+      ]
+    }
+  ]
+}

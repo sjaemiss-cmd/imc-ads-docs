@@ -1,0 +1,42 @@
+{
+  "taskId": "fixed-ratio-reinforcement",
+  "ads": [
+    {
+      "id": "dunkin-national-donut-day",
+      "label": "Dunkin National Donut Day 2025",
+      "position": "고정비율 강화 광고 사례",
+      "brand": "Dunkin'",
+      "campaign": "National Donut Day 2025",
+      "publishedAt": "2025-06-02",
+      "medium": "디지털 프로모션 / 앱·매장 연계",
+      "summary": "정해진 구매 행동을 할 때마다 보상이 따라오는 구조를 전면에 내세워 고정비율 강화 개념을 그대로 구현한 프로모션 광고다.",
+      "keywords": ["고정비율 강화", "보상 규칙", "반복 구매"],
+      "conceptSummary": "고정비율 강화는 일정 횟수나 정해진 행동이 수행될 때마다 보상이 주어지는 강화 방식이다. 소비자는 규칙이 명확할수록 반복 행동을 예측하기 쉽다.",
+      "conceptBullets": [
+        "보상 조건이 명확해 행동과 결과의 연결이 분명하다.",
+        "소비자는 몇 번의 행동 뒤 보상이 오는지 쉽게 학습한다.",
+        "프로모션 메시지에 자주 쓰이며 반복 구매를 촉진한다."
+      ],
+      "caseSummary": "Dunkin은 National Donut Day에 음료 구매 시 도넛을 제공하는 보상 구조를 제시해, 정해진 조건을 충족하면 즉시 보상이 따라오게 만든다.",
+      "caseBullets": [
+        "보상 획득 방식이 단순해 소비자가 행동 규칙을 빠르게 이해한다.",
+        "할인보다 '이 행동을 하면 이 보상을 받는다'는 강화 규칙이 선명하다.",
+        "프로모션 목적이 추가 구매와 반복 방문을 촉진하는 데 맞춰진다."
+      ],
+      "implementationAnalysis": "이 광고의 핵심은 제품 이미지보다 행동 규칙의 명료성이다. 정해진 구매 행위에 정해진 보상이 연결되므로 고정비율 강화의 구조를 설명하기 쉽다.",
+      "implementationBullets": [
+        "행동과 보상의 대응 관계가 고정돼 있다.",
+        "소비자는 규칙을 학습하며 반복 행동을 시도하게 된다.",
+        "메시지가 감성 서사보다 강화 스케줄 자체를 전면에 둔다."
+      ],
+      "duplicateCheck": "forum의 기존 식음료 프로모션 사례와 캠페인명이 다르고, Dunkin National Donut Day 2025는 사용 게시가 확인되지 않았다.",
+      "sources": [
+        {
+          "label": "Dunkin' Newsroom",
+          "url": "https://news.dunkindonuts.com/news/national-donut-day-2025",
+          "note": "2025-06-02 공식 발표"
+        }
+      ]
+    }
+  ]
+}

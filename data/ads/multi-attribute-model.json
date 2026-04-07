@@ -1,0 +1,42 @@
+{
+  "taskId": "multi-attribute-model",
+  "ads": [
+    {
+      "id": "apple-iphone-16e",
+      "label": "Apple iPhone 16e",
+      "position": "다속성 모형 광고 사례",
+      "brand": "Apple",
+      "campaign": "iPhone 16e launch",
+      "publishedAt": "2025-02-19",
+      "medium": "제품 런칭 커뮤니케이션",
+      "summary": "배터리, 칩, 카메라, Apple Intelligence, 가격 포지션을 묶어 여러 속성의 가중치로 태도를 형성하게 만드는 전형적인 다속성 모형 사례다.",
+      "keywords": ["속성 평가", "가중치", "태도 계산"],
+      "conceptSummary": "다속성 모형은 소비자의 태도가 하나의 인상으로만 형성되는 것이 아니라 여러 속성에 대한 믿음과 중요도 가중치의 결합으로 형성된다고 본다.",
+      "conceptBullets": [
+        "소비자는 제품의 여러 속성을 동시에 고려하며 태도를 만든다.",
+        "각 속성은 동일한 비중이 아니라 개인별 중요도로 가중된다.",
+        "광고는 중요한 속성 묶음을 체계적으로 제시해 전반적 태도를 개선하려 한다."
+      ],
+      "caseSummary": "Apple은 iPhone 16e를 소개하며 A18 칩, 긴 배터리, 48MP 카메라, Apple Intelligence 지원, 합리적 진입점이라는 속성을 묶어 제시한다.",
+      "caseBullets": [
+        "하나의 장점만 강조하지 않고 핵심 속성 꾸러미를 패키지처럼 보여준다.",
+        "소비자는 자신에게 중요한 항목을 골라 전체 태도를 계산하게 된다.",
+        "가격과 성능의 균형을 함께 제시해 속성 간 타협 구조를 만든다."
+      ],
+      "implementationAnalysis": "이 광고는 호감 이미지를 만드는 데서 끝나지 않고 속성 평가 표를 머릿속에 만들게 한다. 바로 그 점이 다속성 모형을 설명하기 좋은 이유다.",
+      "implementationBullets": [
+        "태도 형성이 단일 감정이 아니라 속성 조합 결과처럼 제시된다.",
+        "광고 메시지 구조 자체가 '여러 이유의 합'으로 설계된다.",
+        "소비자는 자신이 중시하는 속성에 더 큰 가중치를 두고 판단한다."
+      ],
+      "duplicateCheck": "forum blacklist의 iPhone 17 Pro 사례와는 브랜드만 같고 캠페인·모델이 달라 직접 중복되지 않는다.",
+      "sources": [
+        {
+          "label": "Apple Newsroom",
+          "url": "https://www.apple.com/newsroom/2025/02/apple-debuts-iphone-16e-a-powerful-new-member-of-the-iphone-16-family/",
+          "note": "2025-02-19 공식 발표"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "taskId": "attention-factor",
+  "ads": [
+    {
+      "id": "mlb-heroes-of-the-game",
+      "label": "MLB Heroes of the Game",
+      "position": "자극물 자체의 주의 요인 광고 사례",
+      "brand": "MLB",
+      "campaign": "Heroes of the Game",
+      "publishedAt": "2025-03-26",
+      "medium": "브랜드 캠페인 / 방송·디지털",
+      "summary": "고속 편집, 강한 명암, 스타 플레이어의 결정적 순간을 압축해 자극물 자체의 강도와 현저성을 높인 광고다.",
+      "keywords": ["현저성", "강도", "속도감"],
+      "conceptSummary": "주의를 높이는 자극물 자체 요인은 크기, 강도, 대비, 움직임, 신기성처럼 메시지 안에 내장된 현저성 요인을 뜻한다.",
+      "conceptBullets": [
+        "소비자는 먼저 눈에 띄는 자극을 선택적으로 처리한다.",
+        "자극의 강도와 대비가 높을수록 초기 주의 확보 가능성이 커진다.",
+        "광고 내용보다 자극물 형식 자체가 주의를 끌 수도 있다."
+      ],
+      "caseSummary": "MLB는 영웅 서사라는 프레임 안에서 강한 조명, 빠른 컷 전환, 환호 장면을 집중 배치해 시선을 붙드는 구조를 만든다.",
+      "caseBullets": [
+        "결정적 플레이를 짧고 강하게 압축해 움직임과 긴장감을 극대화한다.",
+        "스타 선수 클로즈업과 경기장 조명의 대비가 시각적 강도를 높인다.",
+        "장면 자체가 이미 현저해 설명 없이도 주의가 확보된다."
+      ],
+      "implementationAnalysis": "이 사례의 핵심은 내용보다 주목 구조다. 야구라는 종목 설명을 길게 하지 않아도 자극 강도와 속도, 대비가 소비자의 시각적 선택을 먼저 잡아낸다.",
+      "implementationBullets": [
+        "주의 확보를 위해 명암 대비와 모션 밀도를 적극 활용한다.",
+        "스타 플레이 순간의 현저성이 메시지 자체가 된다.",
+        "광고 형식이 곧 주의 요인으로 작동하는 전형적 사례다."
+      ],
+      "duplicateCheck": "eCampus 게시글에 있던 스포츠 의류·자동차 캠페인과 달리 MLB 자체 브랜딩 캠페인은 확인되지 않아 중복을 피했다.",
+      "sources": [
+        {
+          "label": "MLB Press Release",
+          "url": "https://www.mlb.com/press-release/press-release-mlb-launches-new-2025-brand-campaign-heroes-of-the-game",
+          "note": "2025-03-26 공식 발표"
+        }
+      ]
+    }
+  ]
+}

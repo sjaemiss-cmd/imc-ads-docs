@@ -24,16 +24,11 @@ export async function loadTasks() {
 }
 
 export async function loadAds(tasks) {
-  const entries = await Promise.all(
-    tasks.map(async (task) => {
-      try {
-        const data = await readJson(`../data/${task.adsFile}`);
-        return [task.id, data];
-      } catch {
-        return [task.id, { taskId: task.id, ads: [] }];
-      }
-    })
-  );
+  const entries = await Promise.all(tasks.map(async (task) => [task.id, await readJson(`../data/${task.adsFile}`)]));
 
   return Object.fromEntries(entries);
+}
+
+export async function loadBlacklist() {
+  return readJson('../data/blacklist.json');
 }

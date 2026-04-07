@@ -1,40 +1,29 @@
 import { buildHash, parseHash, resolveSelection } from './router.js';
-import { loadAds, loadTasks } from './store.js';
+import { renderApp } from './render.js';
+import { loadAds, loadBlacklist, loadTasks } from './store.js';
 
-const content = document.querySelector("[data-role='ad-content']");
+const regions = {
+  sidebar: document.querySelector("[data-role='task-sidebar']"),
+  tabs: document.querySelector("[data-role='ad-tabs']"),
+  content: document.querySelector("[data-role='ad-content']"),
+};
 
-function renderPlaceholder(tasks, adsByTask, selection) {
-  if (!content) {
+function renderError(message) {
+  if (!regions.content) {
     return;
   }
 
-  const task = tasks.find((entry) => entry.id === selection.taskId) ?? tasks[0] ?? null;
-  const adList = task ? adsByTask[task.id]?.ads ?? [] : [];
-  const ad = adList.find((entry) => entry.id === selection.adId) ?? null;
-
-  if (!task) {
-    content.innerHTML = '<div class="placeholder">과제 정보를 불러오지 못했습니다.</div>';
-    return;
-  }
-
-  const heading = ad ? `${task.title} / ${ad.label ?? ad.id}` : task.title;
-  const message = ad
-    ? '라우팅 상태가 연결되었습니다. 상세 렌더는 다음 단계에서 붙습니다.'
-    : '광고 데이터 준비 중입니다.';
-
-  content.innerHTML = `
-    <div class="placeholder">
-      <h1>${heading}</h1>
-      <p>${task.group}</p>
+  regions.content.innerHTML = `
+    <div class="empty-state">
+      <h1>불러오기 실패</h1>
       <p>${message}</p>
-      <pre>${JSON.stringify(selection, null, 2)}</pre>
     </div>
   `;
 }
 
 async function bootstrap() {
   const tasks = await loadTasks();
-  const adsByTask = await loadAds(tasks);
+  const [adsByTask, blacklist] = await Promise.all([loadAds(tasks), loadBlacklist()]);
 
   const render = () => {
     const selection = resolveSelection(parseHash(window.location.hash), tasks, adsByTask);
@@ -47,9 +36,14 @@ async function bootstrap() {
       return;
     }
 
-    renderPlaceholder(tasks, adsByTask, {
-      taskId: selection.taskId,
-      adId: nextAdId,
+    renderApp(regions, {
+      tasks,
+      adsByTask,
+      blacklist,
+      selection: {
+        taskId: selection.taskId,
+        adId: nextAdId,
+      },
     });
   };
 
@@ -58,7 +52,5 @@ async function bootstrap() {
 }
 
 bootstrap().catch(() => {
-  if (content) {
-    content.innerHTML = '<div class="placeholder">앱을 불러오지 못했습니다.</div>';
-  }
+  renderError('데이터 파일을 읽지 못했습니다.');
 });

@@ -1,0 +1,42 @@
+{
+  "taskId": "semantic-encoding",
+  "ads": [
+    {
+      "id": "bath-body-works-come-back-to-your-senses",
+      "label": "Bath & Body Works Come Back To Your Senses",
+      "position": "의미적 부호화 광고 사례",
+      "brand": "Bath & Body Works",
+      "campaign": "Come Back To Your Senses",
+      "publishedAt": "2025-05-02",
+      "medium": "브랜드 캠페인 / 디지털",
+      "summary": "향을 단순 냄새가 아니라 기억, 기분, 장소와 연결되는 의미 단위로 번역해 소비자가 더 오래 기억하도록 돕는 의미적 부호화형 광고다.",
+      "keywords": ["의미 연결", "기억 단서", "연상 강화"],
+      "conceptSummary": "의미적 부호화는 정보를 단순 반복이 아니라 기존 지식, 맥락, 감정, 범주와 연결해 저장하는 방식이다. 의미 연결이 많을수록 기억이 더 잘 남는다.",
+      "conceptBullets": [
+        "새로운 자극을 익숙한 이야기나 범주와 연결할수록 기억이 쉬워진다.",
+        "단순한 감각 정보보다 '무엇을 떠올리게 하는가'가 핵심이다.",
+        "광고는 제품을 하나의 의미망 안에 배치해 회상을 강화할 수 있다."
+      ],
+      "caseSummary": "Bath & Body Works는 향을 기분 전환, 계절감, 추억 회상 같은 심리적 맥락과 연결하며 '향=의미 있는 순간'으로 재구성한다.",
+      "caseBullets": [
+        "향 자체보다 그 향이 불러오는 기억과 감정을 이야기 소재로 사용한다.",
+        "소비자는 제품명을 냄새보다 특정 장면과 연결해 기억하게 된다.",
+        "브랜드가 향을 감각 정보가 아니라 기억의 바로가기처럼 다룬다."
+      ],
+      "implementationAnalysis": "이 광고가 구현하는 것은 향의 물리적 특성보다 연상 구조다. 즉 소비자가 향을 맡을 때마다 관련 장면과 감정이 함께 활성화되도록 의미적 부호화를 설계한다.",
+      "implementationBullets": [
+        "제품 정보를 감정·상황·기억과 결합해 의미 밀도를 높인다.",
+        "회상 단서를 풍부하게 만들어 단기 노출 후에도 기억 잔존을 높인다.",
+        "설명보다 연상망을 구축하는 방식이 의미적 부호화의 핵심이다."
+      ],
+      "duplicateCheck": "forum 318977 기준 향 제품 사례는 있었지만 Bath & Body Works의 이 캠페인명은 없었고 직접 중복되지 않는다.",
+      "sources": [
+        {
+          "label": "Bath & Body Works Newsroom",
+          "url": "https://news.bbwinc.com/news/news-details/2025/Bath--Body-Works-Invites-Customers-to-Come-Back-To-Their-Senses-With-New-Brand-Campaign/default.aspx",
+          "note": "2025-05-02 공식 발표"
+        }
+      ]
+    }
+  ]
+}

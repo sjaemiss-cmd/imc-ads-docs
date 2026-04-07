@@ -1,0 +1,79 @@
+{
+  "taskId": "need-vs-cognitive",
+  "ads": [
+    {
+      "id": "mcdonalds-big-arch",
+      "label": "McDonald's Big Arch",
+      "position": "욕구기반 동기 사례",
+      "brand": "McDonald's Australia",
+      "campaign": "Big Arch launch",
+      "publishedAt": "2025-07-16",
+      "medium": "신제품 런칭 영상 / 디지털",
+      "summary": "배고픔과 포만 욕구를 직접 자극해 소비자가 즉각적 결핍 해소를 떠올리게 만드는 욕구기반 동기 광고다.",
+      "keywords": ["배고픔", "결핍 해소", "즉시 반응"],
+      "conceptSummary": "욕구기반 동기는 신체적 결핍, 감정적 부족감, 즉각적인 만족 욕구처럼 소비자의 현재 상태를 직접 자극하는 동기다.",
+      "conceptBullets": [
+        "광고는 문제를 '생각'보다 '느낌'으로 먼저 체감시키는 방향을 쓴다.",
+        "허기, 갈증, 불안 같은 상태를 빠르게 해소해줄 해답을 제시한다.",
+        "정보 탐색보다 즉시 소비를 유도하는 표현이 강해진다."
+      ],
+      "caseSummary": "Big Arch 캠페인은 이름부터 큰 허기를 상정하고, 크기와 풍성함을 강조한 비주얼로 소비자의 공복 감각을 곧바로 건드린다.",
+      "caseBullets": [
+        "제품명에 'big hunger' 상황을 직접 연결해 욕구를 전면화한다.",
+        "먹음직한 비주얼과 두터운 구성 묘사가 포만 기대를 즉시 환기한다.",
+        "메시지가 복잡한 설명 없이 지금 당장 먹고 싶다는 상태를 강화한다."
+      ],
+      "implementationAnalysis": "이 광고의 핵심은 판단 이전의 반응이다. 소비자가 제품을 논리적으로 따지기 전에 허기를 해결할 대상이라고 느끼게 만드는 구조라 욕구기반 동기 사례로 적합하다.",
+      "implementationBullets": [
+        "제품 속성보다 결핍 해소 장면이 먼저 작동한다.",
+        "카피가 즉시 행동을 유도할 만큼 단순하고 직접적이다.",
+        "광고를 본 뒤의 첫 반응이 정보 처리보다 식욕 반응에 가깝다."
+      ],
+      "duplicateCheck": "forum blacklist 13건과 제목 대조 결과 중복되지 않았고, 기존 게시글에 Big Arch 사례는 확인되지 않았다.",
+      "sources": [
+        {
+          "label": "McDonald's Australia Newsroom",
+          "url": "https://www.mcdonalds.com/au/en-au/newsroom/article/got-big-maccas-hunger-meet-big-arch.html",
+          "note": "2025-07-16 공식 발표"
+        }
+      ]
+    },
+    {
+      "id": "google-pixel-dream-job",
+      "label": "Google Pixel Dream Job",
+      "position": "인지기반 동기 사례",
+      "brand": "Google Pixel",
+      "campaign": "Dream Job",
+      "publishedAt": "2025-02-06",
+      "medium": "브랜드 필름 / 제품 기능 시연",
+      "summary": "면접 준비라는 문제 상황에서 정보 탐색과 불확실성 감소를 돕는 기능을 보여주며 인지기반 동기를 자극한다.",
+      "keywords": ["문제 해결", "정보 탐색", "불확실성 감소"],
+      "conceptSummary": "인지기반 동기는 소비자가 더 잘 판단하고 더 나은 결정을 내리기 위해 정보를 찾고 문제를 해결하려는 동기다.",
+      "conceptBullets": [
+        "소비자는 제품이 주는 지식, 효율, 위험 감소 효과를 중시한다.",
+        "광고는 감정 자극보다 기능적 해결 경로를 보여주는 편이 강하다.",
+        "문제 상황과 해결 도구의 연결이 설득의 중심이 된다."
+      ],
+      "caseSummary": "Dream Job은 Pixel과 Gemini Live가 면접 전 질문 정리, 답변 연습, 상황 대응을 어떻게 돕는지 보여주며 합리적 도움을 강조한다.",
+      "caseBullets": [
+        "광고는 사용자의 불안 상황을 설정하되 해결은 기능 시연으로 풀어낸다.",
+        "AI와 대화하며 준비하는 장면이 정보 처리 도구라는 인식을 강화한다.",
+        "제품 효용이 감정 위로보다 문제 해결 역량으로 제시된다."
+      ],
+      "implementationAnalysis": "인지기반 동기 광고답게 이 사례는 '갖고 싶다'보다 '도움이 된다'는 판단을 유도한다. 즉 정보 검색과 준비 효율이 곧 구매 이유가 된다.",
+      "implementationBullets": [
+        "기능 설명과 실제 사용 맥락이 직접 연결되어 사고 과정을 돕는다.",
+        "광고가 제시하는 효익은 욕구 충족보다 의사결정 지원에 가깝다.",
+        "소비자는 제품을 문제 해결 파트너로 인식하게 된다."
+      ],
+      "duplicateCheck": "기존 forum 게시글과 제목·캠페인명을 비교했고 Dream Job 사례는 사용 흔적이 없다.",
+      "sources": [
+        {
+          "label": "Google Blog",
+          "url": "https://blog.google/products/pixel/pixel-ad-dream-job-gemini-live/",
+          "note": "2025-02-06 공식 블로그"
+        }
+      ]
+    }
+  ]
+}

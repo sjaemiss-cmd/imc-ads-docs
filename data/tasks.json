@@ -26,7 +26,7 @@
   {
     "id": "sensory-stimulus",
     "group": "3. 감각과 지각",
-    "title": "감각 자극 광고",
+    "title": "오감 자극 광고",
     "type": "single",
     "adCount": 1,
     "adsFile": "ads/sensory-stimulus.json"
@@ -34,7 +34,7 @@
   {
     "id": "attention-factor",
     "group": "3. 감각과 지각",
-    "title": "자극물 자체의 주의 요인",
+    "title": "자극물 자체의 주의 요인 광고",
     "type": "single",
     "adCount": 1,
     "adsFile": "ads/attention-factor.json"
@@ -42,7 +42,7 @@
   {
     "id": "gestalt-grouping",
     "group": "3. 감각과 지각",
-    "title": "게슈탈트 집단화 원리",
+    "title": "게슈탈트 집단화 원리 광고",
     "type": "single",
     "adCount": 1,
     "adsFile": "ads/gestalt-grouping.json"
@@ -50,7 +50,7 @@
   {
     "id": "semantic-encoding",
     "group": "4. 기억",
-    "title": "의미적 부호화",
+    "title": "의미적 부호화 광고",
     "type": "single",
     "adCount": 1,
     "adsFile": "ads/semantic-encoding.json"
@@ -58,7 +58,7 @@
   {
     "id": "procedural-memory",
     "group": "4. 기억",
-    "title": "절차기억(스크립트)",
+    "title": "절차기억(스크립트) 광고",
     "type": "single",
     "adCount": 1,
     "adsFile": "ads/procedural-memory.json"
@@ -66,7 +66,7 @@
   {
     "id": "recognition-cue",
     "group": "4. 기억",
-    "title": "재인 단서",
+    "title": "재인적 단서 광고",
     "type": "single",
     "adCount": 1,
     "adsFile": "ads/recognition-cue.json"
@@ -74,7 +74,7 @@
   {
     "id": "classical-conditioning",
     "group": "5. 학습",
-    "title": "고전적 조건형성",
+    "title": "고전적 조건화 광고",
     "type": "single",
     "adCount": 1,
     "adsFile": "ads/classical-conditioning.json"
@@ -90,7 +90,7 @@
   {
     "id": "experiential-hierarchy",
     "group": "6. 태도",
-    "title": "경험적 위계",
+    "title": "경험적 위계 광고",
     "type": "single",
     "adCount": 1,
     "adsFile": "ads/experiential-hierarchy.json"
@@ -98,7 +98,7 @@
   {
     "id": "multi-attribute-model",
     "group": "6. 태도",
-    "title": "다속성 모형",
+    "title": "다속성 모형 광고",
     "type": "single",
     "adCount": 1,
     "adsFile": "ads/multi-attribute-model.json"
@@ -106,7 +106,7 @@
   {
     "id": "subjective-norm",
     "group": "6. 태도",
-    "title": "주관적 규범",
+    "title": "주관적 규범 광고",
     "type": "single",
     "adCount": 1,
     "adsFile": "ads/subjective-norm.json"

@@ -1,0 +1,47 @@
+{
+  "taskId": "recognition-cue",
+  "ads": [
+    {
+      "id": "heinz-it-has-to-be",
+      "label": "HEINZ It Has to Be...",
+      "position": "재인적 단서 광고 사례",
+      "brand": "HEINZ",
+      "campaign": "It Has to Be Heinz",
+      "publishedAt": "2025-01-30",
+      "medium": "OOH / 로고리스 브랜드 캠페인",
+      "summary": "로고와 제품명 없이도 병 실루엣과 색, 문장 구조만으로 브랜드를 알아보게 만드는 전형적인 재인적 단서 광고다.",
+      "keywords": ["재인 단서", "로고리스", "브랜드 자산"],
+      "conceptSummary": "재인적 단서는 소비자가 처음부터 완전히 회상하지 않아도, 일부 단서를 보고 '아 이거'라고 알아차리게 만드는 자극이다.",
+      "conceptBullets": [
+        "회상보다 재인이 쉬우므로 광고는 강력한 단서 자산을 축적하려 한다.",
+        "색, 형태, 문장 패턴 같은 시각 단서만으로도 브랜드 재인이 가능하다.",
+        "단서가 적을수록 오히려 브랜드 자산의 힘을 더 잘 보여줄 수 있다."
+      ],
+      "caseSummary": "HEINZ는 'It Has to Be...'라는 익숙한 문구와 빨강, 병 윤곽만 남겨도 소비자가 케첩 브랜드를 즉시 알아보도록 설계했다.",
+      "caseBullets": [
+        "제품명을 제거해도 강한 시각 단서가 브랜드 재인을 끌어낸다.",
+        "브랜드 자산이 충분히 축적됐음을 역으로 증명하는 방식이다.",
+        "소비자는 전체 정보를 기억하지 않아도 단서 일부로 정답을 맞힌다."
+      ],
+      "implementationAnalysis": "이 캠페인의 설득 포인트는 새로운 정보를 주는 것이 아니라 이미 기억 속에 있는 브랜드를 단서만으로 꺼내게 하는 데 있다. 그래서 재인적 단서 광고 사례로 매우 선명하다.",
+      "implementationBullets": [
+        "로고 삭제가 오히려 재인 메커니즘을 더 뚜렷하게 드러낸다.",
+        "색과 실루엣이 브랜드 회상의 스위치 역할을 한다.",
+        "소비자 기억 속 기존 자산을 호출하는 구조라 학습된 재인이 작동한다."
+      ],
+      "duplicateCheck": "forum blacklist의 코카콜라·GAP처럼 강한 브랜드 자산 사례와는 다르며, Heinz 본 캠페인은 게시 이력이 없다.",
+      "sources": [
+        {
+          "label": "HEINZ Campaign Hub",
+          "url": "https://www.heinz.com/ithastobeheinz",
+          "note": "공식 캠페인 페이지"
+        },
+        {
+          "label": "The Drum",
+          "url": "https://www.thedrum.com/news/2025/01/30/ad-the-day-heinz-ditches-logo-it-has-be-outdoor-campaign",
+          "note": "2025-01-30 캠페인 보도"
+        }
+      ]
+    }
+  ]
+}

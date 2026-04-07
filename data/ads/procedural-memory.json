@@ -1,0 +1,42 @@
+{
+  "taskId": "procedural-memory",
+  "ads": [
+    {
+      "id": "puma-go-wild",
+      "label": "PUMA Go Wild",
+      "position": "절차기억(스크립트) 광고 사례",
+      "brand": "PUMA",
+      "campaign": "Go Wild",
+      "publishedAt": "2025-03-20",
+      "medium": "글로벌 브랜드 캠페인",
+      "summary": "러닝 전 준비, 달리는 리듬, 완주 후 해방감이라는 익숙한 실행 순서를 따라가며 소비자의 러닝 스크립트를 자극하는 절차기억 광고다.",
+      "keywords": ["스크립트", "행동 순서", "루틴 회상"],
+      "conceptSummary": "절차기억은 몸으로 익힌 행동 순서와 루틴을 저장하는 기억 체계다. 광고에서 절차기억이 작동하면 소비자는 장면을 볼 때 자신이 해본 행동 순서를 자동으로 떠올린다.",
+      "conceptBullets": [
+        "절차기억은 설명보다 몸의 루틴과 순서로 활성화된다.",
+        "광고는 일상 행동의 단계들을 보여주며 친숙한 스크립트를 불러낼 수 있다.",
+        "소비자가 '나도 저렇게 한다'고 느낄 때 행동 공감이 커진다."
+      ],
+      "caseSummary": "PUMA Go Wild는 평범한 러너들이 준비하고 뛰고 몰입하는 흐름을 반복적으로 보여주며 러닝이라는 일상 루틴을 브랜드와 결합한다.",
+      "caseBullets": [
+        "러닝화를 신고 밖으로 나가고 속도를 올리는 전형적 순서를 따라간다.",
+        "특별한 경기보다 반복 가능한 실행 감각을 강조한다.",
+        "보는 순간 개인의 러닝 습관과 신체 기억이 활성화된다."
+      ],
+      "implementationAnalysis": "절차기억 광고의 핵심은 설명이 아니라 몸의 기억을 호출하는 데 있다. PUMA는 러닝의 단계적 흐름을 보여주며 브랜드를 그 스크립트 안에 끼워 넣는다.",
+      "implementationBullets": [
+        "장면 배치가 러닝 루틴의 시간 순서를 그대로 따른다.",
+        "소비자는 자신의 행동 기억과 브랜드를 함께 묶어 떠올리게 된다.",
+        "광고가 스포츠 지식을 전달하기보다 익숙한 실행 감각을 재생한다."
+      ],
+      "duplicateCheck": "forum의 다이나핏 사례와는 다른 브랜드·캠페인이며, 러닝 스크립트 중심 사례로 중복을 피했다.",
+      "sources": [
+        {
+          "label": "PUMA Newsroom",
+          "url": "https://about.puma.com/en/newsroom/corporate-news/2025/20-03-2025-puma-redefines-game-unveiling-bold-strategy-and-brand",
+          "note": "2025-03-20 공식 발표"
+        }
+      ]
+    }
+  ]
+}

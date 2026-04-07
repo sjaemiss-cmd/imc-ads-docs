@@ -1,0 +1,79 @@
+{
+  "taskId": "high-vs-low-involvement",
+  "ads": [
+    {
+      "id": "volvo-our-volvo-story",
+      "label": "Volvo Our Volvo Story",
+      "position": "고관여 광고 사례",
+      "brand": "Volvo Cars",
+      "campaign": "Our Volvo Story",
+      "publishedAt": "2025-07-22",
+      "medium": "브랜드 캠페인 / 장기 고려 구매",
+      "summary": "안전, 역사, 신뢰 같은 고위험 구매 기준을 길게 축적하며 소비자가 충분히 숙고하도록 만드는 고관여 광고다.",
+      "keywords": ["숙고", "위험 지각", "신뢰 축적"],
+      "conceptSummary": "고관여 광고는 가격, 위험, 사용 기간이 큰 제품을 다룰 때 소비자가 긴 탐색과 비교를 수행한다는 전제를 가진다.",
+      "conceptBullets": [
+        "광고는 단기 반응보다 신뢰와 확신 축적을 목표로 한다.",
+        "브랜드 역사, 품질, 안전 같은 고관여 단서가 중요해진다.",
+        "메시지는 단순 재미보다 고려 이유를 차곡차곡 쌓는 방식으로 간다."
+      ],
+      "caseSummary": "Volvo는 70년의 존재감과 안전 유산, 브랜드 스토리를 결합해 차량 구매를 신중한 선택으로 프레이밍한다.",
+      "caseBullets": [
+        "캠페인 명 자체가 제품보다 브랜드 서사를 길게 읽게 만든다.",
+        "안전과 역사라는 판단 기준이 감성보다 앞에 배치된다.",
+        "즉시 할인보다 브랜드를 오래 믿을 이유를 설계한다."
+      ],
+      "implementationAnalysis": "고관여 소비자는 구매 전 장기적 리스크를 검토한다. Volvo는 바로 그 점을 겨냥해 브랜드 유산과 신뢰를 정보 자산처럼 제시한다.",
+      "implementationBullets": [
+        "광고가 제공하는 핵심 효익은 즉흥적 재미보다 확신이다.",
+        "구매를 장기적 의사결정으로 정의해 메시지 밀도를 높인다.",
+        "브랜드 스토리를 판단 근거로 전환하는 점이 고관여적이다."
+      ],
+      "duplicateCheck": "forum 318977 기준 기존 사용 광고 13건과 대조했고 Volvo Our Volvo Story는 중복되지 않는다.",
+      "sources": [
+        {
+          "label": "Volvo Cars US Media",
+          "url": "https://www.media.volvocars.com/us/en-us/media/pressreleases/351984/volvo-cars-launches-our-volvo-story-campaign-and-sweepstakes-to-celebrate-70-years-of-impact-in-the",
+          "note": "2025-07-22 공식 발표"
+        }
+      ]
+    },
+    {
+      "id": "snickers-halftime-hunger",
+      "label": "SNICKERS Halftime Hunger",
+      "position": "저관여 광고 사례",
+      "brand": "SNICKERS",
+      "campaign": "Josh Allen halftime hunger",
+      "publishedAt": "2025-06-03",
+      "medium": "시즌성 디지털 캠페인",
+      "summary": "배고프면 SNICKERS라는 단순한 연상과 즉시 구매 가능한 해결책을 짧고 강하게 남기는 저관여 광고다.",
+      "keywords": ["간단 연상", "즉시 구매", "반복 메시지"],
+      "conceptSummary": "저관여 광고는 소비자가 긴 비교 없이 습관적 또는 간편하게 구매하는 상황을 전제로 하며, 메시지도 단순 반복형이 많다.",
+      "conceptBullets": [
+        "제품군이 익숙하고 위험이 낮기 때문에 상세 정보량이 적다.",
+        "광고는 짧은 카피와 기억하기 쉬운 연결고리에 집중한다.",
+        "즉각적 구매 전환을 노리는 간단한 상황 제시가 유효하다."
+      ],
+      "caseSummary": "SNICKERS는 하프타임 허기를 Josh Allen과 연결해, 경기 중 배고플 때 바로 집어드는 간식이라는 상황 연상을 반복한다.",
+      "caseBullets": [
+        "메시지가 한 문장으로 요약될 만큼 단순하다.",
+        "긴 제품 설명 없이 '배고플 때 해결책'이라는 연상만 강화한다.",
+        "시즌성 화제성과 익숙한 브랜드 자산을 활용해 빠른 기억을 유도한다."
+      ],
+      "implementationAnalysis": "저관여 제품은 깊은 숙고 대신 회상 가능성과 구매 편의가 중요하다. 이 광고는 바로 그 특성에 맞춰 단순하고 반복 가능한 행동 단서를 만든다.",
+      "implementationBullets": [
+        "상세 스펙이 아니라 상황-해결 연결만 남긴다.",
+        "브랜드 회상을 빠르게 만드는 단순 메시지 구조를 택한다.",
+        "소비자의 판단 부담을 낮추고 즉시 선택을 유도한다."
+      ],
+      "duplicateCheck": "기존 eCampus 게시글의 OREO, Burger King, Coke 등 간식류 사례와도 직접 겹치지 않도록 별도 캠페인으로 선별했다.",
+      "sources": [
+        {
+          "label": "Mars Newsroom",
+          "url": "https://www.mars.com/news-and-stories/press-releases-statements/snickers-drafts-josh-allen-satisfy-halftime-hunger",
+          "note": "2025-06-03 공식 발표"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "taskId": "subjective-norm",
+  "ads": [
+    {
+      "id": "adidas-you-got-this",
+      "label": "adidas You Got This",
+      "position": "주관적 규범 광고 사례",
+      "brand": "adidas",
+      "campaign": "You Got This 2025",
+      "publishedAt": "2025-02-10",
+      "medium": "글로벌 브랜드 캠페인",
+      "summary": "선수 주변의 코치, 친구, 가족, 응원 집단이 어떻게 행동과 자신감에 영향을 주는지를 보여주며 주관적 규범의 힘을 시각화한 광고다.",
+      "keywords": ["주관적 규범", "사회적 시선", "주변 기대"],
+      "conceptSummary": "주관적 규범은 중요한 타인이 내가 어떤 행동을 해야 한다고 기대하는지에 대한 인식이며, 태도와 별개로 행동 의도를 강하게 좌우할 수 있다.",
+      "conceptBullets": [
+        "소비자는 자신의 선호뿐 아니라 주변의 기대와 평가를 고려한다.",
+        "특히 수행 불안이나 사회적 비교가 큰 상황에서 주관적 규범의 영향이 커진다.",
+        "광고는 '나 혼자'가 아니라 '주변이 나를 어떻게 밀어주는가'를 보여줄 수 있다."
+      ],
+      "caseSummary": "adidas는 선수 개인보다 그 주변의 지지자와 목소리를 강조하며, performance를 가능하게 하는 사회적 응원망을 브랜드 메시지로 묶는다.",
+      "caseBullets": [
+        "광고의 감정선이 개인 내면보다 주변의 기대와 격려에서 형성된다.",
+        "응원과 지지가 행동 의도를 강화하는 사회적 압력으로 기능한다.",
+        "브랜드는 그 규범적 지지 환경을 대표하는 조력자처럼 보인다."
+      ],
+      "implementationAnalysis": "주관적 규범은 '남들이 원해서 한다'가 아니라 '중요한 사람들이 나를 이렇게 믿고 본다'는 인식이다. adidas는 바로 그 기대 인식을 장면으로 구현해 소비 행동과 연결한다.",
+      "implementationBullets": [
+        "행동의 동력이 개인 판단만이 아니라 주변의 기대에서 나온다.",
+        "응원과 지지의 목소리가 규범적 압력과 격려를 동시에 형성한다.",
+        "브랜드가 사회적 승인과 자신감 회복의 매개로 작동한다."
+      ],
+      "duplicateCheck": "forum에 있던 다이나핏, GAP 사례와는 다른 브랜드·캠페인이고, adidas You Got This 2025는 게시 이력이 확인되지 않았다.",
+      "sources": [
+        {
+          "label": "adidas Group Magazine",
+          "url": "https://www.adidas-group.com/en/magazine/behind-the-scenes/behind-the-2025-brand-campaign-we-all-need-someone-to-make-us-believe-you-got-this",
+          "note": "2025-02-10 공식 스토리"
+        }
+      ]
+    }
+  ]
+}
