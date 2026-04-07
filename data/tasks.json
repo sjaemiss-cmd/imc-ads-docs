@@ -1,0 +1,114 @@
+[
+  {
+    "id": "positivism-vs-interpretivism",
+    "group": "1. IMC",
+    "title": "실증주의 vs 해석주의",
+    "type": "comparison",
+    "adCount": 2,
+    "adsFile": "../data/ads/positivism-vs-interpretivism.json"
+  },
+  {
+    "id": "need-vs-cognitive",
+    "group": "2. 동기와 관여도",
+    "title": "욕구기반 동기 vs 인지기반 동기",
+    "type": "comparison",
+    "adCount": 2,
+    "adsFile": "../data/ads/need-vs-cognitive.json"
+  },
+  {
+    "id": "high-vs-low-involvement",
+    "group": "2. 동기와 관여도",
+    "title": "고관여 vs 저관여",
+    "type": "comparison",
+    "adCount": 2,
+    "adsFile": "../data/ads/high-vs-low-involvement.json"
+  },
+  {
+    "id": "sensory-stimulus",
+    "group": "3. 감각과 지각",
+    "title": "감각 자극 광고",
+    "type": "single",
+    "adCount": 1,
+    "adsFile": "../data/ads/sensory-stimulus.json"
+  },
+  {
+    "id": "attention-factor",
+    "group": "3. 감각과 지각",
+    "title": "자극물 자체의 주의 요인",
+    "type": "single",
+    "adCount": 1,
+    "adsFile": "../data/ads/attention-factor.json"
+  },
+  {
+    "id": "gestalt-grouping",
+    "group": "3. 감각과 지각",
+    "title": "게슈탈트 집단화 원리",
+    "type": "single",
+    "adCount": 1,
+    "adsFile": "../data/ads/gestalt-grouping.json"
+  },
+  {
+    "id": "semantic-encoding",
+    "group": "4. 기억",
+    "title": "의미적 부호화",
+    "type": "single",
+    "adCount": 1,
+    "adsFile": "../data/ads/semantic-encoding.json"
+  },
+  {
+    "id": "procedural-memory",
+    "group": "4. 기억",
+    "title": "절차기억(스크립트)",
+    "type": "single",
+    "adCount": 1,
+    "adsFile": "../data/ads/procedural-memory.json"
+  },
+  {
+    "id": "recognition-cue",
+    "group": "4. 기억",
+    "title": "재인 단서",
+    "type": "single",
+    "adCount": 1,
+    "adsFile": "../data/ads/recognition-cue.json"
+  },
+  {
+    "id": "classical-conditioning",
+    "group": "5. 학습",
+    "title": "고전적 조건형성",
+    "type": "single",
+    "adCount": 1,
+    "adsFile": "../data/ads/classical-conditioning.json"
+  },
+  {
+    "id": "fixed-ratio-reinforcement",
+    "group": "5. 학습",
+    "title": "고정비율 강화",
+    "type": "single",
+    "adCount": 1,
+    "adsFile": "../data/ads/fixed-ratio-reinforcement.json"
+  },
+  {
+    "id": "experiential-hierarchy",
+    "group": "6. 태도",
+    "title": "경험적 위계",
+    "type": "single",
+    "adCount": 1,
+    "adsFile": "../data/ads/experiential-hierarchy.json"
+  },
+  {
+    "id": "multi-attribute-model",
+    "group": "6. 태도",
+    "title": "다속성 모형",
+    "type": "single",
+    "adCount": 1,
+    "adsFile": "../data/ads/multi-attribute-model.json"
+  },
+  {
+    "id": "subjective-norm",
+    "group": "6. 태도",
+    "title": "주관적 규범",
+    "type": "single",
+    "adCount": 1,
+    "adsFile": "../data/ads/subjective-norm.json"
+  }
+]
