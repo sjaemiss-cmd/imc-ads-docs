@@ -260,6 +260,31 @@
     }
     .guide-body .warn strong { color: #b06000; }
 
+    /* ── Draft Autosave Badge ── */
+    .draft-badge {
+      display: none; font-size: 12px; color: #6e6e73;
+      margin-left: 8px; font-weight: 400;
+    }
+    .draft-badge.saved { display: inline; color: #137333; }
+    .draft-badge.restoring { display: inline; color: #0066cc; }
+    .draft-restore-bar {
+      display: none; background: #e8f0fe; border: 1px solid #c2d9fc;
+      border-radius: 10px; padding: 10px 16px; margin-bottom: 14px;
+      font-size: 13px; color: #1a73e8;
+      justify-content: space-between; align-items: center;
+    }
+    .draft-restore-bar.show { display: flex; }
+    .draft-restore-bar button {
+      background: none; border: 1px solid #1a73e8; color: #1a73e8;
+      padding: 4px 12px; border-radius: 8px; font-size: 12px; font-weight: 600;
+      margin-left: 8px;
+    }
+    .draft-restore-bar button:hover { background: #1a73e8; color: #fff; }
+    .draft-restore-bar .draft-discard {
+      border-color: #aeaeb2; color: #6e6e73;
+    }
+    .draft-restore-bar .draft-discard:hover { background: #6e6e73; color: #fff; }
+
     /* ── Duplicate Checker ── */
     .dup-checker {
       margin-top: 12px; padding: 14px 18px; border-radius: 12px;
@@ -403,7 +428,14 @@
 
       <!-- Form -->
       <div class="form-section">
-        <h3>새 광고 사례 올리기</h3>
+        <h3>새 광고 사례 올리기 <span class="draft-badge" id="draft-badge"></span></h3>
+        <div class="draft-restore-bar" id="draft-restore-bar">
+          <span id="draft-restore-msg">이전에 작성 중이던 초안이 있습니다.</span>
+          <div>
+            <button onclick="restoreDraft()">복원</button>
+            <button class="draft-discard" onclick="discardDraft()">삭제</button>
+          </div>
+        </div>
         <form id="submission-form">
           <div class="form-grid">
             <div class="form-group">
@@ -661,6 +693,9 @@
       // Restore saved author name
       const saved = localStorage.getItem('imc-author');
       if (saved) document.getElementById('f-author').value = saved;
+
+      // 초안 복원 체크
+      checkAndShowDraftBar(topicId);
     }
 
     async function renderSubmissions(topicId) {
@@ -770,6 +805,8 @@
       const dupEl2 = document.getElementById('dup-checker');
       dupEl2.classList.remove('show', 'dup-block', 'dup-warn', 'dup-pass');
       document.getElementById('dup-results').innerHTML = '';
+      // 초안 삭제
+      clearDraftAfterSubmit();
       await renderSubmissions(currentTopicId);
     });
 
@@ -917,6 +954,109 @@
       el.textContent = msg;
       el.classList.add('show');
       setTimeout(() => el.classList.remove('show'), 2500);
+    }
+
+    // ================================================================
+    // Draft Autosave
+    // ================================================================
+    const DRAFT_FIELDS = ['f-brand', 'f-campaign', 'f-published', 'f-medium', 'f-url', 'f-concept', 'f-analysis'];
+
+    function draftKey(topicId) {
+      return 'imc-draft-' + (topicId || currentTopicId);
+    }
+
+    function saveDraft() {
+      if (!currentTopicId) return;
+      const data = {};
+      let hasContent = false;
+      for (const id of DRAFT_FIELDS) {
+        const val = document.getElementById(id)?.value || '';
+        data[id] = val;
+        if (val.trim()) hasContent = true;
+      }
+      if (!hasContent) {
+        localStorage.removeItem(draftKey());
+        updateDraftBadge(false);
+        return;
+      }
+      data._savedAt = Date.now();
+      localStorage.setItem(draftKey(), JSON.stringify(data));
+      updateDraftBadge(true);
+    }
+
+    function loadDraft(topicId) {
+      const raw = localStorage.getItem(draftKey(topicId));
+      if (!raw) return null;
+      try { return JSON.parse(raw); } catch { return null; }
+    }
+
+    function checkAndShowDraftBar(topicId) {
+      const draft = loadDraft(topicId);
+      const bar = document.getElementById('draft-restore-bar');
+      const badge = document.getElementById('draft-badge');
+      if (!draft) {
+        bar.classList.remove('show');
+        badge.classList.remove('saved', 'restoring');
+        return;
+      }
+      const ago = Date.now() - (draft._savedAt || 0);
+      let timeStr;
+      if (ago < 60000) timeStr = '방금 전';
+      else if (ago < 3600000) timeStr = Math.floor(ago / 60000) + '분 전';
+      else if (ago < 86400000) timeStr = Math.floor(ago / 3600000) + '시간 전';
+      else timeStr = Math.floor(ago / 86400000) + '일 전';
+
+      const preview = (draft['f-brand'] || '') + (draft['f-campaign'] ? ' / ' + draft['f-campaign'] : '');
+      document.getElementById('draft-restore-msg').textContent =
+        `작성 중이던 초안이 있습니다 (${timeStr}${preview ? ' · ' + preview : ''})`;
+      bar.classList.add('show');
+    }
+
+    function restoreDraft() {
+      const draft = loadDraft();
+      if (!draft) return;
+      for (const id of DRAFT_FIELDS) {
+        const el = document.getElementById(id);
+        if (el && draft[id]) el.value = draft[id];
+      }
+      document.getElementById('draft-restore-bar').classList.remove('show');
+      updateDraftBadge(true);
+      toast('초안이 복원되었습니다');
+      updateVolumeChecker();
+      debouncedDupCheck();
+    }
+
+    function discardDraft() {
+      localStorage.removeItem(draftKey());
+      document.getElementById('draft-restore-bar').classList.remove('show');
+      updateDraftBadge(false);
+      toast('초안이 삭제되었습니다');
+    }
+
+    function clearDraftAfterSubmit() {
+      localStorage.removeItem(draftKey());
+      document.getElementById('draft-restore-bar').classList.remove('show');
+      updateDraftBadge(false);
+    }
+
+    function updateDraftBadge(saved) {
+      const badge = document.getElementById('draft-badge');
+      badge.classList.remove('saved', 'restoring');
+      if (saved) {
+        badge.classList.add('saved');
+        badge.textContent = '(자동저장됨)';
+      }
+    }
+
+    // 폼 필드에 input 이벤트로 자동저장 연결 (디바운스 1초)
+    let draftTimer = null;
+    function debouncedSaveDraft() {
+      clearTimeout(draftTimer);
+      draftTimer = setTimeout(saveDraft, 1000);
+    }
+
+    for (const id of DRAFT_FIELDS) {
+      document.getElementById(id)?.addEventListener('input', debouncedSaveDraft);
     }
 
     // ================================================================
