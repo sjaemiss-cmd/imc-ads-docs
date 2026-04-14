@@ -10,7 +10,8 @@ create table if not exists topics (
   chapter       text not null,
   title         text not null,
   description   text not null,
-  concept_hint  text not null
+  concept_hint  text not null,
+  assignees     text[] default '{}'
 );
 
 -- 2. submissions 테이블: 팀원들이 올리는 광고 사례

@@ -521,44 +521,45 @@
     }
 
     // ================================================================
-    // Assignees (담당자) — localStorage에 저장
+    // Assignees (담당자) — Supabase topics.assignees 컬럼 사용
     // ================================================================
-    function getAssignees(group) {
-      try { return JSON.parse(localStorage.getItem('imc-assignees-' + group) || '[]'); } catch { return []; }
-    }
-    function setAssignees(group, names) {
-      localStorage.setItem('imc-assignees-' + group, JSON.stringify(names));
+    function getColumnAssignees(side) {
+      const nums = side === 'left' ? [1,2,3,4,5] : [6,7,8,9,10];
+      const colTopics = topics.filter(t => nums.includes(t.question_num));
+      const all = new Set();
+      colTopics.forEach(t => (t.assignees || []).forEach(a => all.add(a)));
+      return [...all];
     }
 
     function renderAssignees() {
       ['left', 'right'].forEach(side => {
         const el = document.getElementById('assignees-' + side);
-        const names = getAssignees(side);
+        const names = getColumnAssignees(side);
         const badgeClass = side === 'right' ? 'assignee-badge right' : 'assignee-badge';
-        let html = '';
-        for (let i = 0; i < 2; i++) {
-          if (names[i]) {
-            html += `<span class="${badgeClass}" onclick="editAssignee('${side}',${i})">${esc(names[i])}</span>`;
-          } else {
-            html += `<span class="assignee-badge editable" onclick="editAssignee('${side}',${i})">+ 담당자</span>`;
-          }
+        let html = names.map(n => `<span class="${badgeClass}">${esc(n)}</span>`).join('');
+        if (names.length < 2) {
+          html += `<span class="assignee-badge editable" onclick="addAssignee('${side}')">+ 담당자</span>`;
         }
         el.innerHTML = html;
       });
     }
 
-    function editAssignee(side, idx) {
-      const names = getAssignees(side);
-      const current = names[idx] || '';
-      const name = prompt('담당자 이름을 입력하세요' + (current ? ` (현재: ${current}, 비우면 삭제)` : ''), current);
-      if (name === null) return;
-      if (name.trim()) {
-        names[idx] = name.trim();
-      } else {
-        names.splice(idx, 1);
+    async function addAssignee(side) {
+      const name = prompt('담당자 이름을 입력하세요');
+      if (!name || !name.trim()) return;
+      const nums = side === 'left' ? [1,2,3,4,5] : [6,7,8,9,10];
+      const colTopics = topics.filter(t => nums.includes(t.question_num));
+      for (const t of colTopics) {
+        const current = t.assignees || [];
+        if (current.includes(name.trim())) continue;
+        const updated = [...current, name.trim()];
+        if (sb) {
+          await sb.from('topics').update({ assignees: updated }).eq('id', t.id);
+        }
+        t.assignees = updated;
       }
-      setAssignees(side, names);
       renderAssignees();
+      toast(name.trim() + ' 담당자 등록 완료');
     }
 
     // ================================================================
@@ -569,13 +570,18 @@
       const leftTopics = topics.filter(t => t.question_num <= 5);
       const rightTopics = topics.filter(t => t.question_num > 5);
 
-      function renderColumn(items) {
+      function renderColumn(items, side) {
         return items.map(t => {
           const c = counts[t.id] || 0;
           const chipClass = 'chip-' + t.chapter.charAt(0);
+          const badgeCls = side === 'right' ? 'assignee-badge right' : 'assignee-badge';
+          const assigneeHtml = (t.assignees || []).map(a => `<span class="${badgeCls}" style="font-size:10px;padding:1px 6px;margin-left:4px;">${esc(a)}</span>`).join('');
           return `
             <div class="topic-card" onclick="openTopic(${t.id})">
-              <span class="topic-chip ${chipClass}">Q${t.question_num} · ${t.chapter}</span>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+                <span class="topic-chip ${chipClass}">Q${t.question_num} · ${t.chapter}</span>
+                <div>${assigneeHtml}</div>
+              </div>
               <h3>${t.title}</h3>
               <div class="count">
                 <span class="count-num">${c}</span> 건 제출됨
@@ -585,8 +591,8 @@
         }).join('');
       }
 
-      document.getElementById('topics-col-left').innerHTML = renderColumn(leftTopics);
-      document.getElementById('topics-col-right').innerHTML = renderColumn(rightTopics);
+      document.getElementById('topics-col-left').innerHTML = renderColumn(leftTopics, 'left');
+      document.getElementById('topics-col-right').innerHTML = renderColumn(rightTopics, 'right');
       renderAssignees();
     }
 
