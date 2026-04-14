@@ -30,6 +30,12 @@
     .deadline-badge {
       background: #ff3b30; color: #fff; font-size: 13px; font-weight: 600;
       padding: 6px 14px; border-radius: 20px; white-space: nowrap;
+      min-width: 160px; text-align: center;
+    }
+    .deadline-badge.urgent { animation: pulse-badge 1s ease-in-out infinite; }
+    @keyframes pulse-badge {
+      0%, 100% { opacity: 1; }
+      50% { opacity: .7; }
     }
 
     /* ── Setup Banner ── */
@@ -254,6 +260,40 @@
     }
     .guide-body .warn strong { color: #b06000; }
 
+    /* ── Duplicate Checker ── */
+    .dup-checker {
+      margin-top: 12px; padding: 14px 18px; border-radius: 12px;
+      border: 1px solid #e5e5ea; background: #fafafa; display: none;
+    }
+    .dup-checker.show { display: block; }
+    .dup-checker.dup-block {
+      background: #fce8e6; border-color: #d93025;
+    }
+    .dup-checker.dup-warn {
+      background: #fff3cd; border-color: #ffc107;
+    }
+    .dup-checker.dup-pass {
+      background: #e6f4ea; border-color: #34c759;
+    }
+    .dup-checker h4 {
+      font-size: 14px; font-weight: 600; margin-bottom: 8px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .dup-checker .dup-icon { font-size: 16px; }
+    .dup-item {
+      font-size: 13px; padding: 8px 12px; margin-bottom: 6px;
+      background: rgba(255,255,255,.7); border-radius: 8px;
+      border: 1px solid rgba(0,0,0,.06);
+    }
+    .dup-item:last-child { margin-bottom: 0; }
+    .dup-item .dup-source {
+      font-weight: 600; font-size: 11px; padding: 2px 8px;
+      border-radius: 6px; margin-right: 6px;
+    }
+    .dup-item .dup-source.forum { background: #fce8e6; color: #d93025; }
+    .dup-item .dup-source.wiki { background: #e8f0fe; color: #1a73e8; }
+    .dup-item .dup-reason { color: #6e6e73; font-size: 12px; margin-top: 2px; }
+
     /* ── Toast ── */
     .toast {
       position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
@@ -280,7 +320,7 @@
           <h1>IMC 팀 과제 위키</h1>
           <p>중간대체과제 10문항 — 팀원들이 함께 광고 사례를 찾아 올리는 공간</p>
         </div>
-        <span class="deadline-badge">D-day: 4/18(토) 자정</span>
+        <span class="deadline-badge" id="deadline-badge">D-day: 4/18(토) 자정</span>
       </div>
     </div>
 
@@ -399,6 +439,12 @@
               <textarea id="f-analysis" required rows="4" placeholder="이 광고에서 해당 개념이 어떻게 적용되었는지 구체적으로..."></textarea>
             </div>
           </div>
+          <!-- Duplicate Checker -->
+          <div class="dup-checker" id="dup-checker">
+            <h4><span class="dup-icon" id="dup-icon"></span> <span id="dup-title">중복 검사 중...</span></h4>
+            <div id="dup-results"></div>
+          </div>
+
           <div class="form-actions">
             <button type="submit" class="btn-submit" id="btn-submit">제출하기</button>
           </div>
@@ -680,6 +726,16 @@
       btn.disabled = true;
       btn.textContent = '제출 중...';
 
+      // 제출 전 중복 체크 재실행 (최종 확인)
+      await checkDuplicate();
+      const dupEl = document.getElementById('dup-checker');
+      if (dupEl.classList.contains('dup-block')) {
+        toast('중복 광고입니다. 다른 광고를 선택해주세요.');
+        btn.disabled = false;
+        btn.textContent = '중복 광고 — 제출 불가';
+        return;
+      }
+
       const record = {
         topic_id:        currentTopicId,
         author:          document.getElementById('f-author').value.trim(),
@@ -710,6 +766,10 @@
       document.getElementById('f-author').value = localStorage.getItem('imc-author') || '';
       btn.disabled = false;
       btn.textContent = '제출하기';
+      // 중복 체커 리셋
+      const dupEl2 = document.getElementById('dup-checker');
+      dupEl2.classList.remove('show', 'dup-block', 'dup-warn', 'dup-pass');
+      document.getElementById('dup-results').innerHTML = '';
       await renderSubmissions(currentTopicId);
     });
 
@@ -860,6 +920,167 @@
     }
 
     // ================================================================
+    // Duplicate Checker
+    // ================================================================
+    let blacklistAds = [];
+
+    async function loadBlacklist() {
+      try {
+        const res = await fetch('data/blacklist.json');
+        const data = await res.json();
+        blacklistAds = data.usedAds || [];
+      } catch (e) {
+        console.warn('Blacklist load failed:', e);
+        blacklistAds = [];
+      }
+    }
+
+    function normStr(str) {
+      return (str || '').toLowerCase().replace(/\s+/g, '').replace(/[^a-z0-9가-힣]/g, '');
+    }
+
+    function brandMatch(a, b) {
+      if (!a || !b) return false;
+      return a === b || a.includes(b) || b.includes(a);
+    }
+
+    async function checkDuplicate() {
+      const brand = document.getElementById('f-brand').value.trim();
+      const campaign = document.getElementById('f-campaign').value.trim();
+      const watchUrl = document.getElementById('f-url').value.trim();
+
+      const el = document.getElementById('dup-checker');
+      const elIcon = document.getElementById('dup-icon');
+      const elTitle = document.getElementById('dup-title');
+      const elResults = document.getElementById('dup-results');
+      const btn = document.getElementById('btn-submit');
+
+      // 입력이 부족하면 숨김
+      if (!brand && !campaign) {
+        el.classList.remove('show', 'dup-block', 'dup-warn', 'dup-pass');
+        btn.disabled = false;
+        btn.textContent = '제출하기';
+        return;
+      }
+
+      const nBrand = normStr(brand);
+      const nCampaign = normStr(campaign);
+      const hits = [];
+
+      // 1) 토론방 블랙리스트 체크
+      for (const ad of blacklistAds) {
+        const bBrand = normStr(ad.brand);
+        const bCampaign = normStr(ad.campaign);
+        const bTitle = normStr(ad.title);
+
+        // URL 일치
+        if (watchUrl && ad.sourceUrl && watchUrl === ad.sourceUrl) {
+          hits.push({ level: 'block', source: '토론방', label: `${ad.brand} / ${ad.campaign}`, reason: '동일 URL' });
+          continue;
+        }
+
+        // 브랜드+캠페인 일치
+        if (nBrand && nCampaign && brandMatch(nBrand, bBrand) &&
+            (brandMatch(nCampaign, bCampaign) || brandMatch(nCampaign, bTitle))) {
+          hits.push({ level: 'block', source: '토론방', label: `${ad.brand} / ${ad.campaign}`, reason: '동일 브랜드·캠페인' });
+          continue;
+        }
+
+        // 브랜드만 일치 (경고)
+        if (nBrand && nBrand.length >= 2 && brandMatch(nBrand, bBrand)) {
+          hits.push({ level: 'warn', source: '토론방', label: `${ad.brand} / ${ad.campaign}`, reason: '동일 브랜드 — 캠페인명 확인 필요' });
+        }
+      }
+
+      // 2) 위키 내 다른 문제 제출물 체크
+      let allSubs = [];
+      if (sb) {
+        const { data } = await sb.from('submissions').select('brand, campaign, watch_url, topic_id');
+        allSubs = data || [];
+      } else {
+        allSubs = localSubmissions;
+      }
+
+      for (const sub of allSubs) {
+        if (sub.topic_id === currentTopicId) continue;
+        const sBrand = normStr(sub.brand);
+        const sCampaign = normStr(sub.campaign);
+        const topic = topics.find(t => t.id === sub.topic_id);
+        const qLabel = `위키 Q${topic?.question_num || '?'}`;
+
+        if (watchUrl && sub.watch_url && watchUrl === sub.watch_url) {
+          hits.push({ level: 'block', source: qLabel, label: `${sub.brand} / ${sub.campaign}`, reason: '동일 URL' });
+          continue;
+        }
+
+        if (nBrand && nCampaign && sBrand && sCampaign &&
+            brandMatch(nBrand, sBrand) && brandMatch(nCampaign, sCampaign)) {
+          hits.push({ level: 'block', source: qLabel, label: `${sub.brand} / ${sub.campaign}`, reason: '동일 브랜드·캠페인' });
+        }
+      }
+
+      // 결과 렌더링
+      el.classList.add('show');
+      el.classList.remove('dup-block', 'dup-warn', 'dup-pass');
+
+      const hasBlock = hits.some(h => h.level === 'block');
+      const hasWarn = hits.some(h => h.level === 'warn');
+
+      if (hasBlock) {
+        el.classList.add('dup-block');
+        elIcon.textContent = '\u26D4';
+        elTitle.textContent = '중복 광고 감지 — 제출 불가';
+        btn.disabled = true;
+        btn.textContent = '중복 광고 — 제출 불가';
+      } else if (hasWarn) {
+        el.classList.add('dup-warn');
+        elIcon.textContent = '\u26A0\uFE0F';
+        elTitle.textContent = '유사 광고 발견 — 확인 필요';
+        btn.disabled = false;
+        btn.textContent = '제출하기';
+      } else if (nBrand && nCampaign) {
+        el.classList.add('dup-pass');
+        elIcon.textContent = '\u2705';
+        elTitle.textContent = '중복 없음 — 사용 가능한 광고입니다';
+        btn.disabled = false;
+        btn.textContent = '제출하기';
+      } else {
+        el.classList.remove('show');
+        btn.disabled = false;
+        btn.textContent = '제출하기';
+      }
+
+      // 중복 없으면 결과 목록 비우기
+      if (hits.length === 0) {
+        elResults.innerHTML = '';
+        return;
+      }
+
+      // block 항목을 먼저 표시
+      const sorted = [...hits].sort((a, b) => (a.level === 'block' ? 0 : 1) - (b.level === 'block' ? 0 : 1));
+      elResults.innerHTML = sorted.map(h => {
+        const srcClass = h.source === '토론방' ? 'forum' : 'wiki';
+        return `
+          <div class="dup-item">
+            <span class="dup-source ${srcClass}">${esc(h.source)}</span>
+            <strong>${esc(h.label)}</strong>
+            <div class="dup-reason">${esc(h.reason)}</div>
+          </div>`;
+      }).join('');
+    }
+
+    // 디바운스: 타이핑 중 과도한 호출 방지
+    let dupTimer = null;
+    function debouncedDupCheck() {
+      clearTimeout(dupTimer);
+      dupTimer = setTimeout(checkDuplicate, 300);
+    }
+
+    document.getElementById('f-brand')?.addEventListener('input', debouncedDupCheck);
+    document.getElementById('f-campaign')?.addEventListener('input', debouncedDupCheck);
+    document.getElementById('f-url')?.addEventListener('input', debouncedDupCheck);
+
+    // ================================================================
     // Volume Checker
     // ================================================================
     // PPT 1장 ≈ A4 반 페이지 ≈ 약 200~400자 (개념 + 분석 합산)
@@ -934,10 +1155,49 @@
     document.getElementById('f-analysis')?.addEventListener('input', updateVolumeChecker);
 
     // ================================================================
+    // Deadline Countdown
+    // ================================================================
+    const DEADLINE = new Date('2026-04-18T23:59:59+09:00');
+
+    function updateCountdown() {
+      const badge = document.getElementById('deadline-badge');
+      if (!badge) return;
+      const now = new Date();
+      const diff = DEADLINE - now;
+
+      if (diff <= 0) {
+        badge.textContent = '마감 종료';
+        badge.style.background = '#6e6e73';
+        badge.classList.remove('urgent');
+        return;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const totalHours = Math.floor(diff / (1000 * 60 * 60));
+
+      if (days >= 1) {
+        badge.textContent = `D-${days} ${hours}시간 ${mins}분 남음`;
+        badge.classList.remove('urgent');
+      } else {
+        badge.textContent = `${totalHours}시간 ${mins}분 남음`;
+        badge.classList.add('urgent');
+        if (totalHours < 6) {
+          badge.style.background = '#ff2d55';
+        }
+      }
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 60000);
+
+    // ================================================================
     // Boot
     // ================================================================
     (async function boot() {
       const ok = initSupabase();
+      await loadBlacklist();
       if (ok) {
         await loadTopics();
         subscribeRealtime();

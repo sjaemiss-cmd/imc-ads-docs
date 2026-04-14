@@ -1,97 +1,321 @@
 {
-  "forumId": 318977,
-  "checkedAt": "2026-04-07",
+  "forums": [
+    {"name": "팀활동 토론방", "id": 318977},
+    {"name": "광고찾기 실습과제", "id": 313162}
+  ],
+  "checkedAt": "2026-04-14",
   "usedAds": [
     {
-      "title": "폭스바겐 아틀라스",
+      "title": "폭스바겐 아틀라스 / 위대하게, 아빠답게",
       "brand": "폭스바겐",
-      "campaign": "욕구 기반 동기 광고",
+      "campaign": "아틀라스 — 위대하게, 아빠답게",
       "sourceUrl": "https://tvcf.co.kr/play/bi2674-1011067",
-      "discussionTitle": "욕구 기반 동기 광고, 인지 기반 동기 광고_1조"
+      "discussionTitle": "욕구 기반 동기 광고, 인지 기반 동기 광고_1조",
+      "forum": "팀활동 토론방"
     },
     {
       "title": "삼성 갤럭시 버즈4 프로",
       "brand": "삼성",
-      "campaign": "인지 기반 동기 광고",
+      "campaign": "갤럭시 버즈4 프로",
       "sourceUrl": "https://tvcf.co.kr/play/bi1511-1011451",
-      "discussionTitle": "욕구 기반 동기 광고, 인지 기반 동기 광고_1조"
+      "discussionTitle": "욕구 기반 동기 광고, 인지 기반 동기 광고_1조",
+      "forum": "팀활동 토론방"
     },
     {
       "title": "Bose / Life Deserves Music. Music Deserves Bose.",
       "brand": "Bose",
       "campaign": "Life Deserves Music. Music Deserves Bose.",
       "sourceUrl": "",
-      "discussionTitle": ""
+      "discussionTitle": "고관여 저관여 광고 찾기_2조",
+      "forum": "팀활동 토론방"
     },
     {
       "title": "가마치통닭 / 칙스터",
       "brand": "가마치통닭",
       "campaign": "칙스터",
       "sourceUrl": "",
-      "discussionTitle": ""
+      "discussionTitle": "고관여 저관여 광고 찾기_2조",
+      "forum": "팀활동 토론방"
     },
     {
-      "title": "롯데 자일리톨 / 양치처럼 매일 꾸준히",
-      "brand": "롯데 자일리톨",
+      "title": "롯데웰푸드 자일리톨 / 양치처럼 매일 꾸준히",
+      "brand": "롯데웰푸드 자일리톨",
       "campaign": "양치처럼 매일 꾸준히",
-      "sourceUrl": "",
-      "discussionTitle": ""
+      "sourceUrl": "https://tvcf.co.kr/play/bh1457-995205",
+      "discussionTitle": "장기기억 중 절차기억(스크립트)이 이용된 광고_7조",
+      "forum": "팀활동 토론방"
     },
     {
-      "title": "농심 / 배홍동 막국수",
+      "title": "농심 배홍동 막국수 / 우리는 막국수도 배홍동으로 간다",
       "brand": "농심",
       "campaign": "배홍동 막국수",
-      "sourceUrl": "",
-      "discussionTitle": ""
+      "sourceUrl": "https://tvcf.co.kr/play/ai288-1012908",
+      "discussionTitle": "재인적 단서가 포함된 광고 사례_8조",
+      "forum": "팀활동 토론방"
     },
     {
       "title": "오뚜기 / 진라면",
       "brand": "오뚜기",
       "campaign": "진라면",
-      "sourceUrl": "",
-      "discussionTitle": ""
+      "sourceUrl": "https://tvcf.co.kr/play/bh11716-960519",
+      "discussionTitle": "재인적 단서가 포함된 광고 사례_8조",
+      "forum": "팀활동 토론방"
     },
     {
-      "title": "다이나핏 / SKY DYNAMITE",
+      "title": "다이나핏 / SKY DYNAMITE with ITZY 유나",
       "brand": "다이나핏",
       "campaign": "SKY DYNAMITE",
-      "sourceUrl": "",
-      "discussionTitle": ""
+      "sourceUrl": "https://tvcf.co.kr/play/bi1679-1011567",
+      "discussionTitle": "단기기억의 증진을 위한 의미적 부호화 설명_6조",
+      "forum": "팀활동 토론방"
     },
     {
       "title": "아이폰 17 Pro / 단체 셀카",
       "brand": "아이폰 17 Pro",
       "campaign": "단체 셀카",
-      "sourceUrl": "",
-      "discussionTitle": ""
+      "sourceUrl": "https://tvcf.co.kr/play/ai2364-1010436",
+      "discussionTitle": "단기기억의 증진을 위한 의미적 부호화 설명_6조",
+      "forum": "팀활동 토론방"
     },
     {
       "title": "코카콜라 / We All Scream for Orange Cream",
       "brand": "코카콜라",
       "campaign": "We All Scream for Orange Cream",
       "sourceUrl": "",
-      "discussionTitle": ""
+      "discussionTitle": "게슈탈트 조직화 원리 중 집단화 원리 사례_5조",
+      "forum": "팀활동 토론방"
+    },
+    {
+      "title": "배달의 민족 / 배민클럽",
+      "brand": "배달의 민족",
+      "campaign": "배민클럽",
+      "sourceUrl": "",
+      "discussionTitle": "게슈탈트 조직화 원리 중 집단화 원리 사례_5조",
+      "forum": "팀활동 토론방"
     },
     {
       "title": "GAP / Better in Denim",
       "brand": "GAP",
       "campaign": "Better in Denim",
       "sourceUrl": "",
-      "discussionTitle": ""
+      "discussionTitle": "자극물 자체에 포함된 주의 요인_4조",
+      "forum": "팀활동 토론방"
     },
     {
       "title": "기아 EV5 / Knives Out collaboration",
       "brand": "기아 EV5",
       "campaign": "Knives Out collaboration",
       "sourceUrl": "",
-      "discussionTitle": ""
+      "discussionTitle": "자극물 자체에 포함된 주의 요인_4조",
+      "forum": "팀활동 토론방"
     },
     {
       "title": "버거킹 / 콰트로 페퍼 큐브 스테이크 와퍼",
       "brand": "버거킹",
       "campaign": "콰트로 페퍼 큐브 스테이크 와퍼",
       "sourceUrl": "",
-      "discussionTitle": ""
+      "discussionTitle": "오감의 하나를 집중 사용하도록 자극요소를 포함하는 광고의 사례_3조",
+      "forum": "팀활동 토론방"
+    },
+    {
+      "title": "박카스 / 젊음을 힘껏. 마음껏. 스포츠",
+      "brand": "박카스",
+      "campaign": "어제의 나를 넘어서",
+      "sourceUrl": "https://tvcf.co.kr/play/ah03969-951144",
+      "discussionTitle": "고전적 조건화_1조",
+      "forum": "팀활동 토론방"
+    },
+    {
+      "title": "신한은행 땡겨요 / 세 번 시키면 만원이 뚝",
+      "brand": "신한은행 땡겨요",
+      "campaign": "중독주의 세 번 시키면 만원이 뚝",
+      "sourceUrl": "https://tvcf.co.kr/play/ah08283-984192",
+      "discussionTitle": "고정비율 강화를 통한 반복 구매 유도_2조",
+      "forum": "팀활동 토론방"
+    },
+    {
+      "title": "삼천리 자전거 / 나다운 라이프를 발견하는 즐거움",
+      "brand": "삼천리 자전거",
+      "campaign": "나다운 라이프를 발견하는 즐거움",
+      "sourceUrl": "https://tvcf.co.kr/play/ai2383-1009138",
+      "discussionTitle": "해석 주의적 광고_삼천리자전거",
+      "forum": "광고찾기 실습과제"
+    },
+    {
+      "title": "Pocari Sweat / 우리의 지금은 옳다",
+      "brand": "Pocari Sweat",
+      "campaign": "우리의 지금은 옳다",
+      "sourceUrl": "https://youtu.be/U81XYwiIBjw",
+      "discussionTitle": "실증주의적 광고",
+      "forum": "광고찾기 실습과제"
+    },
+    {
+      "title": "대상 청정원 / 30년간 알게 모르게 맛있게",
+      "brand": "청정원",
+      "campaign": "30주년 기념 캠페인",
+      "sourceUrl": "https://tvcf.co.kr/play/ai2145-1009914",
+      "discussionTitle": "해석주의적 광고 - 청정원",
+      "forum": "광고찾기 실습과제"
+    },
+    {
+      "title": "틴더 / 사랑에 정해진 모양은 없어",
+      "brand": "틴더",
+      "campaign": "사랑에 정해진 모양은 없어",
+      "sourceUrl": "https://tvcf.co.kr/play/bi2655-1010365",
+      "discussionTitle": "해석주의적 광고_틴더",
+      "forum": "광고찾기 실습과제"
+    },
+    {
+      "title": "한국마즈 쉬바 / 10마리 중 9마리 고양이의 선택",
+      "brand": "한국마즈 쉬바",
+      "campaign": "10마리 중 9마리 고양이의 선택",
+      "sourceUrl": "https://tvcf.co.kr/play/bi2799-1010279",
+      "discussionTitle": "실증주의적 광고_한국마즈(쉬바)",
+      "forum": "광고찾기 실습과제"
+    },
+    {
+      "title": "다이슨 에어랩 2X",
+      "brand": "다이슨",
+      "campaign": "에어랩 2X",
+      "sourceUrl": "",
+      "discussionTitle": "실증주의적 광고 - 다이슨 에어랩 2x",
+      "forum": "광고찾기 실습과제"
+    },
+    {
+      "title": "Apple / A Critter Carol",
+      "brand": "Apple",
+      "campaign": "A Critter Carol",
+      "sourceUrl": "https://m.youtube.com/watch?v=w8ieBta7d94",
+      "discussionTitle": "해석주의 광고 – Apple",
+      "forum": "광고찾기 실습과제"
+    },
+    {
+      "title": "mengniu / 설날 축복 캠페인",
+      "brand": "mengniu",
+      "campaign": "새해 행운을 받는다(接彩头)",
+      "sourceUrl": "https://tvcf.co.kr/play/ai4404-1006040",
+      "discussionTitle": "해석주의 광고 _ mengniu(중국 우유 브랜드)",
+      "forum": "광고찾기 실습과제"
+    },
+    {
+      "title": "맥도날드 / 고구마 후라이",
+      "brand": "맥도날드",
+      "campaign": "바삭 달콤하구마!",
+      "sourceUrl": "",
+      "discussionTitle": "해석주의적 광고_맥도날드",
+      "forum": "광고찾기 실습과제"
+    },
+    {
+      "title": "카스 / 성적은 잊혀져도 이야기는 기억된다",
+      "brand": "카스",
+      "campaign": "올림픽 기억 캠페인",
+      "sourceUrl": "https://tvcf.co.kr/play/bi2277-1004727",
+      "discussionTitle": "해석주의적 광고- 카스",
+      "forum": "광고찾기 실습과제"
+    },
+    {
+      "title": "일동제약 아로나민 골드",
+      "brand": "일동제약",
+      "campaign": "아로나민 골드",
+      "sourceUrl": "https://tvcf.co.kr/play/ai2745-1010374",
+      "discussionTitle": "실증주의적 광고_아로나민 골드",
+      "forum": "광고찾기 실습과제"
+    },
+    {
+      "title": "캔바 / 뭐든지 해낸다, 빠르게",
+      "brand": "캔바",
+      "campaign": "뭐든지 해낸다, 빠르게",
+      "sourceUrl": "https://tvcf.co.kr/play/ai384-1007508",
+      "discussionTitle": "실증주의적 광고_캔바: 뭐든지 해낸다, 빠르게 편",
+      "forum": "광고찾기 실습과제"
+    },
+    {
+      "title": "웅진식품 생차 / 다시 시작하生",
+      "brand": "웅진식품 생차",
+      "campaign": "기분 좋은 시작을 시작하生",
+      "sourceUrl": "https://tvcf.co.kr/play/ai2166-1009816",
+      "discussionTitle": "해석주의적 광고_웅진식품 생차",
+      "forum": "광고찾기 실습과제"
+    },
+    {
+      "title": "짐빔 하이볼 / 장원영",
+      "brand": "짐빔 하이볼",
+      "campaign": "장원영 하이볼",
+      "sourceUrl": "https://tvcf.co.kr/play/ai2644-1010364",
+      "discussionTitle": "해석주의적 광고_짐빔 하이볼",
+      "forum": "광고찾기 실습과제"
+    },
+    {
+      "title": "LG 디오스 식기세척기 / 조용모드",
+      "brand": "LG",
+      "campaign": "디오스 오브제컬렉션 식기세척기",
+      "sourceUrl": "https://tvcf.co.kr/play/bh08917-987799",
+      "discussionTitle": "실증주의적 광고_LG 식기세척기",
+      "forum": "광고찾기 실습과제"
+    },
+    {
+      "title": "제주삼다수 / 좋아마심",
+      "brand": "제주삼다수",
+      "campaign": "좋아마심",
+      "sourceUrl": "https://tvcf.co.kr/play/ah05044-981256",
+      "discussionTitle": "해석주의적 광고_제주 삼다수",
+      "forum": "광고찾기 실습과제"
+    },
+    {
+      "title": "농심 / 서울 라면 MV",
+      "brand": "농심",
+      "campaign": "서울 라면 MV",
+      "sourceUrl": "https://tvcf.co.kr/play/bi2878-1008287",
+      "discussionTitle": "해석주의적 광고_농심",
+      "forum": "광고찾기 실습과제"
+    },
+    {
+      "title": "삼성 갤럭시 S26 울트라 / 프라이버시 디스플레이",
+      "brand": "삼성",
+      "campaign": "갤럭시 S26 울트라 프라이버시 디스플레이",
+      "sourceUrl": "https://tvcf.co.kr/play/bi2413-1009741",
+      "discussionTitle": "실증주의적 광고_samsung galaxy s26 ultra",
+      "forum": "광고찾기 실습과제"
+    },
+    {
+      "title": "삼성 갤럭시 북6 프로",
+      "brand": "삼성",
+      "campaign": "갤럭시 북6 프로",
+      "sourceUrl": "https://tvcf.co.kr/play/ai3605-1008860",
+      "discussionTitle": "실증주의적 광고_삼성 갤럭시 북6 프로",
+      "forum": "광고찾기 실습과제"
+    },
+    {
+      "title": "KB손해보험 / 속상한 일도 일상",
+      "brand": "KB손해보험",
+      "campaign": "속상한 일도 일상, 제자리로 돌아오면 일상",
+      "sourceUrl": "https://tvcf.co.kr/play/ai2188-1008818",
+      "discussionTitle": "해석주의적 광고_KB손해보험",
+      "forum": "광고찾기 실습과제"
+    },
+    {
+      "title": "탁센 / 1위 15초",
+      "brand": "탁센",
+      "campaign": "6년 연속 판매 1위",
+      "sourceUrl": "https://tvcf.co.kr/play/ah07385-977482",
+      "discussionTitle": "실증주의적 광고 - 탁센",
+      "forum": "광고찾기 실습과제"
+    },
+    {
+      "title": "르무통 / 사랑하는 사람에게 선물",
+      "brand": "르무통",
+      "campaign": "사랑하는 사람에게 선물",
+      "sourceUrl": "https://tvcf.co.kr/play/ai2724-1008472",
+      "discussionTitle": "해석주의적광고_르무통",
+      "forum": "광고찾기 실습과제"
+    },
+    {
+      "title": "빙그레 바나나맛우유 / 무가당",
+      "brand": "빙그레",
+      "campaign": "바나나맛우유 무가당",
+      "sourceUrl": "https://www.adconsumerreport.com/Report/View.aspx?Code=A000585795",
+      "discussionTitle": "실증주의적 광고_빙그레바나나맛우유",
+      "forum": "광고찾기 실습과제"
     }
   ]
 }
