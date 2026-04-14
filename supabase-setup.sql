@@ -38,6 +38,7 @@ alter table topics enable row level security;
 alter table submissions enable row level security;
 
 create policy "topics_read" on topics for select using (true);
+create policy "topics_update" on topics for update using (true);
 create policy "submissions_read" on submissions for select using (true);
 create policy "submissions_insert" on submissions for insert with check (true);
 create policy "submissions_update" on submissions for update using (true);

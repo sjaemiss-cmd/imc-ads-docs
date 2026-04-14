@@ -627,17 +627,23 @@
       if (!name || !name.trim()) return;
       const nums = side === 'left' ? [1,2,3,4,5] : [6,7,8,9,10];
       const colTopics = topics.filter(t => nums.includes(t.question_num));
+      let failed = false;
       for (const t of colTopics) {
         const current = t.assignees || [];
         if (current.includes(name.trim())) continue;
         const updated = [...current, name.trim()];
         if (sb) {
-          await sb.from('topics').update({ assignees: updated }).eq('id', t.id);
+          const { error } = await sb.from('topics').update({ assignees: updated }).eq('id', t.id);
+          if (error) { console.error('담당자 저장 실패:', error); failed = true; continue; }
         }
         t.assignees = updated;
       }
       renderAssignees();
-      toast(name.trim() + ' 담당자 등록 완료');
+      if (failed) {
+        toast('담당자 저장 실패 — Supabase SQL Editor에서 topics_update 정책을 추가하세요');
+      } else {
+        toast(name.trim() + ' 담당자 등록 완료');
+      }
     }
 
     // ================================================================
