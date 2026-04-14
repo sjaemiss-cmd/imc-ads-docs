@@ -155,10 +155,32 @@
     .sub-link { font-size: 13px; margin-top: 8px; }
     .sub-time { font-size: 12px; color: #aeaeb2; margin-top: 8px; }
     .no-submissions { text-align: center; padding: 32px; color: #aeaeb2; font-size: 14px; }
-    .sub-delete {
-      float: right; background: none; border: none; color: #aeaeb2; font-size: 18px; padding: 0 4px;
+    .sub-actions { float: right; display: flex; gap: 4px; }
+    .sub-delete, .sub-edit {
+      background: none; border: none; color: #aeaeb2; font-size: 14px; padding: 2px 6px;
     }
     .sub-delete:hover { color: #ff3b30; }
+    .sub-edit:hover { color: #0066cc; }
+    .sub-edit-form { margin-top: 12px; border-top: 1px solid #e5e5ea; padding-top: 12px; }
+    .sub-edit-form .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .sub-edit-form .form-group { display: flex; flex-direction: column; gap: 3px; }
+    .sub-edit-form .form-group.full { grid-column: 1 / -1; }
+    .sub-edit-form label { font-size: 12px; font-weight: 600; color: #6e6e73; }
+    .sub-edit-form input, .sub-edit-form textarea {
+      padding: 8px 10px; border: 1px solid #d2d2d7; border-radius: 8px;
+      font-size: 13px; font-family: inherit; background: #fafafa;
+    }
+    .sub-edit-form input:focus, .sub-edit-form textarea:focus {
+      outline: none; border-color: #0066cc; background: #fff;
+    }
+    .sub-edit-form textarea { resize: vertical; min-height: 70px; }
+    .sub-edit-actions { margin-top: 8px; display: flex; gap: 8px; }
+    .sub-edit-actions button {
+      padding: 8px 18px; border: none; border-radius: 8px; font-size: 13px; font-weight: 600;
+    }
+    .btn-edit-save { background: #0066cc; color: #fff; }
+    .btn-edit-save:hover { background: #0055b3; }
+    .btn-edit-cancel { background: #e5e5ea; color: #1d1d1f; }
 
     /* ── Comments ── */
     .comments-section { margin-top: 12px; padding-top: 10px; border-top: 1px dashed #e5e5ea; }
@@ -716,7 +738,10 @@
 
       list.innerHTML = subs.map(s => `
         <div class="submission-card" id="sub-${s.id}">
-          <button class="sub-delete" onclick="deleteSub('${s.id}')" title="삭제">×</button>
+          <div class="sub-actions">
+            <button class="sub-edit" onclick="toggleEdit('${s.id}')" title="수정">수정</button>
+            <button class="sub-delete" onclick="deleteSub('${s.id}')" title="삭제">×</button>
+          </div>
           <div class="sub-meta">
             <span class="sub-author">${esc(s.author)}</span>
             <span class="sub-brand">${esc(s.brand)}</span>
@@ -731,6 +756,21 @@
           </div>
           ${s.watch_url ? `<div class="sub-link"><a href="${esc(s.watch_url)}" target="_blank" rel="noopener">광고 보기 →</a></div>` : ''}
           <div class="sub-time">${new Date(s.created_at).toLocaleString('ko-KR')}</div>
+          <div class="sub-edit-form" id="edit-form-${s.id}" hidden>
+            <div class="form-grid">
+              <div class="form-group"><label>브랜드</label><input id="edit-brand-${s.id}" value="${esc(s.brand)}" /></div>
+              <div class="form-group"><label>캠페인/광고명</label><input id="edit-campaign-${s.id}" value="${esc(s.campaign)}" /></div>
+              <div class="form-group"><label>실행 시기</label><input id="edit-published-${s.id}" value="${esc(s.published_at)}" /></div>
+              <div class="form-group"><label>매체</label><input id="edit-medium-${s.id}" value="${esc(s.medium)}" /></div>
+              <div class="form-group full"><label>광고 링크</label><input id="edit-url-${s.id}" value="${esc(s.watch_url)}" /></div>
+              <div class="form-group full"><label>개념/이론 설명</label><textarea id="edit-concept-${s.id}" rows="4">${esc(s.concept_summary)}</textarea></div>
+              <div class="form-group full"><label>사례 분석</label><textarea id="edit-analysis-${s.id}" rows="5">${esc(s.case_analysis)}</textarea></div>
+            </div>
+            <div class="sub-edit-actions">
+              <button class="btn-edit-save" onclick="saveEdit('${s.id}')">저장</button>
+              <button class="btn-edit-cancel" onclick="toggleEdit('${s.id}')">취소</button>
+            </div>
+          </div>
           <div class="comments-section">
             <button class="comments-toggle" onclick="toggleComments('${s.id}')">
               <span id="comment-count-${s.id}">...</span> 댓글
@@ -831,6 +871,39 @@
       }
 
       toast('삭제됨');
+      await renderSubmissions(currentTopicId);
+    }
+
+    // ================================================================
+    // Edit Submission
+    // ================================================================
+    function toggleEdit(id) {
+      const form = document.getElementById('edit-form-' + id);
+      if (form) form.hidden = !form.hidden;
+    }
+
+    async function saveEdit(id) {
+      const get = (field) => document.getElementById(`edit-${field}-${id}`)?.value.trim() || '';
+      const updates = {
+        brand:           get('brand'),
+        campaign:        get('campaign'),
+        published_at:    get('published'),
+        medium:          get('medium'),
+        watch_url:       get('url'),
+        concept_summary: get('concept'),
+        case_analysis:   get('analysis'),
+      };
+
+      if (sb) {
+        const { error } = await sb.from('submissions').update(updates).eq('id', id);
+        if (error) { toast('수정 실패: ' + error.message); return; }
+      } else {
+        const sub = localSubmissions.find(s => s.id === id);
+        if (sub) Object.assign(sub, updates);
+        saveFallback();
+      }
+
+      toast('수정 완료!');
       await renderSubmissions(currentTopicId);
     }
 
