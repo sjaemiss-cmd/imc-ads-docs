@@ -1474,7 +1474,7 @@
     // 캐시: L1 메모리 → L2 localStorage → L3 Supabase → L4 OpenAI
     // ================================================================
     const OPENAI_API_KEY = localStorage.getItem('openai-api-key') || (() => {
-      const k = prompt('번역 기능을 위해 OpenAI API 키를 입력하세요 (한 번만 입력하면 저장됩니다):');
+      const k = prompt('번역 기능을 위해 OpenAI API 키를 입력하세요 (한 번만 입력하면 저장됩니다)\n\nဘာသာပြန်ရန် OpenAI API key ထည့်ပါ (တစ်ခါထည့်ရုံဖြင့် သိမ်းဆည်းပါမည်):');
       if (k) localStorage.setItem('openai-api-key', k);
       return k || '';
     })();
