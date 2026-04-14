@@ -392,11 +392,11 @@
             </div>
             <div class="form-group full">
               <label for="f-concept">개념/이론 설명 (자기 말로)</label>
-              <textarea id="f-concept" required rows="3" placeholder="이 문제와 관련된 개념을 자신의 말로 설명..."></textarea>
+              <textarea id="f-concept" required rows="3" placeholder="이 문제와 관련된 개념을 자신의 말로 설명..." oninput="updateVolumeChecker()"></textarea>
             </div>
             <div class="form-group full">
               <label for="f-analysis">광고 사례 분석 (구체적 장면/요소)</label>
-              <textarea id="f-analysis" required rows="4" placeholder="이 광고에서 해당 개념이 어떻게 적용되었는지 구체적으로..."></textarea>
+              <textarea id="f-analysis" required rows="4" placeholder="이 광고에서 해당 개념이 어떻게 적용되었는지 구체적으로..." oninput="updateVolumeChecker()"></textarea>
             </div>
           </div>
           <div class="form-actions">
@@ -929,9 +929,6 @@
         elSum.className = 'vc-summary vc-fail';
       }
     }
-
-    document.getElementById('f-concept')?.addEventListener('input', updateVolumeChecker);
-    document.getElementById('f-analysis')?.addEventListener('input', updateVolumeChecker);
 
     // ================================================================
     // Boot
