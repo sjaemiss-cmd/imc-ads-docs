@@ -181,6 +181,35 @@
       border-radius: 12px; font-size: 15px;
     }
 
+    /* ── Guide Panel ── */
+    .guide-toggle {
+      width: 100%; background: #fff; border: 1px solid #e5e5ea; border-radius: 12px;
+      padding: 14px 20px; margin-bottom: 16px; font-size: 14px; font-weight: 600;
+      color: #424245; display: flex; justify-content: space-between; align-items: center;
+      transition: background .15s;
+    }
+    .guide-toggle:hover { background: #f5f5f7; }
+    .guide-toggle .arrow { transition: transform .2s; font-size: 12px; color: #aeaeb2; }
+    .guide-toggle.open .arrow { transform: rotate(180deg); }
+    .guide-body {
+      background: #fff; border: 1px solid #e5e5ea; border-radius: 12px;
+      padding: 20px 24px; margin-top: -8px; margin-bottom: 16px;
+      font-size: 14px; line-height: 1.8; display: none;
+    }
+    .guide-body.open { display: block; }
+    .guide-body h4 {
+      font-size: 14px; font-weight: 700; color: #1d1d1f;
+      margin: 16px 0 6px; padding-bottom: 4px; border-bottom: 1px solid #f0f0f2;
+    }
+    .guide-body h4:first-child { margin-top: 0; }
+    .guide-body ul { padding-left: 20px; margin: 4px 0 8px; }
+    .guide-body li { margin-bottom: 4px; color: #424245; }
+    .guide-body .warn {
+      background: #fff3cd; border-radius: 8px; padding: 10px 14px;
+      font-size: 13px; margin-top: 12px; line-height: 1.6;
+    }
+    .guide-body .warn strong { color: #b06000; }
+
     /* ── Toast ── */
     .toast {
       position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
@@ -208,6 +237,46 @@
           <p>중간대체과제 10문항 — 팀원들이 함께 광고 사례를 찾아 올리는 공간</p>
         </div>
         <span class="deadline-badge">D-day: 4/18(토) 자정</span>
+      </div>
+    </div>
+
+    <!-- Guide Panel -->
+    <button class="guide-toggle" id="guide-toggle" onclick="document.getElementById('guide-toggle').classList.toggle('open');document.getElementById('guide-body').classList.toggle('open')">
+      과제 안내 (제출 형식 · 선정 기준 · 마감)
+      <span class="arrow">▼</span>
+    </button>
+    <div class="guide-body" id="guide-body">
+      <h4>과제 목적</h4>
+      <p>소비자 심리 및 행동 관련 개념들이 실제 광고 활동에 어떻게 적용되는가를 스스로 점검하고, 다양한 광고물을 접하며 광고에 대한 이해를 증진하는 것.</p>
+
+      <h4>답안 작성 방법 (문제당)</h4>
+      <ul>
+        <li><strong>분량</strong>: PPT 1장 또는 A4 1/2 페이지</li>
+        <li><strong>① 개념/이론 설명</strong> — 자기 말로 서술 (강의노트·서적 그대로 붙이기 금지!)</li>
+        <li><strong>② 광고 사례 분석</strong> — 구체적으로 어떤 장면에, 어떻게 적용되어 있는지 설명</li>
+        <li><strong>③ 배경 설명</strong> — 필요 시 브랜드·광고 배경을 간결하게 포함</li>
+      </ul>
+
+      <h4>제출 형식</h4>
+      <ul>
+        <li>PPT 또는 MS워드 등 <strong>집현캠퍼스에서 바로 열리는 확장자</strong></li>
+        <li><strong>문제 순서대로</strong> 답안 배치</li>
+      </ul>
+
+      <h4>광고 선정 기준</h4>
+      <ul>
+        <li><strong>2023년 이후</strong> 실행된 국내외 마케팅 커뮤니케이션 콘텐츠</li>
+        <li>광고 기본 정보 필수 기재: <strong>광고주, 브랜드명, 실행 시기, 실행 매체</strong></li>
+        <li>집현캠퍼스에서 확인 가능한 <strong>링크 또는 이미지</strong> 포함</li>
+        <li>집현캠퍼스 <strong>토론방에 이미 사용된 광고</strong>는 동일 문제에 사용 불가</li>
+        <li><strong>문제별로 서로 다른 광고</strong> 사례 제시</li>
+      </ul>
+
+      <h4>마감</h4>
+      <p><strong>4월 18일 (토) 밤 12시</strong> — 집현캠퍼스 중간고사 과제방 업로드 (시간 엄수, 늦은 과제 감점)</p>
+
+      <div class="warn">
+        <strong>주의!</strong> 세상은 넓고 광고는 수도 없이 많습니다. 토론방에서 이미 쓰인 광고를 그대로 가져오지 마세요. 문제마다 반드시 다른 광고를 찾아야 합니다.
       </div>
     </div>
 
