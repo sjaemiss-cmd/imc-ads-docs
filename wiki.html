@@ -350,6 +350,34 @@
     }
     .toast.show { opacity: 1; }
 
+    /* ── Language Toggle ── */
+    .lang-toggle {
+      display: flex; background: #f5f5f7; border-radius: 8px;
+      padding: 2px; border: 1px solid #e5e5ea;
+    }
+    .lang-btn {
+      padding: 5px 14px; border: none; background: transparent;
+      border-radius: 6px; cursor: pointer; font-size: 13px;
+      font-weight: 600; transition: all .15s; color: #6e6e73;
+    }
+    .lang-btn.active {
+      background: #0066cc; color: #fff;
+      box-shadow: 0 1px 3px rgba(0,102,204,.3);
+    }
+    .trans-badge {
+      position: fixed; top: 12px; right: 16px; background: #fff;
+      border: 1px solid #e5e5ea; border-radius: 10px; padding: 8px 14px;
+      font-size: 13px; color: #6e6e73; box-shadow: 0 2px 8px rgba(0,0,0,.1);
+      z-index: 200; display: none; align-items: center; gap: 8px;
+    }
+    .trans-badge.show { display: flex; }
+    .trans-spinner {
+      width: 14px; height: 14px; border: 2px solid #e5e5ea;
+      border-top-color: #0066cc; border-radius: 50%;
+      animation: trans-spin .6s linear infinite;
+    }
+    @keyframes trans-spin { to { transform: rotate(360deg); } }
+
     /* ── Responsive ── */
     @media (max-width: 640px) {
       .form-grid { grid-template-columns: 1fr; }
@@ -367,8 +395,20 @@
           <h1>IMC 팀 과제 위키</h1>
           <p>중간대체과제 10문항 — 팀원들이 함께 광고 사례를 찾아 올리는 공간</p>
         </div>
-        <span class="deadline-badge" id="deadline-badge">D-day: 4/18(토) 자정</span>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+          <div class="lang-toggle">
+            <button class="lang-btn active" data-lang="ko" onclick="switchLanguage('ko')">한국어</button>
+            <button class="lang-btn" data-lang="my" onclick="switchLanguage('my')">မြန်မာ</button>
+          </div>
+          <span class="deadline-badge" id="deadline-badge">D-day: 4/18(토) 자정</span>
+        </div>
       </div>
+    </div>
+
+    <!-- Translation indicator -->
+    <div class="trans-badge" id="trans-badge">
+      <div class="trans-spinner"></div>
+      <span id="trans-badge-text">ဘာသာပြန်နေသည်...</span>
     </div>
 
     <!-- Guide Panel -->
@@ -529,6 +569,7 @@
   <!-- Toast -->
   <div id="toast" class="toast"></div>
 
+  <script src="assets/wiki-translation-cache.js"></script>
   <script>
     // ================================================================
     // CONFIG — Supabase 프로젝트 생성 후 아래 두 값을 채워넣으세요
@@ -831,6 +872,23 @@
 
       // Save author for next time
       localStorage.setItem('imc-author', record.author);
+
+      // Auto-translate Burmese input to Korean before saving
+      if (isBurmese(record.concept_summary) || isBurmese(record.case_analysis)) {
+        btn.textContent = wikiLang === 'my' ? 'ဘာသာပြန်ပြီး တင်ပို့နေသည်...' : '번역 후 제출 중...';
+        if (isBurmese(record.concept_summary)) {
+          record.concept_summary = await translateSingle(record.concept_summary, 'my', 'ko');
+        }
+        if (isBurmese(record.case_analysis)) {
+          record.case_analysis = await translateSingle(record.case_analysis, 'my', 'ko');
+        }
+        if (isBurmese(record.brand)) {
+          record.brand = await translateSingle(record.brand, 'my', 'ko');
+        }
+        if (isBurmese(record.campaign)) {
+          record.campaign = await translateSingle(record.campaign, 'my', 'ko');
+        }
+      }
 
       if (sb) {
         const { error } = await sb.from('submissions').insert([record]);
@@ -1412,6 +1470,329 @@
     setInterval(updateCountdown, 60000);
 
     // ================================================================
+    // Translation Layer — 한국어 ↔ မြန်မာ (Burmese)
+    // 캐시: L1 메모리 → L2 localStorage → L3 Supabase → L4 OpenAI
+    // ================================================================
+    const OPENAI_API_KEY = localStorage.getItem('openai-api-key') || (() => {
+      const k = prompt('번역 기능을 위해 OpenAI API 키를 입력하세요 (한 번만 입력하면 저장됩니다):');
+      if (k) localStorage.setItem('openai-api-key', k);
+      return k || '';
+    })();
+    let wikiLang = localStorage.getItem('wiki-lang') || 'ko';
+    let isTranslating = false;
+    let translateDebounce = null;
+    const translationCacheUtils = window.WikiTranslationCache || {};
+    const ck = translationCacheUtils.buildCacheKey || ((f, t, s) => `${f}>${t}:${s}`);
+    const getCachedTranslation = translationCacheUtils.getCachedTranslation || ((cache, f, t, s) => cache[ck(f, t, s)] || null);
+    const sanitizeTranslationCache = translationCacheUtils.sanitizeTranslationCache || (cache => cache || {});
+    const shouldAcceptTranslation = translationCacheUtils.shouldAcceptTranslation || ((_, __, ___, translated) => Boolean(translated));
+
+    // 번역된 노드 → 원본 텍스트 (즉시 복원 + 중복 번역 방지)
+    const originalTexts = new Map();
+
+    // L1 메모리 + L2 localStorage
+    let memCache = {};
+    let localCache = {};
+    let localCacheDirty = false;
+    try {
+      const rawLocalCache = JSON.parse(localStorage.getItem('wiki-trans-cache') || '{}');
+      const sanitizedLocalCache = sanitizeTranslationCache(rawLocalCache);
+      localCacheDirty = Object.keys(rawLocalCache).length !== Object.keys(sanitizedLocalCache).length;
+      localCache = sanitizedLocalCache;
+    } catch {}
+    Object.assign(memCache, localCache);
+
+    function getCached(f, t, s) {
+      const key = ck(f, t, s);
+      const cached = getCachedTranslation(memCache, f, t, s);
+      if (cached) return cached;
+
+      if (Object.prototype.hasOwnProperty.call(memCache, key)) {
+        delete memCache[key];
+        delete localCache[key];
+        localCacheDirty = true;
+      }
+      return null;
+    }
+    function setCache(f, t, s, v) {
+      if (!shouldAcceptTranslation(f, t, s, v)) return;
+      memCache[ck(f, t, s)] = v;
+      localCache[ck(f, t, s)] = v;
+    }
+    function flushLocalCache() {
+      try {
+        const keys = Object.keys(localCache);
+        if (keys.length > 3000) {
+          const keep = {}; keys.slice(-2000).forEach(k => { keep[k] = localCache[k]; }); localCache = keep;
+        }
+        localStorage.setItem('wiki-trans-cache', JSON.stringify(localCache));
+        localCacheDirty = false;
+      } catch {}
+    }
+    if (localCacheDirty) flushLocalCache();
+
+    // L3 Supabase 공유 캐시
+    async function getFromSupabase(fl, tl, texts) {
+      if (!sb || texts.length === 0) return {};
+      const found = {};
+      try {
+        const { data, error } = await sb.from('translations').select('source_text, translated').eq('source_lang', fl).eq('target_lang', tl);
+        if (error || !data) return {};
+        const dbMap = {};
+        data.forEach(row => { dbMap[row.source_text] = row.translated; });
+        texts.forEach(text => {
+          const translated = dbMap[text];
+          if (shouldAcceptTranslation(fl, tl, text, translated)) {
+            found[text] = translated;
+            setCache(fl, tl, text, translated);
+          }
+        });
+      } catch {}
+      return found;
+    }
+
+    async function saveToSupabase(fl, tl, pairs) {
+      if (!sb || pairs.length === 0) return;
+      try {
+        for (const p of pairs) {
+          await sb.from('translations').insert({
+            source_lang: fl, target_lang: tl, source_text: p.source_text, translated: p.translated,
+          }).then(({ error }) => {
+            if (error && !error.message.includes('duplicate')) console.warn('Translation save:', error.message);
+          });
+        }
+      } catch {}
+    }
+
+    function showTransBadge(show, text) {
+      const el = document.getElementById('trans-badge');
+      const txt = document.getElementById('trans-badge-text');
+      if (el) el.classList.toggle('show', show);
+      if (txt && text) txt.textContent = text;
+    }
+
+    // 텍스트 노드 수집 — originalTexts에 있는 노드는 이미 번역됨 → 스킵
+    function collectTextNodes(root) {
+      const nodes = [];
+      const walk = (el) => {
+        for (const child of el.childNodes) {
+          if (child.nodeType === Node.TEXT_NODE) {
+            if (originalTexts.has(child)) continue;
+            const text = child.textContent.trim();
+            if (text.length >= 2 && !/^\d+$/.test(text) && !/^https?:\/\//.test(text)) {
+              nodes.push(child);
+            }
+          } else if (child.nodeType === Node.ELEMENT_NODE) {
+            if (['SCRIPT','STYLE','INPUT','TEXTAREA','CODE'].includes(child.tagName)) continue;
+            walk(child);
+          }
+        }
+      };
+      walk(root);
+      return nodes;
+    }
+
+    // OpenAI API 배치 번역
+    async function apiBatchTranslate(textsObj, fl, tl) {
+      const ln = { ko: 'Korean', my: 'Burmese (Myanmar)' };
+      try {
+        const res = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${OPENAI_API_KEY}` },
+          body: JSON.stringify({
+            model: 'gpt-4o-mini',
+            messages: [
+              { role: 'system', content: `Translate every JSON value from ${ln[fl]} to ${ln[tl]}. Return valid JSON, same keys. Keep numbers, URLs, brands, English unchanged.` },
+              { role: 'user', content: JSON.stringify(textsObj) }
+            ],
+            temperature: 0.2,
+            response_format: { type: 'json_object' }
+          })
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        return JSON.parse(data.choices[0].message.content);
+      } catch (err) { console.error('Translation API:', err); return null; }
+    }
+
+    // 단일 텍스트 번역
+    async function translateSingle(text, fl, tl) {
+      const c = getCached(fl, tl, text);
+      if (c) return c;
+      const db = await getFromSupabase(fl, tl, [text]);
+      if (db[text]) return db[text];
+      const r = await apiBatchTranslate({ '0': text }, fl, tl);
+      if (shouldAcceptTranslation(fl, tl, text, r?.['0'])) {
+        setCache(fl, tl, text, r['0']); flushLocalCache();
+        await saveToSupabase(fl, tl, [{ source_text: text, translated: r['0'] }]);
+        return r['0'];
+      }
+      return text;
+    }
+
+    function isBurmese(text) {
+      return (text.match(/[\u1000-\u109F]/g) || []).length > text.length * 0.15;
+    }
+
+    // DOM에 번역 적용 + 원본 저장
+    function applyTranslation(text, translated, textToNodes) {
+      const nodes = textToNodes.get(text);
+      if (!nodes) return;
+      nodes.forEach(node => {
+        if (!node.parentNode) return;
+        if (!originalTexts.has(node)) originalTexts.set(node, node.textContent);
+        node.textContent = node.textContent.replace(text, translated);
+      });
+    }
+
+    // 즉시 한국어 복원 (재렌더링 불필요)
+    function restoreOriginals() {
+      originalTexts.forEach((orig, node) => {
+        if (node.parentNode) node.textContent = orig;
+      });
+      originalTexts.clear();
+      document.querySelectorAll('[data-orig-ph]').forEach(el => {
+        el.placeholder = el.dataset.origPh;
+        delete el.dataset.origPh;
+        delete el.dataset.translated;
+      });
+    }
+
+    // ── 페이지 전체 번역 ──
+    async function translatePage() {
+      if (isTranslating || wikiLang !== 'my') return;
+      isTranslating = true;
+      showTransBadge(true, 'ဘာသာပြန်နေသည်...');
+
+      const root = document.querySelector('.app');
+      if (!root) { isTranslating = false; showTransBadge(false); return; }
+
+      // === PASS 1: 수집 + 캐시 적용 ===
+      const textNodes = collectTextNodes(root);
+      if (textNodes.length === 0) { isTranslating = false; showTransBadge(false); return; }
+
+      const textToNodes = new Map();
+      const needLookup = [];
+
+      textNodes.forEach(node => {
+        const text = node.textContent.trim();
+        if (!textToNodes.has(text)) {
+          textToNodes.set(text, []);
+          if (!getCached('ko', 'my', text)) needLookup.push(text);
+        }
+        textToNodes.get(text).push(node);
+      });
+
+      // L1/L2 캐시 즉시 적용
+      for (const [text] of textToNodes) {
+        const c = getCached('ko', 'my', text);
+        if (c) applyTranslation(text, c, textToNodes);
+      }
+
+      if (needLookup.length === 0) { showTransBadge(false); isTranslating = false; return; }
+
+      // L3 Supabase
+      const dbFound = await getFromSupabase('ko', 'my', needLookup);
+      const stillMissing = [];
+      for (const text of needLookup) {
+        if (dbFound[text]) applyTranslation(text, dbFound[text], textToNodes);
+        else stillMissing.push(text);
+      }
+
+      // L4 OpenAI API (청크 8개씩)
+      if (stillMissing.length > 0) {
+        const CHUNK = 8;
+        const dbPairs = [];
+        for (let i = 0; i < stillMissing.length; i += CHUNK) {
+          const ct = stillMissing.slice(i, i + CHUNK);
+          const chunk = {}; ct.forEach((t, j) => { chunk[String(j)] = t; });
+          const result = await apiBatchTranslate(chunk, 'ko', 'my');
+          if (result) {
+            for (const [k, v] of Object.entries(result)) {
+              const orig = ct[parseInt(k)];
+              if (!orig || !shouldAcceptTranslation('ko', 'my', orig, v)) continue;
+              setCache('ko', 'my', orig, v);
+              dbPairs.push({ source_text: orig, translated: v });
+              applyTranslation(orig, v, textToNodes);
+            }
+          }
+        }
+        flushLocalCache();
+        if (dbPairs.length > 0) saveToSupabase('ko', 'my', dbPairs);
+      }
+
+      // === PASS 2: 누락 재검증 — 개별 번역으로 100% 보장 ===
+      const missed = collectTextNodes(root);
+      if (missed.length > 0) {
+        const missedMap = new Map();
+        missed.forEach(node => {
+          const text = node.textContent.trim();
+          if (!missedMap.has(text)) missedMap.set(text, []);
+          missedMap.get(text).push(node);
+        });
+        const dbPairs2 = [];
+        for (const [text, nodes] of missedMap) {
+          const translated = await translateSingle(text, 'ko', 'my');
+          if (translated !== text) {
+            nodes.forEach(node => {
+              if (!node.parentNode) return;
+              if (!originalTexts.has(node)) originalTexts.set(node, node.textContent);
+              node.textContent = node.textContent.replace(text, translated);
+            });
+            dbPairs2.push({ source_text: text, translated });
+          }
+        }
+        if (dbPairs2.length > 0) saveToSupabase('ko', 'my', dbPairs2);
+      }
+
+      // Placeholder 번역
+      const inputs = root.querySelectorAll('input[placeholder], textarea[placeholder]');
+      for (const el of inputs) {
+        if (el.placeholder.length < 2 || el.dataset.translated === 'my') continue;
+        const c = getCached('ko', 'my', el.placeholder);
+        if (c) {
+          el.dataset.origPh = el.placeholder; el.placeholder = c; el.dataset.translated = 'my';
+        } else {
+          const v = await translateSingle(el.placeholder, 'ko', 'my');
+          if (v !== el.placeholder) {
+            el.dataset.origPh = el.placeholder; el.placeholder = v; el.dataset.translated = 'my';
+          }
+        }
+      }
+
+      showTransBadge(false);
+      isTranslating = false;
+    }
+
+    // 언어 전환
+    async function switchLanguage(lang) {
+      if (lang === wikiLang) return;
+      clearTimeout(translateDebounce);
+      wikiLang = lang;
+      localStorage.setItem('wiki-lang', lang);
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
+      });
+
+      if (lang === 'my') {
+        await translatePage();
+      } else {
+        restoreOriginals(); // 즉시 복원, 재렌더링 없음
+      }
+    }
+
+    // MutationObserver: Myanmar 모드에서 DOM 변경 시 자동 번역
+    function setupTranslationObserver() {
+      const root = document.querySelector('.app');
+      if (!root) return;
+      new MutationObserver(() => {
+        if (wikiLang !== 'my' || isTranslating) return;
+        clearTimeout(translateDebounce);
+        translateDebounce = setTimeout(() => translatePage(), 300);
+      }).observe(root, { childList: true, subtree: true });
+    }
+
+    // ================================================================
     // Boot
     // ================================================================
     (async function boot() {
@@ -1422,6 +1803,15 @@
         subscribeRealtime();
       }
       await renderDashboard();
+
+      // Init language toggle state
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === wikiLang);
+      });
+      setupTranslationObserver();
+      if (wikiLang === 'my') {
+        setTimeout(() => translatePage(), 500);
+      }
     })();
   </script>
 </body>

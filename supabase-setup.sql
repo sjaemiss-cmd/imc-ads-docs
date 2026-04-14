@@ -104,6 +104,27 @@ create policy "comments_read" on comments for select using (true);
 create policy "comments_insert" on comments for insert with check (true);
 create policy "comments_delete" on comments for delete using (true);
 
--- 7. Realtime 활성화
+-- 7. translations 테이블: AI 번역 캐시 (팀 공유)
+create table if not exists translations (
+  id          serial primary key,
+  source_lang text not null,        -- 'ko' or 'my'
+  target_lang text not null,        -- 'my' or 'ko'
+  source_text text not null,
+  translated  text not null,
+  created_at  timestamptz default now()
+);
+
+-- 원문 기준 유니크 인덱스 (동일 번역 중복 방지)
+create unique index if not exists idx_translations_unique
+  on translations(source_lang, target_lang, md5(source_text));
+
+create index if not exists idx_translations_lookup
+  on translations(source_lang, target_lang, md5(source_text));
+
+alter table translations enable row level security;
+create policy "translations_read" on translations for select using (true);
+create policy "translations_insert" on translations for insert with check (true);
+
+-- 8. Realtime 활성화
 alter publication supabase_realtime add table submissions;
 alter publication supabase_realtime add table comments;
