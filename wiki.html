@@ -42,13 +42,30 @@
       background: rgba(0,0,0,.06); padding: 2px 6px; border-radius: 4px; font-size: 13px;
     }
 
-    /* ── Topic Cards ── */
-    .topics-grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 12px; margin-bottom: 20px;
+    /* ── Two-Column Dashboard ── */
+    .dashboard-columns {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;
     }
+    .dash-column { display: flex; flex-direction: column; gap: 10px; }
+    .column-header {
+      font-size: 13px; font-weight: 700; color: #6e6e73; padding: 6px 0;
+      border-bottom: 2px solid #e5e5ea; margin-bottom: 2px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .column-assignees {
+      display: flex; gap: 4px;
+    }
+    .assignee-badge {
+      font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 8px;
+      background: #e8f0fe; color: #1a73e8;
+    }
+    .assignee-badge.right { background: #fef7e0; color: #b06000; }
+    .assignee-badge.editable {
+      cursor: pointer; border: 1px dashed #aeaeb2; background: #fafafa; color: #aeaeb2;
+    }
+    .assignee-badge.editable:hover { border-color: #0066cc; color: #0066cc; }
     .topic-card {
-      background: #fff; border-radius: 14px; padding: 18px 20px;
+      background: #fff; border-radius: 14px; padding: 14px 16px;
       box-shadow: 0 1px 3px rgba(0,0,0,.06); cursor: pointer;
       transition: transform .15s, box-shadow .15s; border: 2px solid transparent;
     }
@@ -56,17 +73,44 @@
     .topic-card.active { border-color: #0066cc; }
     .topic-chip {
       display: inline-block; font-size: 11px; font-weight: 600; padding: 3px 10px;
-      border-radius: 12px; margin-bottom: 8px;
+      border-radius: 12px; margin-bottom: 6px;
     }
     .chip-1 { background: #e8f0fe; color: #1a73e8; }
     .chip-3 { background: #fce8e6; color: #d93025; }
     .chip-4 { background: #e6f4ea; color: #137333; }
     .chip-5 { background: #fef7e0; color: #b06000; }
-    .topic-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+    .topic-card h3 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
     .topic-card .count {
-      font-size: 13px; color: #6e6e73; display: flex; align-items: center; gap: 4px;
+      font-size: 12px; color: #6e6e73; display: flex; align-items: center; gap: 4px;
     }
-    .count-num { font-weight: 700; color: #0066cc; font-size: 16px; }
+    .count-num { font-weight: 700; color: #0066cc; font-size: 15px; }
+
+    /* ── Volume Checker ── */
+    .volume-checker {
+      margin-top: 16px; padding: 14px 18px; border-radius: 12px;
+      border: 1px solid #e5e5ea; background: #fafafa;
+    }
+    .volume-checker h4 { font-size: 14px; font-weight: 600; margin-bottom: 10px; }
+    .vc-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 6px 0; font-size: 13px; border-bottom: 1px solid #f0f0f2;
+    }
+    .vc-row:last-child { border-bottom: none; }
+    .vc-label { color: #424245; }
+    .vc-value { font-weight: 600; }
+    .vc-pass { color: #137333; }
+    .vc-warn { color: #b06000; }
+    .vc-fail { color: #d93025; }
+    .vc-bar {
+      width: 100%; height: 6px; background: #e5e5ea; border-radius: 3px;
+      margin-top: 10px; overflow: hidden;
+    }
+    .vc-bar-fill {
+      height: 100%; border-radius: 3px; transition: width .3s, background .3s;
+    }
+    .vc-summary {
+      margin-top: 8px; font-size: 13px; font-weight: 600; text-align: center;
+    }
 
     /* ── Detail Panel ── */
     .detail-panel {
@@ -222,7 +266,7 @@
     /* ── Responsive ── */
     @media (max-width: 640px) {
       .form-grid { grid-template-columns: 1fr; }
-      .topics-grid { grid-template-columns: 1fr; }
+      .dashboard-columns { grid-template-columns: 1fr; }
       .header h1 { font-size: 18px; }
     }
   </style>
@@ -286,9 +330,24 @@
       설정해주세요. 자세한 방법은 <code>SETUP.md</code>를 참고하세요.
     </div>
 
-    <!-- Dashboard (topic cards) -->
+    <!-- Dashboard (two-column layout) -->
     <div id="dashboard">
-      <div id="topics-grid" class="topics-grid"></div>
+      <div class="dashboard-columns">
+        <div class="dash-column">
+          <div class="column-header">
+            <span>Q1 ~ Q5</span>
+            <div class="column-assignees" id="assignees-left"></div>
+          </div>
+          <div id="topics-col-left"></div>
+        </div>
+        <div class="dash-column">
+          <div class="column-header">
+            <span>Q6 ~ Q10</span>
+            <div class="column-assignees" id="assignees-right"></div>
+          </div>
+          <div id="topics-col-right"></div>
+        </div>
+      </div>
     </div>
 
     <!-- Detail Panel -->
@@ -344,6 +403,25 @@
             <button type="submit" class="btn-submit" id="btn-submit">제출하기</button>
           </div>
         </form>
+
+        <!-- Volume Checker -->
+        <div class="volume-checker" id="volume-checker">
+          <h4>분량 체커 (PPT 1장 / A4 반 페이지 기준)</h4>
+          <div class="vc-row">
+            <span class="vc-label">개념/이론 설명</span>
+            <span class="vc-value" id="vc-concept">0자</span>
+          </div>
+          <div class="vc-row">
+            <span class="vc-label">사례 분석</span>
+            <span class="vc-value" id="vc-analysis">0자</span>
+          </div>
+          <div class="vc-row">
+            <span class="vc-label">합산</span>
+            <span class="vc-value" id="vc-total">0자</span>
+          </div>
+          <div class="vc-bar"><div class="vc-bar-fill" id="vc-bar-fill"></div></div>
+          <div class="vc-summary" id="vc-summary">내용을 입력하면 분량이 표시됩니다</div>
+        </div>
       </div>
     </div>
   </div>
@@ -443,25 +521,73 @@
     }
 
     // ================================================================
-    // Render Dashboard
+    // Assignees (담당자) — localStorage에 저장
+    // ================================================================
+    function getAssignees(group) {
+      try { return JSON.parse(localStorage.getItem('imc-assignees-' + group) || '[]'); } catch { return []; }
+    }
+    function setAssignees(group, names) {
+      localStorage.setItem('imc-assignees-' + group, JSON.stringify(names));
+    }
+
+    function renderAssignees() {
+      ['left', 'right'].forEach(side => {
+        const el = document.getElementById('assignees-' + side);
+        const names = getAssignees(side);
+        const badgeClass = side === 'right' ? 'assignee-badge right' : 'assignee-badge';
+        let html = '';
+        for (let i = 0; i < 2; i++) {
+          if (names[i]) {
+            html += `<span class="${badgeClass}" onclick="editAssignee('${side}',${i})">${esc(names[i])}</span>`;
+          } else {
+            html += `<span class="assignee-badge editable" onclick="editAssignee('${side}',${i})">+ 담당자</span>`;
+          }
+        }
+        el.innerHTML = html;
+      });
+    }
+
+    function editAssignee(side, idx) {
+      const names = getAssignees(side);
+      const current = names[idx] || '';
+      const name = prompt('담당자 이름을 입력하세요' + (current ? ` (현재: ${current}, 비우면 삭제)` : ''), current);
+      if (name === null) return;
+      if (name.trim()) {
+        names[idx] = name.trim();
+      } else {
+        names.splice(idx, 1);
+      }
+      setAssignees(side, names);
+      renderAssignees();
+    }
+
+    // ================================================================
+    // Render Dashboard (two-column)
     // ================================================================
     async function renderDashboard() {
       const counts = await getSubmissionCounts();
-      const grid = document.getElementById('topics-grid');
-      grid.innerHTML = topics.map(t => {
-        const c = counts[t.id] || 0;
-        const chipClass = 'chip-' + t.chapter.charAt(0);
-        return `
-          <div class="topic-card ${currentTopicId === t.id ? 'active' : ''}"
-               onclick="openTopic(${t.id})">
-            <span class="topic-chip ${chipClass}">Q${t.question_num} · ${t.chapter}</span>
-            <h3>${t.title}</h3>
-            <div class="count">
-              <span class="count-num">${c}</span> 건 제출됨
+      const leftTopics = topics.filter(t => t.question_num <= 5);
+      const rightTopics = topics.filter(t => t.question_num > 5);
+
+      function renderColumn(items) {
+        return items.map(t => {
+          const c = counts[t.id] || 0;
+          const chipClass = 'chip-' + t.chapter.charAt(0);
+          return `
+            <div class="topic-card" onclick="openTopic(${t.id})">
+              <span class="topic-chip ${chipClass}">Q${t.question_num} · ${t.chapter}</span>
+              <h3>${t.title}</h3>
+              <div class="count">
+                <span class="count-num">${c}</span> 건 제출됨
+              </div>
             </div>
-          </div>
-        `;
-      }).join('');
+          `;
+        }).join('');
+      }
+
+      document.getElementById('topics-col-left').innerHTML = renderColumn(leftTopics);
+      document.getElementById('topics-col-right').innerHTML = renderColumn(rightTopics);
+      renderAssignees();
     }
 
     // ================================================================
@@ -726,6 +852,80 @@
       el.classList.add('show');
       setTimeout(() => el.classList.remove('show'), 2500);
     }
+
+    // ================================================================
+    // Volume Checker
+    // ================================================================
+    // PPT 1장 ≈ A4 반 페이지 ≈ 약 200~400자 (개념 + 분석 합산)
+    const VC_MIN = 150;   // 최소 (너무 짧음)
+    const VC_GOOD = 250;  // 적정 시작
+    const VC_MAX = 500;   // 적정 끝
+    const VC_OVER = 700;  // 초과
+
+    function updateVolumeChecker() {
+      const concept = (document.getElementById('f-concept')?.value || '').trim();
+      const analysis = (document.getElementById('f-analysis')?.value || '').trim();
+      const cLen = concept.length;
+      const aLen = analysis.length;
+      const total = cLen + aLen;
+
+      const elC = document.getElementById('vc-concept');
+      const elA = document.getElementById('vc-analysis');
+      const elT = document.getElementById('vc-total');
+      const elBar = document.getElementById('vc-bar-fill');
+      const elSum = document.getElementById('vc-summary');
+      if (!elC) return;
+
+      function classify(len, min) {
+        if (len === 0) return 'vc-value';
+        if (len < min) return 'vc-value vc-fail';
+        return 'vc-value vc-pass';
+      }
+      elC.textContent = cLen + '자';
+      elC.className = classify(cLen, 50);
+      elA.textContent = aLen + '자';
+      elA.className = classify(aLen, 80);
+      elT.textContent = total + '자';
+
+      // Bar
+      const pct = Math.min(total / VC_MAX * 100, 100);
+      elBar.style.width = pct + '%';
+
+      if (total === 0) {
+        elT.className = 'vc-value';
+        elBar.style.background = '#e5e5ea';
+        elSum.textContent = '내용을 입력하면 분량이 표시됩니다';
+        elSum.className = 'vc-summary';
+      } else if (total < VC_MIN) {
+        elT.className = 'vc-value vc-fail';
+        elBar.style.background = '#ff3b30';
+        elSum.textContent = '너무 짧습니다. 개념 설명과 사례 분석을 더 보강하세요.';
+        elSum.className = 'vc-summary vc-fail';
+      } else if (total < VC_GOOD) {
+        elT.className = 'vc-value vc-warn';
+        elBar.style.background = '#ff9500';
+        elSum.textContent = '조금 더 보강하면 좋겠습니다.';
+        elSum.className = 'vc-summary vc-warn';
+      } else if (total <= VC_MAX) {
+        elT.className = 'vc-value vc-pass';
+        elBar.style.background = '#34c759';
+        elSum.textContent = '적정 분량입니다. PPT 1장 / A4 반 페이지에 딱 맞습니다.';
+        elSum.className = 'vc-summary vc-pass';
+      } else if (total <= VC_OVER) {
+        elT.className = 'vc-value vc-warn';
+        elBar.style.background = '#ff9500';
+        elSum.textContent = '약간 길지만 괜찮습니다. 핵심만 남기면 더 좋아요.';
+        elSum.className = 'vc-summary vc-warn';
+      } else {
+        elT.className = 'vc-value vc-fail';
+        elBar.style.background = '#ff3b30';
+        elSum.textContent = '너무 깁니다! PPT 1장에 안 들어갑니다. 줄여주세요.';
+        elSum.className = 'vc-summary vc-fail';
+      }
+    }
+
+    document.getElementById('f-concept')?.addEventListener('input', updateVolumeChecker);
+    document.getElementById('f-analysis')?.addEventListener('input', updateVolumeChecker);
 
     // ================================================================
     // Boot
