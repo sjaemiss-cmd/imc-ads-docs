@@ -521,8 +521,8 @@
               <input id="f-medium" required placeholder="TVCF / YouTube / SNS" />
             </div>
             <div class="form-group">
-              <label for="f-url">광고 링크 (TVCF 등)</label>
-              <input id="f-url" type="url" placeholder="https://www.tvcf.co.kr/play/..." />
+              <label for="f-url">광고 링크 (TVCF: 검색→광고 클릭→주소창 복사)</label>
+              <input id="f-url" type="url" placeholder="https://tvcf.co.kr/play/bh00000-000000" />
             </div>
             <div class="form-group full">
               <label for="f-concept">개념/이론 설명 (자기 말로)</label>
@@ -795,7 +795,7 @@
             <h4>사례 분석</h4>
             <p>${esc(s.case_analysis)}</p>
           </div>
-          ${s.watch_url ? `<div class="sub-link"><a href="${esc(s.watch_url)}" target="_blank" rel="noopener">광고 보기 →</a></div>` : ''}
+          ${s.watch_url ? `<div class="sub-link"><a href="${esc(s.watch_url)}" target="_blank" rel="noopener">광고 보기 →</a>${/tvcf\.co\.kr\/play\/\d+$/.test(s.watch_url) ? ' <span style="color:#e74c3c;font-size:0.8em;">(⚠ 로그인 필요 링크 — 수정 필요)</span>' : ''}</div>` : ''}
           <div class="sub-time">${new Date(s.created_at).toLocaleString('ko-KR')}</div>
           <div class="sub-edit-form" id="edit-form-${s.id}" hidden>
             <div class="form-grid">
@@ -865,7 +865,7 @@
         campaign:        document.getElementById('f-campaign').value.trim(),
         published_at:    document.getElementById('f-published').value.trim(),
         medium:          document.getElementById('f-medium').value.trim(),
-        watch_url:       document.getElementById('f-url').value.trim(),
+        watch_url:       fixTvcfUrl(document.getElementById('f-url').value.trim()),
         concept_summary: document.getElementById('f-concept').value.trim(),
         case_analysis:   document.getElementById('f-analysis').value.trim(),
       };
@@ -947,7 +947,7 @@
         campaign:        get('campaign'),
         published_at:    get('published'),
         medium:          get('medium'),
-        watch_url:       get('url'),
+        watch_url:       fixTvcfUrl(get('url')),
         concept_summary: get('concept'),
         case_analysis:   get('analysis'),
       };
@@ -1079,6 +1079,18 @@
     // ================================================================
     // Utilities
     // ================================================================
+    function fixTvcfUrl(url) {
+      if (!url) return url;
+      // tvcf.co.kr/play/숫자만 → 로그인 필요해서 안 열림
+      // tvcf.co.kr/play/bh코드-숫자 → 로그인 없이 열림
+      const badMatch = url.match(/tvcf\.co\.kr\/play\/(\d+)$/);
+      if (badMatch) {
+        toast('⚠️ TVCF 링크가 로그인 필요 형식입니다. tvcf.co.kr에서 광고를 검색한 뒤, 광고 페이지의 URL(bh...-... 형식)을 복사해주세요.');
+        return url;
+      }
+      return url;
+    }
+
     function esc(str) {
       if (!str) return '';
       const d = document.createElement('div');
