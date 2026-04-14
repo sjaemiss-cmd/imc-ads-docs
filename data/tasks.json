@@ -110,5 +110,29 @@
     "type": "single",
     "adCount": 1,
     "adsFile": "ads/subjective-norm.json"
+  },
+  {
+    "id": "auditory-stimulus",
+    "group": "3. 감각과 지각",
+    "title": "청각 자극 광고",
+    "type": "single",
+    "adCount": 1,
+    "adsFile": "ads/auditory-stimulus.json"
+  },
+  {
+    "id": "differential-threshold",
+    "group": "3. 감각과 지각",
+    "title": "차등적 식역(JND) 광고",
+    "type": "single",
+    "adCount": 1,
+    "adsFile": "ads/differential-threshold.json"
+  },
+  {
+    "id": "negative-reinforcement",
+    "group": "5. 학습",
+    "title": "부정적 강화 광고",
+    "type": "single",
+    "adCount": 1,
+    "adsFile": "ads/negative-reinforcement.json"
   }
 ]

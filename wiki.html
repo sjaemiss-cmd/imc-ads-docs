@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>IMC 팀 과제 위키</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f5f5f7; color: #1d1d1f; line-height: 1.6;
+    }
+    a { color: #0066cc; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    button { cursor: pointer; font-family: inherit; }
+
+    /* ── Layout ── */
+    .app { max-width: 960px; margin: 0 auto; padding: 16px; }
+
+    /* ── Header ── */
+    .header {
+      background: #fff; border-radius: 16px; padding: 24px; margin-bottom: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.08);
+    }
+    .header h1 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+    .header p { font-size: 14px; color: #6e6e73; }
+    .header-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .deadline-badge {
+      background: #ff3b30; color: #fff; font-size: 13px; font-weight: 600;
+      padding: 6px 14px; border-radius: 20px; white-space: nowrap;
+    }
+
+    /* ── Setup Banner ── */
+    .setup-banner {
+      background: #fff3cd; border: 1px solid #ffc107; border-radius: 12px;
+      padding: 16px 20px; margin-bottom: 20px; font-size: 14px; line-height: 1.7;
+    }
+    .setup-banner.connected { background: #d4edda; border-color: #28a745; }
+    .setup-banner code {
+      background: rgba(0,0,0,.06); padding: 2px 6px; border-radius: 4px; font-size: 13px;
+    }
+
+    /* ── Topic Cards ── */
+    .topics-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 12px; margin-bottom: 20px;
+    }
+    .topic-card {
+      background: #fff; border-radius: 14px; padding: 18px 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.06); cursor: pointer;
+      transition: transform .15s, box-shadow .15s; border: 2px solid transparent;
+    }
+    .topic-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,.1); }
+    .topic-card.active { border-color: #0066cc; }
+    .topic-chip {
+      display: inline-block; font-size: 11px; font-weight: 600; padding: 3px 10px;
+      border-radius: 12px; margin-bottom: 8px;
+    }
+    .chip-1 { background: #e8f0fe; color: #1a73e8; }
+    .chip-3 { background: #fce8e6; color: #d93025; }
+    .chip-4 { background: #e6f4ea; color: #137333; }
+    .chip-5 { background: #fef7e0; color: #b06000; }
+    .topic-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+    .topic-card .count {
+      font-size: 13px; color: #6e6e73; display: flex; align-items: center; gap: 4px;
+    }
+    .count-num { font-weight: 700; color: #0066cc; font-size: 16px; }
+
+    /* ── Detail Panel ── */
+    .detail-panel {
+      background: #fff; border-radius: 16px; padding: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.08); margin-bottom: 20px;
+    }
+    .detail-panel[hidden] { display: none; }
+    .detail-back {
+      font-size: 14px; color: #6e6e73; background: none; border: none;
+      margin-bottom: 16px; display: flex; align-items: center; gap: 4px;
+    }
+    .detail-back:hover { color: #0066cc; }
+    .detail-header { margin-bottom: 20px; }
+    .detail-header h2 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+    .detail-header .question { font-size: 14px; color: #424245; background: #f5f5f7; padding: 12px 16px; border-radius: 10px; }
+    .detail-header .hint { font-size: 13px; color: #6e6e73; margin-top: 8px; font-style: italic; }
+
+    /* ── Submissions List ── */
+    .submissions-title { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
+    .submission-card {
+      border: 1px solid #e5e5ea; border-radius: 12px; padding: 16px;
+      margin-bottom: 10px; transition: border-color .15s;
+    }
+    .submission-card:hover { border-color: #0066cc; }
+    .sub-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; align-items: center; }
+    .sub-author {
+      font-size: 12px; font-weight: 600; background: #0066cc; color: #fff;
+      padding: 2px 10px; border-radius: 10px;
+    }
+    .sub-brand { font-size: 14px; font-weight: 700; }
+    .sub-campaign { font-size: 13px; color: #6e6e73; }
+    .sub-info { font-size: 13px; color: #6e6e73; margin-bottom: 6px; }
+    .sub-body { font-size: 14px; line-height: 1.7; }
+    .sub-body h4 { font-size: 13px; font-weight: 600; color: #424245; margin: 10px 0 4px; }
+    .sub-body p { margin-bottom: 6px; }
+    .sub-link { font-size: 13px; margin-top: 8px; }
+    .sub-time { font-size: 12px; color: #aeaeb2; margin-top: 8px; }
+    .no-submissions { text-align: center; padding: 32px; color: #aeaeb2; font-size: 14px; }
+    .sub-delete {
+      float: right; background: none; border: none; color: #aeaeb2; font-size: 18px; padding: 0 4px;
+    }
+    .sub-delete:hover { color: #ff3b30; }
+
+    /* ── Form ── */
+    .form-section { border-top: 1px solid #e5e5ea; padding-top: 20px; margin-top: 20px; }
+    .form-section h3 { font-size: 16px; font-weight: 600; margin-bottom: 14px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-group label { font-size: 13px; font-weight: 600; color: #424245; }
+    .form-group input, .form-group textarea, .form-group select {
+      padding: 10px 12px; border: 1px solid #d2d2d7; border-radius: 10px;
+      font-size: 14px; font-family: inherit; background: #fafafa;
+      transition: border-color .15s;
+    }
+    .form-group input:focus, .form-group textarea:focus {
+      outline: none; border-color: #0066cc; background: #fff;
+    }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+    .form-actions { margin-top: 14px; display: flex; gap: 10px; }
+    .btn-submit {
+      background: #0066cc; color: #fff; border: none; padding: 12px 28px;
+      border-radius: 12px; font-size: 15px; font-weight: 600;
+      transition: background .15s;
+    }
+    .btn-submit:hover { background: #0055b3; }
+    .btn-submit:disabled { background: #aeaeb2; cursor: not-allowed; }
+    .btn-cancel {
+      background: #e5e5ea; color: #1d1d1f; border: none; padding: 12px 20px;
+      border-radius: 12px; font-size: 15px;
+    }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+      background: #1d1d1f; color: #fff; padding: 12px 24px; border-radius: 12px;
+      font-size: 14px; font-weight: 500; opacity: 0; transition: opacity .3s;
+      pointer-events: none; z-index: 100;
+    }
+    .toast.show { opacity: 1; }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .topics-grid { grid-template-columns: 1fr; }
+      .header h1 { font-size: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- Header -->
+    <div class="header">
+      <div class="header-row">
+        <div>
+          <h1>IMC 팀 과제 위키</h1>
+          <p>중간대체과제 10문항 — 팀원들이 함께 광고 사례를 찾아 올리는 공간</p>
+        </div>
+        <span class="deadline-badge">D-day: 4/18(토) 자정</span>
+      </div>
+    </div>
+
+    <!-- Setup Banner (Supabase 미연결 시 표시) -->
+    <div id="setup-banner" class="setup-banner" hidden>
+      Supabase 연결이 필요합니다. 아래 <code>SUPABASE_URL</code>과 <code>SUPABASE_KEY</code>를
+      설정해주세요. 자세한 방법은 <code>SETUP.md</code>를 참고하세요.
+    </div>
+
+    <!-- Dashboard (topic cards) -->
+    <div id="dashboard">
+      <div id="topics-grid" class="topics-grid"></div>
+    </div>
+
+    <!-- Detail Panel -->
+    <div id="detail-panel" class="detail-panel" hidden>
+      <button class="detail-back" onclick="showDashboard()">← 전체 문제로 돌아가기</button>
+      <div class="detail-header">
+        <h2 id="detail-title"></h2>
+        <div id="detail-question" class="question"></div>
+        <div id="detail-hint" class="hint"></div>
+      </div>
+      <h3 class="submissions-title">제출된 광고 사례 (<span id="sub-count">0</span>건)</h3>
+      <div id="submissions-list"></div>
+
+      <!-- Form -->
+      <div class="form-section">
+        <h3>새 광고 사례 올리기</h3>
+        <form id="submission-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="f-author">작성자 이름</label>
+              <input id="f-author" required placeholder="홍길동" />
+            </div>
+            <div class="form-group">
+              <label for="f-brand">브랜드</label>
+              <input id="f-brand" required placeholder="삼성전자" />
+            </div>
+            <div class="form-group">
+              <label for="f-campaign">캠페인/광고명</label>
+              <input id="f-campaign" required placeholder="Galaxy S25 울트라" />
+            </div>
+            <div class="form-group">
+              <label for="f-published">광고 실행 시기</label>
+              <input id="f-published" required placeholder="2025.01" />
+            </div>
+            <div class="form-group">
+              <label for="f-medium">매체</label>
+              <input id="f-medium" required placeholder="TVCF / YouTube / SNS" />
+            </div>
+            <div class="form-group">
+              <label for="f-url">광고 링크 (TVCF 등)</label>
+              <input id="f-url" type="url" placeholder="https://www.tvcf.co.kr/play/..." />
+            </div>
+            <div class="form-group full">
+              <label for="f-concept">개념/이론 설명 (자기 말로)</label>
+              <textarea id="f-concept" required rows="3" placeholder="이 문제와 관련된 개념을 자신의 말로 설명..."></textarea>
+            </div>
+            <div class="form-group full">
+              <label for="f-analysis">광고 사례 분석 (구체적 장면/요소)</label>
+              <textarea id="f-analysis" required rows="4" placeholder="이 광고에서 해당 개념이 어떻게 적용되었는지 구체적으로..."></textarea>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn-submit" id="btn-submit">제출하기</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast"></div>
+
+  <script>
+    // ================================================================
+    // CONFIG — Supabase 프로젝트 생성 후 아래 두 값을 채워넣으세요
+    // ================================================================
+    const SUPABASE_URL = 'https://vouuqxtclcnhkugmomci.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_KSv29b6X75xsbt23Nwc9Fg_JY5WbvK3';
+
+    // ================================================================
+    // Init
+    // ================================================================
+    let sb = null;
+    let topics = [];
+    let currentTopicId = null;
+
+    function initSupabase() {
+      if (!SUPABASE_URL || !SUPABASE_KEY) {
+        document.getElementById('setup-banner').hidden = false;
+        loadFallbackData();
+        return false;
+      }
+      sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+      return true;
+    }
+
+    // ================================================================
+    // Fallback — Supabase 미연결 시 로컬 데모 데이터 사용
+    // ================================================================
+    const FALLBACK_TOPICS = [
+      { id:1,  question_num:1,  chapter:'1장', title:'해석주의적 관점', description:'사회와 소비자의 관계를 해석주의적 관점에서 바라본 광고의 사례를 찾아서 설명하시오.', concept_hint:'소비자를 의미 해석자로 봄.' },
+      { id:2,  question_num:2,  chapter:'3장', title:'오감 자극: 청각', description:'소비자의 오감 중 청각을 집중 자극하는 광고 사례를 찾아서 설명하시오.', concept_hint:'청각-미각 교차감각.' },
+      { id:3,  question_num:3,  chapter:'3장', title:'차등적 식역 (JND)', description:'차등적 식역의 개념을 설명하고 광고 사례를 서술하시오.', concept_hint:'JND 초과 수치로 차이 인식 유도.' },
+      { id:4,  question_num:4,  chapter:'3장', title:'자극물의 주의 요인 (2개+)', description:'자극물 자체의 주의 요인을 2개 이상 찾아 설명하시오.', concept_hint:'크기, 색 대비, 움직임, 독특함.' },
+      { id:5,  question_num:5,  chapter:'4장', title:'의미적 부호화', description:'의미적 부호화를 설명하고 광고 사례를 찾아서 설명하시오.', concept_hint:'익숙한 스키마 활용.' },
+      { id:6,  question_num:6,  chapter:'4장', title:'절차기억 (스크립트)', description:'절차기억의 개념을 설명하고 광고 사례를 찾아서 설명하시오.', concept_hint:'순서화된 행동 흐름의 기억.' },
+      { id:7,  question_num:7,  chapter:'4장', title:'재인적 단서', description:'재인을 설명하고 재인적 단서가 포함된 광고를 찾아서 설명하시오.', concept_hint:'패키지, 로고, 실루엣 단서.' },
+      { id:8,  question_num:8,  chapter:'5장', title:'고전적 조건화', description:'모델이나 음악 이외의 무조건자극 사례를 찾아 그림으로 설명하시오.', concept_hint:'모델/음악 외 자극 필수. 그림 필요.' },
+      { id:9,  question_num:9,  chapter:'5장', title:'부정적 강화', description:'부정적 강화의 개념을 설명하고 광고 사례를 찾아서 설명하시오.', concept_hint:'불쾌 자극 제거 → 행동 증가. ≠처벌.' },
+      { id:10, question_num:10, chapter:'5장', title:'고정비율 강화', description:'고정비율 강화의 광고 사례를 찾아서 설명하시오.', concept_hint:'예측 가능한 보상 → 행동 반복.' },
+    ];
+    let localSubmissions = [];
+
+    function loadFallbackData() {
+      topics = FALLBACK_TOPICS;
+      try {
+        localSubmissions = JSON.parse(localStorage.getItem('imc-submissions') || '[]');
+      } catch { localSubmissions = []; }
+      renderDashboard();
+    }
+
+    function saveFallback() {
+      localStorage.setItem('imc-submissions', JSON.stringify(localSubmissions));
+    }
+
+    // ================================================================
+    // Data Loading
+    // ================================================================
+    async function loadTopics() {
+      if (!sb) return;
+      const { data, error } = await sb.from('topics').select('*').order('question_num');
+      if (error) { console.error(error); return; }
+      topics = data;
+    }
+
+    async function loadSubmissions(topicId) {
+      if (!sb) {
+        return localSubmissions.filter(s => s.topic_id === topicId);
+      }
+      const { data, error } = await sb
+        .from('submissions')
+        .select('*')
+        .eq('topic_id', topicId)
+        .order('created_at', { ascending: false });
+      if (error) { console.error(error); return []; }
+      return data;
+    }
+
+    async function getSubmissionCounts() {
+      if (!sb) {
+        const counts = {};
+        localSubmissions.forEach(s => {
+          counts[s.topic_id] = (counts[s.topic_id] || 0) + 1;
+        });
+        return counts;
+      }
+      const { data, error } = await sb.from('submissions').select('topic_id');
+      if (error) return {};
+      const counts = {};
+      data.forEach(s => { counts[s.topic_id] = (counts[s.topic_id] || 0) + 1; });
+      return counts;
+    }
+
+    // ================================================================
+    // Render Dashboard
+    // ================================================================
+    async function renderDashboard() {
+      const counts = await getSubmissionCounts();
+      const grid = document.getElementById('topics-grid');
+      grid.innerHTML = topics.map(t => {
+        const c = counts[t.id] || 0;
+        const chipClass = 'chip-' + t.chapter.charAt(0);
+        return `
+          <div class="topic-card ${currentTopicId === t.id ? 'active' : ''}"
+               onclick="openTopic(${t.id})">
+            <span class="topic-chip ${chipClass}">Q${t.question_num} · ${t.chapter}</span>
+            <h3>${t.title}</h3>
+            <div class="count">
+              <span class="count-num">${c}</span> 건 제출됨
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // ================================================================
+    // Topic Detail
+    // ================================================================
+    async function openTopic(topicId) {
+      currentTopicId = topicId;
+      const topic = topics.find(t => t.id === topicId);
+      if (!topic) return;
+
+      document.getElementById('dashboard').hidden = true;
+      document.getElementById('detail-panel').hidden = false;
+      document.getElementById('detail-title').textContent = `Q${topic.question_num}. ${topic.title}`;
+      document.getElementById('detail-question').textContent = topic.description;
+      document.getElementById('detail-hint').textContent = topic.concept_hint;
+
+      await renderSubmissions(topicId);
+
+      // Restore saved author name
+      const saved = localStorage.getItem('imc-author');
+      if (saved) document.getElementById('f-author').value = saved;
+    }
+
+    async function renderSubmissions(topicId) {
+      const subs = await loadSubmissions(topicId);
+      document.getElementById('sub-count').textContent = subs.length;
+      const list = document.getElementById('submissions-list');
+
+      if (subs.length === 0) {
+        list.innerHTML = '<div class="no-submissions">아직 제출된 사례가 없습니다. 첫 번째로 올려보세요!</div>';
+        return;
+      }
+
+      list.innerHTML = subs.map(s => `
+        <div class="submission-card" id="sub-${s.id}">
+          <button class="sub-delete" onclick="deleteSub('${s.id}')" title="삭제">×</button>
+          <div class="sub-meta">
+            <span class="sub-author">${esc(s.author)}</span>
+            <span class="sub-brand">${esc(s.brand)}</span>
+            <span class="sub-campaign">— ${esc(s.campaign)}</span>
+          </div>
+          <div class="sub-info">${esc(s.published_at)} · ${esc(s.medium)}</div>
+          <div class="sub-body">
+            <h4>개념/이론 설명</h4>
+            <p>${esc(s.concept_summary)}</p>
+            <h4>사례 분석</h4>
+            <p>${esc(s.case_analysis)}</p>
+          </div>
+          ${s.watch_url ? `<div class="sub-link"><a href="${esc(s.watch_url)}" target="_blank" rel="noopener">광고 보기 →</a></div>` : ''}
+          <div class="sub-time">${new Date(s.created_at).toLocaleString('ko-KR')}</div>
+        </div>
+      `).join('');
+    }
+
+    function showDashboard() {
+      document.getElementById('dashboard').hidden = false;
+      document.getElementById('detail-panel').hidden = true;
+      currentTopicId = null;
+      renderDashboard();
+    }
+
+    // ================================================================
+    // Submit
+    // ================================================================
+    document.getElementById('submission-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('btn-submit');
+      btn.disabled = true;
+      btn.textContent = '제출 중...';
+
+      const record = {
+        topic_id:        currentTopicId,
+        author:          document.getElementById('f-author').value.trim(),
+        brand:           document.getElementById('f-brand').value.trim(),
+        campaign:        document.getElementById('f-campaign').value.trim(),
+        published_at:    document.getElementById('f-published').value.trim(),
+        medium:          document.getElementById('f-medium').value.trim(),
+        watch_url:       document.getElementById('f-url').value.trim(),
+        concept_summary: document.getElementById('f-concept').value.trim(),
+        case_analysis:   document.getElementById('f-analysis').value.trim(),
+      };
+
+      // Save author for next time
+      localStorage.setItem('imc-author', record.author);
+
+      if (sb) {
+        const { error } = await sb.from('submissions').insert([record]);
+        if (error) { toast('제출 실패: ' + error.message); btn.disabled = false; btn.textContent = '제출하기'; return; }
+      } else {
+        record.id = crypto.randomUUID();
+        record.created_at = new Date().toISOString();
+        localSubmissions.unshift(record);
+        saveFallback();
+      }
+
+      toast('제출 완료!');
+      e.target.reset();
+      document.getElementById('f-author').value = localStorage.getItem('imc-author') || '';
+      btn.disabled = false;
+      btn.textContent = '제출하기';
+      await renderSubmissions(currentTopicId);
+    });
+
+    // ================================================================
+    // Delete
+    // ================================================================
+    async function deleteSub(id) {
+      if (!confirm('이 사례를 삭제할까요?')) return;
+
+      if (sb) {
+        const { error } = await sb.from('submissions').delete().eq('id', id);
+        if (error) { toast('삭제 실패'); return; }
+      } else {
+        localSubmissions = localSubmissions.filter(s => s.id !== id);
+        saveFallback();
+      }
+
+      toast('삭제됨');
+      await renderSubmissions(currentTopicId);
+    }
+
+    // ================================================================
+    // Realtime
+    // ================================================================
+    function subscribeRealtime() {
+      if (!sb) return;
+      sb.channel('submissions-changes')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'submissions' }, () => {
+          if (currentTopicId) renderSubmissions(currentTopicId);
+          renderDashboard();
+        })
+        .subscribe();
+    }
+
+    // ================================================================
+    // Utilities
+    // ================================================================
+    function esc(str) {
+      if (!str) return '';
+      const d = document.createElement('div');
+      d.textContent = str;
+      return d.innerHTML;
+    }
+
+    function toast(msg) {
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.classList.add('show');
+      setTimeout(() => el.classList.remove('show'), 2500);
+    }
+
+    // ================================================================
+    // Boot
+    // ================================================================
+    (async function boot() {
+      const ok = initSupabase();
+      if (ok) {
+        await loadTopics();
+        subscribeRealtime();
+      }
+      await renderDashboard();
+    })();
+  </script>
+</body>
+</html>
