@@ -921,8 +921,12 @@
       if (!confirm('이 사례를 삭제할까요?')) return;
 
       if (sb) {
-        const { error } = await sb.from('submissions').delete().eq('id', id);
+        const { data, error } = await sb.from('submissions').delete().eq('id', id).select();
         if (error) { toast('삭제 실패'); return; }
+        if (!data || data.length === 0) {
+          toast('⚠️ 삭제 권한이 없습니다. Supabase RLS 정책을 확인하세요.');
+          return;
+        }
       } else {
         localSubmissions = localSubmissions.filter(s => s.id !== id);
         saveFallback();
@@ -953,8 +957,12 @@
       };
 
       if (sb) {
-        const { error } = await sb.from('submissions').update(updates).eq('id', id);
+        const { data, error } = await sb.from('submissions').update(updates).eq('id', id).select();
         if (error) { toast('수정 실패: ' + error.message); return; }
+        if (!data || data.length === 0) {
+          toast('⚠️ 수정 권한이 없습니다. Supabase RLS 정책을 확인하세요.');
+          return;
+        }
       } else {
         const sub = localSubmissions.find(s => s.id === id);
         if (sub) Object.assign(sub, updates);
