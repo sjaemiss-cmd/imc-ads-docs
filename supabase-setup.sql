@@ -85,5 +85,23 @@ insert into topics (question_num, chapter, title, description, concept_hint) val
      '일정 반응 횟수 후 예측 가능한 보상. 적립, 쿠폰, 스탬프 같은 보상 언어.')
 on conflict (question_num) do nothing;
 
--- 6. Realtime 활성화
+-- 6. comments 테이블: 광고 사례에 대한 댓글
+create table if not exists comments (
+  id              uuid default gen_random_uuid() primary key,
+  submission_id   uuid references submissions(id) on delete cascade not null,
+  author          text not null,
+  body            text not null,
+  created_at      timestamptz default now()
+);
+
+create index if not exists idx_comments_submission on comments(submission_id);
+create index if not exists idx_comments_created on comments(created_at);
+
+alter table comments enable row level security;
+create policy "comments_read" on comments for select using (true);
+create policy "comments_insert" on comments for insert with check (true);
+create policy "comments_delete" on comments for delete using (true);
+
+-- 7. Realtime 활성화
 alter publication supabase_realtime add table submissions;
+alter publication supabase_realtime add table comments;
