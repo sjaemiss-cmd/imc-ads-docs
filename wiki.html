@@ -378,11 +378,76 @@
     }
     @keyframes trans-spin { to { transform: rotate(360deg); } }
 
+    /* ── AI Evaluation ── */
+    .eval-btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff; border: none; padding: 8px 16px; border-radius: 10px;
+      font-size: 13px; font-weight: 600; cursor: pointer;
+      transition: opacity .15s, transform .15s;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .eval-btn:hover { opacity: .9; transform: translateY(-1px); }
+    .eval-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+
+    .eval-result {
+      margin-top: 12px; padding: 16px; border-radius: 12px;
+      background: linear-gradient(135deg, #f8f9ff 0%, #f0f0ff 100%);
+      border: 1px solid #e0e0f0;
+    }
+    .eval-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 14px;
+    }
+    .eval-total { font-size: 28px; font-weight: 800; color: #1d1d1f; }
+    .eval-total-sub { font-size: 14px; color: #6e6e73; font-weight: 400; }
+    .eval-grade {
+      font-size: 18px; font-weight: 800; padding: 4px 14px; border-radius: 10px; color: #fff;
+    }
+    .grade-S { background: linear-gradient(135deg, #667eea, #764ba2); }
+    .grade-A { background: #34c759; }
+    .grade-B { background: #0066cc; }
+    .grade-C { background: #ff9500; }
+    .grade-D { background: #ff3b30; }
+
+    .eval-criteria { display: flex; flex-direction: column; gap: 8px; }
+    .eval-criterion-row {
+      display: flex; align-items: center; gap: 10px; font-size: 13px;
+    }
+    .eval-crit-name {
+      width: 90px; font-weight: 600; color: #424245; flex-shrink: 0; font-size: 12px;
+    }
+    .eval-crit-bar {
+      flex: 1; height: 8px; background: #e5e5ea; border-radius: 4px; overflow: hidden;
+    }
+    .eval-crit-fill {
+      height: 100%; border-radius: 4px; transition: width .5s ease;
+    }
+    .eval-crit-score {
+      width: 50px; text-align: right; font-weight: 700; font-size: 13px; flex-shrink: 0;
+    }
+    .eval-crit-comment {
+      font-size: 12px; color: #6e6e73; margin-top: 1px; padding-left: 100px;
+      margin-bottom: 4px;
+    }
+    .eval-summary-box {
+      margin-top: 14px; padding: 12px; border-radius: 10px;
+      background: #fff; font-size: 13px; line-height: 1.6;
+    }
+    .eval-summary-box strong { color: #424245; }
+    .eval-improve-box {
+      margin-top: 8px; padding: 10px 12px; border-radius: 10px;
+      background: #fff3cd; font-size: 13px; line-height: 1.5;
+      border: 1px solid #ffc107;
+    }
+    .eval-improve-box strong { color: #b06000; }
+
     /* ── Responsive ── */
     @media (max-width: 640px) {
       .form-grid { grid-template-columns: 1fr; }
       .dashboard-columns { grid-template-columns: 1fr; }
       .header h1 { font-size: 18px; }
+      .eval-crit-name { width: 70px; font-size: 11px; }
+      .eval-crit-comment { padding-left: 80px; }
     }
   </style>
 </head>
@@ -448,6 +513,38 @@
 
       <div class="warn">
         <strong>주의!</strong> 세상은 넓고 광고는 수도 없이 많습니다. 토론방에서 이미 쓰인 광고를 그대로 가져오지 마세요. 문제마다 반드시 다른 광고를 찾아야 합니다.
+      </div>
+    </div>
+
+    <!-- AI 평가시스템 -->
+    <button class="guide-toggle" id="eval-guide-toggle" onclick="document.getElementById('eval-guide-toggle').classList.toggle('open');document.getElementById('eval-guide-body').classList.toggle('open')">
+      AI 평가시스템 (광고 사례 자동 평가 기준)
+      <span class="arrow">▼</span>
+    </button>
+    <div class="guide-body" id="eval-guide-body">
+      <h4>평가 개요</h4>
+      <p>제출된 광고 사례의 <strong>AI 평가</strong> 버튼을 누르면 5개 기준으로 자동 평가합니다. 평가 결과는 참고용이며, 최종 선정은 팀 토론을 통해 결정하세요.</p>
+
+      <h4>평가 기준 (총 100점)</h4>
+      <ul>
+        <li><strong>1. 개념 적합도 (30점)</strong> — 해당 이론/개념을 정확하게 보여주는가? 개념의 핵심 메커니즘이 광고의 중심 전략으로 작동하는지 평가</li>
+        <li><strong>2. 분석 용이성 (30점)</strong> — 광고 요소(모델, 카피, 비주얼, 컬러, 오디오)에서 개념이 구체적으로 식별되는가? 3개 이상 요소에서 짚어낼 수 있으면 만점</li>
+        <li><strong>3. 배타성 (15점)</strong> — 해당 광고가 이 주제에만 적합한가? 다른 주제에도 끼워맞출 수 있는 범용 광고는 감점</li>
+        <li><strong>4. 중복 회피 (10점)</strong> — 광고 선택의 독창성. 누구나 떠올릴 법한 뻔한 광고보다 신선한 사례를 높이 평가</li>
+        <li><strong>5. 발표 임팩트 (15점)</strong> — 발표 시 설득력과 인상도. 광고 자체가 인상적이고 보자마자 개념이 와닿는 정도</li>
+      </ul>
+
+      <h4>등급 기준</h4>
+      <ul>
+        <li><strong>S (90~100)</strong> — 완벽한 사례. 이 광고로 바로 제출 가능</li>
+        <li><strong>A (75~89)</strong> — 우수한 사례. 약간의 보완으로 최종 선정 가능</li>
+        <li><strong>B (60~74)</strong> — 적절한 사례. 분석 보강 필요</li>
+        <li><strong>C (45~59)</strong> — 아쉬운 사례. 다른 광고 검토 권장</li>
+        <li><strong>D (0~44)</strong> — 부적합. 다른 광고로 교체 필요</li>
+      </ul>
+
+      <div class="warn">
+        <strong>참고:</strong> AI 평가는 제출된 텍스트 내용만으로 판단합니다. 실제 광고 영상을 보고 판단하는 것이 아니므로, 분석 내용을 상세히 작성할수록 정확한 평가를 받을 수 있습니다.
       </div>
     </div>
 
@@ -797,6 +894,10 @@
           </div>
           ${s.watch_url ? `<div class="sub-link"><a href="${esc(s.watch_url)}" target="_blank" rel="noopener">광고 보기 →</a>${/tvcf\.co\.kr\/play\/\d+$/.test(s.watch_url) ? ' <span style="color:#e74c3c;font-size:0.8em;">(⚠ 로그인 필요 링크 — 수정 필요)</span>' : ''}</div>` : ''}
           <div class="sub-time">${new Date(s.created_at).toLocaleString('ko-KR')}</div>
+          <div style="margin-top:10px;">
+            <button class="eval-btn" id="eval-btn-${s.id}" onclick="evaluateSubmission('${s.id}')">AI 평가</button>
+          </div>
+          <div class="eval-result" id="eval-result-${s.id}" style="display:none;"></div>
           <div class="sub-edit-form" id="edit-form-${s.id}" hidden>
             <div class="form-grid">
               <div class="form-group"><label>브랜드</label><input id="edit-brand-${s.id}" value="${esc(s.brand)}" /></div>
@@ -1810,6 +1911,225 @@
         clearTimeout(translateDebounce);
         translateDebounce = setTimeout(() => translatePage(), 300);
       }).observe(root, { childList: true, subtree: true });
+    }
+
+    // ================================================================
+    // AI Evaluation
+    // ================================================================
+    async function evaluateSubmission(subId) {
+      const btn = document.getElementById('eval-btn-' + subId);
+      const resultEl = document.getElementById('eval-result-' + subId);
+      if (!btn || !resultEl) return;
+
+      btn.disabled = true;
+      btn.textContent = '평가 중...';
+
+      // Get submission data
+      let sub;
+      if (sb) {
+        const { data } = await sb.from('submissions').select('*').eq('id', subId).single();
+        sub = data;
+      } else {
+        sub = localSubmissions.find(s => s.id === subId);
+      }
+      if (!sub) {
+        btn.disabled = false; btn.textContent = 'AI 평가'; return;
+      }
+
+      const topic = topics.find(t => t.id === sub.topic_id);
+      if (!topic) {
+        btn.disabled = false; btn.textContent = 'AI 평가'; return;
+      }
+
+      const apiKey = localStorage.getItem('openai-api-key');
+      if (!apiKey) {
+        const k = prompt('AI 평가를 위해 OpenAI API 키를 입력하세요 (한 번만 입력하면 저장됩니다):');
+        if (k) { localStorage.setItem('openai-api-key', k); } else {
+          toast('API 키가 필요합니다.');
+          btn.disabled = false; btn.textContent = 'AI 평가'; return;
+        }
+      }
+
+      const evalPrompt = `당신은 IMC(통합 마케팅 커뮤니케이션) 수업의 광고 사례 평가자다. 각 기준을 독립적으로 평가하라.
+
+## 핵심 원칙
+- 각 기준은 서로 독립적으로 채점한다. 한 기준에서 높은 점수를 줬다고 다른 기준도 높여서는 안 된다.
+- 점수는 반드시 아래 루브릭의 구체적 조건을 확인한 후 해당하는 구간에서 결정한다.
+- 루브릭의 조건을 하나라도 충족하지 못하면 그 아래 구간으로 내린다.
+- 총점은 각 기준 점수의 단순 합산이다. 총점을 먼저 정하고 역산하지 마라.
+
+## 평가 대상
+- 과제 문항: Q${topic.question_num}. ${topic.title}
+- 문제: ${topic.description}
+- 개념 힌트: ${topic.concept_hint || '없음'}
+
+## 제출된 광고
+- 브랜드: ${sub.brand}
+- 캠페인/광고명: ${sub.campaign}
+- 실행 시기: ${sub.published_at}
+- 매체: ${sub.medium}
+- 개념/이론 설명: ${sub.concept_summary}
+- 사례 분석: ${sub.case_analysis}
+
+## 평가 기준 (총 100점)
+
+### 1. 개념 적합도 (30점)
+질문: 이 광고가 해당 이론의 핵심 메커니즘을 보여주는가? 제출자의 개념 설명이 학술적으로 정확한가?
+채점 전 반드시 확인할 것:
+  (a) 제출자가 해당 개념의 정의를 정확히 서술했는가?
+  (b) 광고의 중심 전략이 정말 이 개념에 기반하는가, 아니면 표면적 유사성일 뿐인가?
+  (c) 과제 문제의 세부 조건(예: "모델이나 음악 이외의 무조건자극")을 충족하는가?
+구간:
+  - 25~30: (a)(b)(c) 모두 완벽히 충족. 개념의 작동 원리까지 설명함
+  - 18~24: (a)(b) 충족하나 (c)가 약하거나, 설명에 사소한 부정확함 있음
+  - 10~17: (a) 또는 (b) 중 하나만 충족. 개념을 대충 맞게 이해하지만 정밀하지 않음
+  - 1~9: 개념 이해가 불충분하거나 광고와 개념의 연결이 억지스러움
+  - 0: 완전히 잘못된 개념 적용
+
+### 2. 분석 용이성 (30점)
+질문: 제출자가 광고의 구체적 요소를 짚어가며 개념과의 연결을 분석했는가?
+채점 전 반드시 세어볼 것: 제출 텍스트에서 실제로 언급한 광고 요소(모델/출연자, 카피/대사, 비주얼/장면, 컬러/톤, 오디오/BGM)가 몇 개인가?
+구간:
+  - 25~30: 4개 이상 요소를 언급하고, 각각이 개념과 왜 연결되는지 구체적으로 설명함
+  - 18~24: 3개 요소를 언급했으나 일부 연결이 피상적("~한 느낌을 준다" 수준)
+  - 10~17: 1~2개 요소만 구체적으로 분석. 나머지는 일반적 감상에 그침
+  - 1~9: 광고 요소를 거의 짚지 않고 전체적 인상만 서술함
+  - 0: 광고 내용 분석 자체가 없음
+
+### 3. 배타성 (15점)
+질문: 이 광고를 다른 IMC 주제(예: 고전적 조건화, 게슈탈트, 경험적 위계 등)로도 설명할 수 있는가?
+채점 전 반드시 확인할 것: 이 광고에 다른 소비자 심리 개념이 동시에 작동하고 있는가? 있다면 몇 개인가?
+구간:
+  - 13~15: 다른 개념으로는 설명이 불가능. 이 주제 전용 사례
+  - 9~12: 주로 이 주제이나, 다른 1개 개념으로도 부분 설명 가능
+  - 5~8: 2~3개 다른 주제에도 적용 가능한 범용적 광고
+  - 1~4: 특정 주제와의 연결이 약하고 어디에든 갖다 붙일 수 있음
+  - 0: 해당 주제와의 연결이 거의 없음
+
+### 4. 중복 회피 (10점)
+질문: 이 광고가 해당 개념의 사례로 얼마나 신선한 선택인가?
+채점 전 반드시 확인할 것: 이 브랜드/광고가 해당 개념을 설명할 때 흔히 쓰이는 교과서적 사례인가?
+구간:
+  - 9~10: 잘 알려지지 않은 광고를 발굴했거나, 유명 광고라도 새로운 관점으로 분석
+  - 6~8: 어느 정도 알려진 광고이나 해당 개념의 전형적 사례는 아님
+  - 3~5: 유명 광고이고 이 개념을 설명할 때 자주 등장하는 편
+  - 1~2: 교과서/강의 슬라이드에 예시로 자주 쓰이는 광고
+  - 0: 강의 자료에서 그대로 가져온 사례
+
+### 5. 발표 임팩트 (15점)
+질문: 이 광고를 틀어주면 청중이 바로 "아, 그 개념!"이라고 반응할 수 있는가?
+구간:
+  - 13~15: 광고 자체가 인상적이고, 해당 개념이 직관적으로 느껴짐
+  - 9~12: 좋은 광고이나 개념 연결을 위해 설명이 필요
+  - 5~8: 광고 자체는 평범하지만, 분석하면 개념이 보임
+  - 1~4: 광고를 봐도 해당 개념이 잘 와닿지 않음
+  - 0: 개념과의 연결이 청중에게 설득력이 없음
+
+## 채점 절차 (이 순서를 반드시 따를 것)
+1단계: 각 기준별로 위 "채점 전 확인" 질문에 먼저 답하라.
+2단계: 확인 결과에 따라 해당 구간을 결정하라.
+3단계: 구간 내에서 세부 점수를 정하라.
+4단계: 5개 점수를 합산하여 totalScore를 구하라.
+5단계: totalScore로 등급을 결정하라 (S:90~100, A:75~89, B:60~74, C:45~59, D:0~44).
+
+반드시 아래 JSON 형식으로만 응답하세요.
+{
+  "scores": {
+    "conceptFit": { "score": 0, "reason": "채점 전 확인 결과 요약", "comment": "구간 판정 근거" },
+    "analysisEase": { "score": 0, "reason": "언급된 광고 요소 개수와 분석 깊이", "comment": "구간 판정 근거" },
+    "exclusivity": { "score": 0, "reason": "다른 주제 적용 가능성", "comment": "구간 판정 근거" },
+    "duplicationAvoidance": { "score": 0, "reason": "사례의 신선도", "comment": "구간 판정 근거" },
+    "presentationImpact": { "score": 0, "reason": "직관적 인지 가능성", "comment": "구간 판정 근거" }
+  },
+  "totalScore": 0,
+  "grade": "S/A/B/C/D",
+  "summary": "가장 높은 기준과 가장 낮은 기준을 명시하며 1~2문장 종합 평가",
+  "improvement": "가장 낮은 점수 기준을 올리기 위한 1가지 구체적 행동 제안"
+}`;
+
+      try {
+        const key = localStorage.getItem('openai-api-key');
+        const res = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
+          body: JSON.stringify({
+            model: 'gpt-4o-mini',
+            messages: [
+              { role: 'system', content: 'You evaluate IMC ad submissions. Follow the rubric exactly — check each condition before scoring. Different submissions MUST get different scores. A submission with vague analysis and one with detailed element-by-element breakdown cannot score similarly. Score each criterion independently: do NOT decide a total first and distribute. The comment for each criterion must cite a specific phrase or absence from the submission text as evidence. Respond only with valid JSON. All text in Korean.' },
+              { role: 'user', content: evalPrompt }
+            ],
+            temperature: 0.3,
+            response_format: { type: 'json_object' }
+          })
+        });
+
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.error?.message || `HTTP ${res.status}`);
+        }
+        const data = await res.json();
+        const result = JSON.parse(data.choices[0].message.content);
+        renderEvalResult(subId, result);
+      } catch (err) {
+        console.error('Evaluation failed:', err);
+        toast('평가 실패: ' + err.message);
+        btn.disabled = false;
+        btn.textContent = 'AI 평가';
+      }
+    }
+
+    function renderEvalResult(subId, result) {
+      const el = document.getElementById('eval-result-' + subId);
+      const btn = document.getElementById('eval-btn-' + subId);
+      if (!el) return;
+
+      const criteria = [
+        { key: 'conceptFit',           name: '개념 적합도', max: 30 },
+        { key: 'analysisEase',         name: '분석 용이성', max: 30 },
+        { key: 'exclusivity',          name: '배타성',      max: 15 },
+        { key: 'duplicationAvoidance', name: '중복 회피',   max: 10 },
+        { key: 'presentationImpact',   name: '발표 임팩트', max: 15 }
+      ];
+
+      function barColor(score, max) {
+        const pct = score / max;
+        if (pct >= 0.8) return '#34c759';
+        if (pct >= 0.6) return '#0066cc';
+        if (pct >= 0.4) return '#ff9500';
+        return '#ff3b30';
+      }
+
+      const grade = (result.grade || 'C').charAt(0);
+      const gradeClass = 'grade-' + grade;
+
+      el.innerHTML =
+        '<div class="eval-header">' +
+          '<div class="eval-total">' + result.totalScore + '<span class="eval-total-sub">/100</span></div>' +
+          '<span class="eval-grade ' + gradeClass + '">' + esc(grade) + '</span>' +
+        '</div>' +
+        '<div class="eval-criteria">' +
+          criteria.map(function(c) {
+            var s = result.scores[c.key] || { score: 0, comment: '', reason: '' };
+            var score = Math.min(s.score, c.max);
+            var pct = (score / c.max * 100).toFixed(0);
+            var color = barColor(score, c.max);
+            var detail = s.reason && s.comment ? esc(s.reason) + ' — ' + esc(s.comment) : esc(s.comment || s.reason || '');
+            return '<div>' +
+              '<div class="eval-criterion-row">' +
+                '<span class="eval-crit-name">' + c.name + '</span>' +
+                '<div class="eval-crit-bar"><div class="eval-crit-fill" style="width:' + pct + '%;background:' + color + '"></div></div>' +
+                '<span class="eval-crit-score" style="color:' + color + '">' + score + '/' + c.max + '</span>' +
+              '</div>' +
+              (detail ? '<div class="eval-crit-comment">' + detail + '</div>' : '') +
+            '</div>';
+          }).join('') +
+        '</div>' +
+        '<div class="eval-summary-box"><strong>종합 평가:</strong> ' + esc(result.summary) + '</div>' +
+        (result.improvement ? '<div class="eval-improve-box"><strong>개선 제안:</strong> ' + esc(result.improvement) + '</div>' : '');
+
+      el.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = '재평가';
     }
 
     // ================================================================
