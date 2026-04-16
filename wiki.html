@@ -1721,7 +1721,7 @@
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${OPENAI_API_KEY}` },
           body: JSON.stringify({
-            model: 'gpt-4o-mini',
+            model: 'gpt-5-nano',
             messages: [
               { role: 'system', content: `Translate every JSON value from ${ln[fl]} to ${ln[tl]}. Return valid JSON, same keys. Keep numbers, URLs, brands, English unchanged.` },
               { role: 'user', content: JSON.stringify(textsObj) }
@@ -2077,7 +2077,7 @@
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
           body: JSON.stringify({
-            model: 'gpt-4o-mini',
+            model: 'gpt-5-nano',
             messages: [
               { role: 'system', content: 'You evaluate IMC ad submissions. Follow the rubric exactly — check each condition before scoring. Different submissions MUST get different scores. A submission with vague analysis and one with detailed element-by-element breakdown cannot score similarly. Score each criterion independently: do NOT decide a total first and distribute. The comment for each criterion must cite a specific phrase or absence from the submission text as evidence. Respond only with valid JSON. All text in Korean.' },
               { role: 'user', content: evalPrompt }
