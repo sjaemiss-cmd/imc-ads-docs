@@ -2164,7 +2164,6 @@
               { role: 'system', content: 'You evaluate IMC ad submissions. Follow the rubric exactly — check each condition before scoring. Different submissions MUST get different scores. A submission with vague analysis and one with detailed element-by-element breakdown cannot score similarly. Score each criterion independently: do NOT decide a total first and distribute. The comment for each criterion must cite a specific phrase or absence from the submission text as evidence. Respond only with valid JSON. All text in Korean.' },
               { role: 'user', content: evalPrompt }
             ],
-            temperature: 0.3,
             response_format: { type: 'json_object' }
           })
         });
