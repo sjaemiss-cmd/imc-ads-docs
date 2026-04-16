@@ -143,6 +143,27 @@ create policy "evaluations_insert" on evaluations for insert with check (true);
 create policy "evaluations_update" on evaluations for update using (true);
 create policy "evaluations_delete" on evaluations for delete using (true);
 
--- 9. Realtime 활성화
+-- 9. votes 테이블: 문제별 광고 투표 (1인 1표)
+create table if not exists votes (
+  id            uuid default gen_random_uuid() primary key,
+  topic_id      integer references topics(id) on delete cascade not null,
+  submission_id uuid references submissions(id) on delete cascade not null,
+  voter         text not null,
+  created_at    timestamptz default now(),
+  updated_at    timestamptz default now()
+);
+
+create unique index if not exists idx_votes_voter_topic on votes(voter, topic_id);
+create index if not exists idx_votes_submission on votes(submission_id);
+create index if not exists idx_votes_topic on votes(topic_id);
+
+alter table votes enable row level security;
+create policy "votes_read" on votes for select using (true);
+create policy "votes_insert" on votes for insert with check (true);
+create policy "votes_update" on votes for update using (true);
+create policy "votes_delete" on votes for delete using (true);
+
+-- 10. Realtime 활성화
 alter publication supabase_realtime add table submissions;
 alter publication supabase_realtime add table comments;
+alter publication supabase_realtime add table votes;

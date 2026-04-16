@@ -447,6 +447,80 @@
     }
     .eval-btn[disabled] { opacity: 0.5; cursor: not-allowed; }
 
+    /* ── Vote ── */
+    .vote-area {
+      display: flex; align-items: center; gap: 10px; margin-top: 10px;
+      padding-top: 10px; border-top: 1px solid #f0f0f2;
+    }
+    .vote-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 18px; border-radius: 10px; font-size: 13px; font-weight: 600;
+      border: 2px solid #e5e5ea; background: #fff; color: #424245;
+      cursor: pointer; transition: all .2s;
+    }
+    .vote-btn:hover { border-color: #0066cc; color: #0066cc; }
+    .vote-btn.voted { background: #0066cc; color: #fff; border-color: #0066cc; }
+    .vote-btn.voted:hover { background: #0055b3; border-color: #0055b3; }
+    .vote-count { font-size: 13px; color: #6e6e73; }
+    .vote-count strong { color: #0066cc; font-size: 15px; }
+    .topic-vote-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 8px;
+    }
+    .topic-vote-badge.voted { background: #e6f4ea; color: #137333; }
+    .topic-vote-badge.not-voted { background: #fce8e6; color: #d93025; }
+    .topic-leading { font-size: 11px; color: #6e6e73; margin-top: 2px; }
+
+    /* ── Dashboard Tabs ── */
+    .dashboard-tabs {
+      display: flex; gap: 4px; margin-bottom: 16px;
+      background: #f5f5f7; border-radius: 10px; padding: 3px;
+      border: 1px solid #e5e5ea;
+    }
+    .dash-tab {
+      flex: 1; padding: 8px 16px; border: none; background: transparent;
+      border-radius: 8px; font-size: 14px; font-weight: 600;
+      color: #6e6e73; cursor: pointer; transition: all .15s; text-align: center;
+    }
+    .dash-tab.active { background: #0066cc; color: #fff; box-shadow: 0 1px 3px rgba(0,102,204,.3); }
+    .dash-tab:hover:not(.active) { color: #0066cc; }
+
+    /* ── Results Dashboard ── */
+    .results-dashboard { display: none; }
+    .results-dashboard.show { display: block; }
+    .results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .result-card {
+      background: #fff; border-radius: 14px; padding: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.06);
+      border: 2px solid transparent; cursor: pointer; transition: border-color .15s;
+    }
+    .result-card.decided { border-color: #34c759; }
+    .result-card.undecided { border-color: #ff9500; border-style: dashed; }
+    .result-card .result-q {
+      font-size: 11px; font-weight: 600; padding: 3px 10px;
+      border-radius: 12px; display: inline-block; margin-bottom: 6px;
+    }
+    .result-card h4 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .result-winner {
+      margin-top: 8px; padding: 10px; border-radius: 10px;
+      background: #f5f5f7; font-size: 13px; line-height: 1.5;
+    }
+    .result-winner .rw-brand { font-weight: 700; font-size: 14px; }
+    .result-winner .rw-author {
+      font-size: 12px; font-weight: 600; background: #0066cc; color: #fff;
+      padding: 1px 8px; border-radius: 8px; margin-left: 6px;
+    }
+    .result-winner .rw-votes { font-size: 12px; color: #137333; font-weight: 600; margin-top: 4px; }
+    .result-no-votes { font-size: 13px; color: #aeaeb2; font-style: italic; padding: 8px 0; }
+    .results-progress {
+      margin-bottom: 16px; padding: 14px 18px; border-radius: 12px;
+      background: #fff; border: 1px solid #e5e5ea;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .results-progress-bar { flex: 1; height: 8px; background: #e5e5ea; border-radius: 4px; overflow: hidden; }
+    .results-progress-fill { height: 100%; background: #34c759; border-radius: 4px; transition: width .3s; }
+    .results-progress-text { font-size: 14px; font-weight: 600; color: #424245; white-space: nowrap; }
+
     /* ── Responsive ── */
     @media (max-width: 640px) {
       .form-grid { grid-template-columns: 1fr; }
@@ -454,6 +528,7 @@
       .header h1 { font-size: 18px; }
       .eval-crit-name { width: 70px; font-size: 11px; }
       .eval-crit-comment { padding-left: 80px; }
+      .results-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -560,6 +635,12 @@
       설정해주세요. 자세한 방법은 <code>SETUP.md</code>를 참고하세요.
     </div>
 
+    <!-- Dashboard Tabs -->
+    <div class="dashboard-tabs" id="dashboard-tabs">
+      <button class="dash-tab active" onclick="showTab('topics')">문제 목록</button>
+      <button class="dash-tab" onclick="showTab('results')">선정 결과</button>
+    </div>
+
     <!-- Dashboard (two-column layout) -->
     <div id="dashboard">
       <div class="dashboard-columns">
@@ -578,6 +659,12 @@
           <div id="topics-col-right"></div>
         </div>
       </div>
+    </div>
+
+    <!-- Results Dashboard (선정 결과) -->
+    <div id="results-dashboard" class="results-dashboard">
+      <div class="results-progress" id="results-progress"></div>
+      <div class="results-grid" id="results-grid"></div>
     </div>
 
     <!-- Detail Panel -->
@@ -687,6 +774,9 @@
     let sb = null;
     let topics = [];
     let currentTopicId = null;
+    let localVotes = [];
+    try { localVotes = JSON.parse(localStorage.getItem('imc-votes') || '[]'); } catch { localVotes = []; }
+    function saveLocalVotes() { localStorage.setItem('imc-votes', JSON.stringify(localVotes)); }
 
     function initSupabase() {
       if (!SUPABASE_URL || !SUPABASE_KEY) {
@@ -818,6 +908,7 @@
     // ================================================================
     async function renderDashboard() {
       const counts = await getSubmissionCounts();
+      const voteSummary = await getAllVoteSummary();
       const leftTopics = topics.filter(t => t.question_num <= 5);
       const rightTopics = topics.filter(t => t.question_num > 5);
 
@@ -827,6 +918,10 @@
           const chipClass = 'chip-' + t.chapter.charAt(0);
           const badgeCls = side === 'right' ? 'assignee-badge right' : 'assignee-badge';
           const assigneeHtml = (t.assignees || []).map(a => `<span class="${badgeCls}" style="font-size:10px;padding:1px 6px;margin-left:4px;">${esc(a)}</span>`).join('');
+          const myVotedSub = voteSummary.myVotes[t.id];
+          const topicVC = voteSummary.byTopic[t.id] || {};
+          let maxV = 0;
+          for (const cnt of Object.values(topicVC)) { if (cnt > maxV) maxV = cnt; }
           return `
             <div class="topic-card" onclick="openTopic(${t.id})">
               <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
@@ -836,6 +931,10 @@
               <h3>${t.title}</h3>
               <div class="count">
                 <span class="count-num">${c}</span> 건 제출됨
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;margin-top:4px;">
+                <span class="topic-vote-badge ${myVotedSub ? 'voted' : 'not-voted'}">${myVotedSub ? '&#10003; 투표함' : '&#9744; 미투표'}</span>
+                ${maxV > 0 ? `<span class="topic-leading">${maxV}표 선두</span>` : ''}
               </div>
             </div>
           `;
@@ -856,6 +955,8 @@
       if (!topic) return;
 
       document.getElementById('dashboard').hidden = true;
+      document.getElementById('results-dashboard').classList.remove('show');
+      document.getElementById('dashboard-tabs').style.display = 'none';
       document.getElementById('detail-panel').hidden = false;
       document.getElementById('detail-title').textContent = `Q${topic.question_num}. ${topic.title}`;
       document.getElementById('detail-question').textContent = topic.description;
@@ -881,7 +982,17 @@
         return;
       }
 
-      list.innerHTML = subs.map(s => `
+      // Load votes for this topic
+      const topicVotes = await getVotesForTopic(topicId);
+      const voter = localStorage.getItem('imc-author');
+      const myVote = topicVotes.find(v => v.voter === voter)?.submission_id || null;
+      const voteCounts = {};
+      topicVotes.forEach(v => { voteCounts[v.submission_id] = (voteCounts[v.submission_id] || 0) + 1; });
+
+      list.innerHTML = subs.map(s => {
+        const vc = voteCounts[s.id] || 0;
+        const isMyVote = myVote === s.id;
+        return `
         <div class="submission-card" id="sub-${s.id}">
           <div class="sub-actions">
             <button class="sub-edit" onclick="toggleEdit('${s.id}')" title="수정">수정</button>
@@ -905,6 +1016,10 @@
             <button class="eval-btn" id="eval-btn-${s.id}" onclick="evaluateSubmission('${s.id}')">AI 평가</button>
           </div>
           <div class="eval-result" id="eval-result-${s.id}" style="display:none;"></div>
+          <div class="vote-area">
+            <button class="vote-btn ${isMyVote ? 'voted' : ''}" onclick="castVote(${topicId}, '${s.id}')">${isMyVote ? '&#10003; 선정됨' : '&#9734; 이 광고 선정'}</button>
+            <span class="vote-count"><strong>${vc}</strong>명 투표</span>
+          </div>
           <div class="sub-edit-form" id="edit-form-${s.id}" hidden>
             <div class="form-grid">
               <div class="form-group"><label>브랜드</label><input id="edit-brand-${s.id}" value="${esc(s.brand)}" /></div>
@@ -934,7 +1049,7 @@
             </div>
           </div>
         </div>
-      `).join('');
+      `}).join('');
 
       // Load comment counts for all visible submissions
       for (const s of subs) { loadCommentCount(s.id); }
@@ -954,7 +1069,12 @@
 
     function showDashboard() {
       document.getElementById('dashboard').hidden = false;
+      document.getElementById('dashboard').style.display = '';
       document.getElementById('detail-panel').hidden = true;
+      document.getElementById('results-dashboard').classList.remove('show');
+      document.getElementById('dashboard-tabs').style.display = '';
+      const tabs = document.querySelectorAll('.dash-tab');
+      if (tabs.length) { tabs[0].classList.add('active'); tabs[1].classList.remove('active'); }
       currentTopicId = null;
       renderDashboard();
     }
@@ -1201,7 +1321,155 @@
             loadCommentCount(subId);
           }
         })
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'votes' }, () => {
+          if (currentTopicId) renderSubmissions(currentTopicId);
+          renderDashboard();
+          if (document.getElementById('results-dashboard').classList.contains('show')) renderResultsDashboard();
+        })
         .subscribe();
+    }
+
+    // ================================================================
+    // Votes
+    // ================================================================
+    async function getVotesForTopic(topicId) {
+      if (sb) {
+        const { data, error } = await sb.from('votes').select('*').eq('topic_id', topicId);
+        if (error) { console.error(error); return []; }
+        return data;
+      }
+      return localVotes.filter(v => v.topic_id === topicId);
+    }
+
+    async function getAllVoteSummary() {
+      const voter = localStorage.getItem('imc-author');
+      let votes = [];
+      if (sb) {
+        const { data, error } = await sb.from('votes').select('topic_id, submission_id, voter');
+        if (!error && data) votes = data;
+      } else {
+        votes = localVotes;
+      }
+      return buildVoteSummary(votes, voter);
+    }
+
+    function buildVoteSummary(votes, voter) {
+      const byTopic = {};
+      const myVotes = {};
+      for (const v of votes) {
+        if (!byTopic[v.topic_id]) byTopic[v.topic_id] = {};
+        byTopic[v.topic_id][v.submission_id] = (byTopic[v.topic_id][v.submission_id] || 0) + 1;
+        if (voter && v.voter === voter) myVotes[v.topic_id] = v.submission_id;
+      }
+      return { byTopic, myVotes };
+    }
+
+    async function castVote(topicId, submissionId) {
+      const voter = localStorage.getItem('imc-author');
+      if (!voter) { toast('먼저 이름을 설정해주세요 (제출 폼의 작성자 이름)'); return; }
+
+      if (sb) {
+        const { data: existing } = await sb.from('votes')
+          .select('*').eq('topic_id', topicId).eq('voter', voter).maybeSingle();
+        if (existing) {
+          if (existing.submission_id === submissionId) {
+            const { error } = await sb.from('votes').delete().eq('id', existing.id);
+            if (error) { toast('투표 취소 실패'); return; }
+            toast('투표가 취소되었습니다');
+          } else {
+            const { error } = await sb.from('votes')
+              .update({ submission_id: submissionId, updated_at: new Date().toISOString() })
+              .eq('id', existing.id);
+            if (error) { toast('투표 변경 실패'); return; }
+            toast('투표가 변경되었습니다');
+          }
+        } else {
+          const { error } = await sb.from('votes')
+            .insert([{ topic_id: topicId, submission_id: submissionId, voter }]);
+          if (error) { toast('투표 실패: ' + error.message); return; }
+          toast('투표 완료!');
+        }
+      } else {
+        const idx = localVotes.findIndex(v => v.topic_id === topicId && v.voter === voter);
+        if (idx >= 0) {
+          if (localVotes[idx].submission_id === submissionId) {
+            localVotes.splice(idx, 1);
+            toast('투표가 취소되었습니다');
+          } else {
+            localVotes[idx].submission_id = submissionId;
+            toast('투표가 변경되었습니다');
+          }
+        } else {
+          localVotes.push({ id: crypto.randomUUID(), topic_id: topicId, submission_id: submissionId, voter, created_at: new Date().toISOString() });
+          toast('투표 완료!');
+        }
+        saveLocalVotes();
+      }
+      await renderSubmissions(currentTopicId);
+      renderDashboard();
+    }
+
+    // ================================================================
+    // Dashboard Tabs & Results
+    // ================================================================
+    function showTab(tab) {
+      const tabs = document.querySelectorAll('.dash-tab');
+      tabs[0].classList.toggle('active', tab === 'topics');
+      tabs[1].classList.toggle('active', tab === 'results');
+      document.getElementById('dashboard').style.display = tab === 'topics' ? '' : 'none';
+      const resultsEl = document.getElementById('results-dashboard');
+      resultsEl.classList.toggle('show', tab === 'results');
+      if (tab === 'results') renderResultsDashboard();
+    }
+
+    async function renderResultsDashboard() {
+      const voteSummary = await getAllVoteSummary();
+      let allSubs = [];
+      if (sb) {
+        const { data } = await sb.from('submissions').select('*');
+        allSubs = data || [];
+      } else {
+        allSubs = localSubmissions;
+      }
+      const subMap = {};
+      allSubs.forEach(s => { subMap[s.id] = s; });
+
+      let decidedCount = 0;
+      const cards = topics.map(t => {
+        const topicVotes = voteSummary.byTopic[t.id] || {};
+        let leadingSubId = null, maxVotes = 0, isTie = false;
+        for (const [subId, count] of Object.entries(topicVotes)) {
+          if (count > maxVotes) { maxVotes = count; leadingSubId = subId; isTie = false; }
+          else if (count === maxVotes && count > 0) { isTie = true; }
+        }
+        if (maxVotes > 0 && !isTie) decidedCount++;
+        const winner = leadingSubId ? subMap[leadingSubId] : null;
+        const chipClass = 'chip-' + t.chapter.charAt(0);
+        const totalVoters = Object.values(topicVotes).reduce((a, b) => a + b, 0);
+
+        if (!winner || maxVotes === 0) {
+          return `<div class="result-card undecided" onclick="openTopic(${t.id})">
+            <span class="result-q ${chipClass}">Q${t.question_num} · ${t.chapter}</span>
+            <h4>${esc(t.title)}</h4>
+            <div class="result-no-votes">아직 투표가 없습니다</div>
+          </div>`;
+        }
+        return `<div class="result-card ${!isTie ? 'decided' : 'undecided'}" onclick="openTopic(${t.id})">
+          <span class="result-q ${chipClass}">Q${t.question_num} · ${t.chapter}</span>
+          <h4>${esc(t.title)}</h4>
+          <div class="result-winner">
+            <span class="rw-brand">${esc(winner.brand)}</span>
+            <span class="rw-author">${esc(winner.author)}</span>
+            <div style="font-size:12px;color:#6e6e73;margin-top:2px;">${esc(winner.campaign)}</div>
+            <div class="rw-votes">${maxVotes}/${totalVoters}표${isTie ? ' (동점 — 추가 투표 필요)' : ''}</div>
+          </div>
+        </div>`;
+      }).join('');
+
+      document.getElementById('results-progress').innerHTML = `
+        <div class="results-progress-bar"><div class="results-progress-fill" style="width:${decidedCount * 10}%"></div></div>
+        <span class="results-progress-text">${decidedCount}/10 선정 완료</span>`;
+      document.getElementById('results-grid').innerHTML = cards;
     }
 
     // ================================================================
