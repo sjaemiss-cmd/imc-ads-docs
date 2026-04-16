@@ -1916,11 +1916,32 @@
     // ================================================================
     // AI Evaluation
     // ================================================================
+    const EVAL_COOLDOWN_MS = 15000; // 15초 쿨다운
+    let lastEvalTime = 0;
+    let evalInProgress = false;
+
     async function evaluateSubmission(subId) {
       const btn = document.getElementById('eval-btn-' + subId);
       const resultEl = document.getElementById('eval-result-' + subId);
       if (!btn || !resultEl) return;
 
+      // Rate limit: 동시 평가 차단
+      if (evalInProgress) {
+        toast('이전 평가가 진행 중입니다. 완료 후 다시 시도하세요.');
+        return;
+      }
+
+      // Rate limit: 쿨다운 체크
+      const now = Date.now();
+      const elapsed = now - lastEvalTime;
+      if (elapsed < EVAL_COOLDOWN_MS) {
+        const remaining = Math.ceil((EVAL_COOLDOWN_MS - elapsed) / 1000);
+        toast(`잠시 후 다시 시도하세요 (${remaining}초 남음)`);
+        return;
+      }
+
+      evalInProgress = true;
+      lastEvalTime = Date.now();
       btn.disabled = true;
       btn.textContent = '평가 중...';
 
@@ -1933,11 +1954,13 @@
         sub = localSubmissions.find(s => s.id === subId);
       }
       if (!sub) {
+        evalInProgress = false;
         btn.disabled = false; btn.textContent = 'AI 평가'; return;
       }
 
       const topic = topics.find(t => t.id === sub.topic_id);
       if (!topic) {
+        evalInProgress = false;
         btn.disabled = false; btn.textContent = 'AI 평가'; return;
       }
 
@@ -1946,6 +1969,7 @@
         const k = prompt('AI 평가를 위해 OpenAI API 키를 입력하세요 (한 번만 입력하면 저장됩니다):');
         if (k) { localStorage.setItem('openai-api-key', k); } else {
           toast('API 키가 필요합니다.');
+          evalInProgress = false;
           btn.disabled = false; btn.textContent = 'AI 평가'; return;
         }
       }
@@ -2075,6 +2099,8 @@
         toast('평가 실패: ' + err.message);
         btn.disabled = false;
         btn.textContent = 'AI 평가';
+      } finally {
+        evalInProgress = false;
       }
     }
 
