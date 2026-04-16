@@ -125,6 +125,24 @@ alter table translations enable row level security;
 create policy "translations_read" on translations for select using (true);
 create policy "translations_insert" on translations for insert with check (true);
 
--- 8. Realtime 활성화
+-- 8. evaluations 테이블: AI 평가 결과 캐시 (제출물 수정 전까지 재평가 차단)
+create table if not exists evaluations (
+  id               uuid default gen_random_uuid() primary key,
+  submission_id    uuid references submissions(id) on delete cascade not null unique,
+  result           jsonb not null,
+  content_snapshot text not null,
+  created_at       timestamptz default now(),
+  updated_at       timestamptz default now()
+);
+
+create index if not exists idx_evaluations_submission on evaluations(submission_id);
+
+alter table evaluations enable row level security;
+create policy "evaluations_read" on evaluations for select using (true);
+create policy "evaluations_insert" on evaluations for insert with check (true);
+create policy "evaluations_update" on evaluations for update using (true);
+create policy "evaluations_delete" on evaluations for delete using (true);
+
+-- 9. Realtime 활성화
 alter publication supabase_realtime add table submissions;
 alter publication supabase_realtime add table comments;

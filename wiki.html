@@ -440,6 +440,12 @@
       border: 1px solid #ffc107;
     }
     .eval-improve-box strong { color: #b06000; }
+    .eval-stale-badge {
+      display: inline-block; font-size: 11px; font-weight: 600;
+      padding: 2px 8px; border-radius: 6px; margin-left: 8px;
+      background: #fff3cd; color: #b06000; border: 1px solid #ffc107;
+    }
+    .eval-btn[disabled] { opacity: 0.5; cursor: not-allowed; }
 
     /* ── Responsive ── */
     @media (max-width: 640px) {
@@ -667,6 +673,7 @@
   <div id="toast" class="toast"></div>
 
   <script src="assets/wiki-translation-cache.js"></script>
+  <script src="assets/wiki-eval-cache.js"></script>
   <script>
     // ================================================================
     // CONFIG — Supabase 프로젝트 생성 후 아래 두 값을 채워넣으세요
@@ -931,6 +938,18 @@
 
       // Load comment counts for all visible submissions
       for (const s of subs) { loadCommentCount(s.id); }
+
+      // Load cached evaluations and render them immediately
+      const subIds = subs.map(s => s.id);
+      const evalMap = await loadEvaluations(subIds);
+      for (const s of subs) {
+        const cached = evalMap[s.id];
+        if (!cached || !cached.result) continue;
+        if (!validateEvalResult(cached.result)) continue;
+        const currentSnapshot = getContentSnapshot(s);
+        const isStale = cached.content_snapshot !== currentSnapshot;
+        renderEvalResult(s.id, cached.result, isStale);
+      }
     }
 
     function showDashboard() {
@@ -1914,7 +1933,51 @@
     }
 
     // ================================================================
-    // AI Evaluation
+    // AI Evaluation — Cache Layer
+    // ================================================================
+    let localEvaluations = {};
+    try { localEvaluations = JSON.parse(localStorage.getItem('imc-evaluations') || '{}'); } catch {}
+    function saveLocalEvaluations() {
+      try { localStorage.setItem('imc-evaluations', JSON.stringify(localEvaluations)); } catch {}
+    }
+
+    const { getContentSnapshot, validateEvalResult } = WikiEvalCache;
+
+    async function loadEvaluations(submissionIds) {
+      if (!submissionIds || submissionIds.length === 0) return {};
+      const map = {};
+      if (sb) {
+        try {
+          const { data, error } = await sb.from('evaluations').select('*').in('submission_id', submissionIds);
+          if (!error && data) {
+            data.forEach(e => { map[e.submission_id] = e; });
+          }
+        } catch (err) { console.error('loadEvaluations error:', err); }
+      } else {
+        submissionIds.forEach(id => {
+          if (localEvaluations[id]) map[id] = localEvaluations[id];
+        });
+      }
+      return map;
+    }
+
+    async function saveEvaluation(subId, result, snapshot) {
+      const record = { submission_id: subId, result, content_snapshot: snapshot, updated_at: new Date().toISOString() };
+      if (sb) {
+        try {
+          const { error } = await sb.from('evaluations').upsert(
+            { ...record, created_at: new Date().toISOString() },
+            { onConflict: 'submission_id' }
+          );
+          if (error) console.error('saveEvaluation error:', error);
+        } catch (err) { console.error('saveEvaluation error:', err); }
+      }
+      localEvaluations[subId] = record;
+      saveLocalEvaluations();
+    }
+
+    // ================================================================
+    // AI Evaluation — API & Rendering
     // ================================================================
     const EVAL_COOLDOWN_MS = 15000; // 15초 쿨다운
     let lastEvalTime = 0;
@@ -1931,19 +1994,9 @@
         return;
       }
 
-      // Rate limit: 쿨다운 체크
-      const now = Date.now();
-      const elapsed = now - lastEvalTime;
-      if (elapsed < EVAL_COOLDOWN_MS) {
-        const remaining = Math.ceil((EVAL_COOLDOWN_MS - elapsed) / 1000);
-        toast(`잠시 후 다시 시도하세요 (${remaining}초 남음)`);
-        return;
-      }
-
       evalInProgress = true;
-      lastEvalTime = Date.now();
       btn.disabled = true;
-      btn.textContent = '평가 중...';
+      btn.textContent = '확인 중...';
 
       // Get submission data
       let sub;
@@ -1963,6 +2016,35 @@
         evalInProgress = false;
         btn.disabled = false; btn.textContent = 'AI 평가'; return;
       }
+
+      // Cache check: 캐시된 평가가 있고 내용이 동일하면 API 호출 생략
+      const currentSnapshot = getContentSnapshot(sub);
+      const cachedEvals = await loadEvaluations([subId]);
+      const cached = cachedEvals[subId];
+      if (cached && cached.result && validateEvalResult(cached.result)) {
+        const isStale = cached.content_snapshot !== currentSnapshot;
+        if (!isStale) {
+          // 내용 미변경 — 재평가 여부 확인
+          if (!confirm('이전 평가 결과가 있습니다. 다시 평가하시겠습니까?\n(API 비용이 발생합니다)')) {
+            renderEvalResult(subId, cached.result, false);
+            evalInProgress = false;
+            return;
+          }
+        }
+        // 내용 변경됨 또는 사용자가 재평가 확인 → API 호출 진행
+      }
+
+      // Rate limit: 쿨다운 체크 (실제 API 호출 직전에만)
+      const now = Date.now();
+      const elapsed = now - lastEvalTime;
+      if (elapsed < EVAL_COOLDOWN_MS) {
+        const remaining = Math.ceil((EVAL_COOLDOWN_MS - elapsed) / 1000);
+        toast(`잠시 후 다시 시도하세요 (${remaining}초 남음)`);
+        evalInProgress = false;
+        btn.disabled = false; btn.textContent = '재평가'; return;
+      }
+      lastEvalTime = Date.now();
+      btn.textContent = '평가 중...';
 
       const apiKey = localStorage.getItem('openai-api-key');
       if (!apiKey) {
@@ -2093,7 +2175,8 @@
         }
         const data = await res.json();
         const result = JSON.parse(data.choices[0].message.content);
-        renderEvalResult(subId, result);
+        renderEvalResult(subId, result, false);
+        await saveEvaluation(subId, result, currentSnapshot);
       } catch (err) {
         console.error('Evaluation failed:', err);
         toast('평가 실패: ' + err.message);
@@ -2104,7 +2187,7 @@
       }
     }
 
-    function renderEvalResult(subId, result) {
+    function renderEvalResult(subId, result, isStale) {
       const el = document.getElementById('eval-result-' + subId);
       const btn = document.getElementById('eval-btn-' + subId);
       if (!el) return;
@@ -2127,10 +2210,11 @@
 
       const grade = (result.grade || 'C').charAt(0);
       const gradeClass = 'grade-' + grade;
+      const staleBadge = isStale ? '<span class="eval-stale-badge">내용 변경됨</span>' : '';
 
       el.innerHTML =
         '<div class="eval-header">' +
-          '<div class="eval-total">' + result.totalScore + '<span class="eval-total-sub">/100</span></div>' +
+          '<div class="eval-total">' + result.totalScore + '<span class="eval-total-sub">/100</span>' + staleBadge + '</div>' +
           '<span class="eval-grade ' + gradeClass + '">' + esc(grade) + '</span>' +
         '</div>' +
         '<div class="eval-criteria">' +
@@ -2154,8 +2238,10 @@
         (result.improvement ? '<div class="eval-improve-box"><strong>개선 제안:</strong> ' + esc(result.improvement) + '</div>' : '');
 
       el.style.display = 'block';
-      btn.disabled = false;
-      btn.textContent = '재평가';
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = isStale ? '재평가' : '재평가';
+      }
     }
 
     // ================================================================
