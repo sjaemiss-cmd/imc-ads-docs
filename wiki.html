@@ -1365,8 +1365,13 @@
     }
 
     async function castVote(topicId, submissionId) {
-      const voter = localStorage.getItem('imc-author');
-      if (!voter) { toast('먼저 이름을 설정해주세요 (제출 폼의 작성자 이름)'); return; }
+      let voter = localStorage.getItem('imc-author');
+      if (!voter) {
+        const name = prompt('투표를 위해 이름을 입력하세요:');
+        if (!name || !name.trim()) { toast('이름이 필요합니다'); return; }
+        localStorage.setItem('imc-author', name.trim());
+        voter = name.trim();
+      }
 
       if (sb) {
         const { data: existing } = await sb.from('votes')
