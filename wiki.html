@@ -815,7 +815,6 @@
     .rev-field {
       background: var(--surface-alt); border: 1px solid var(--border);
       border-radius: 14px; padding: 22px 24px;
-      margin-top: 16px;
       position: relative;
     }
     .rev-field::before {
@@ -828,17 +827,27 @@
       padding-left: 4px; line-height: 1.35;
     }
     .rev-field h4 .fts-section-copy { margin-left: auto; }
-    .rev-body {
-      display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
-      gap: 20px; align-items: start;
+
+    /* Section-level split: edit area (left) + history area (right) */
+    .fts-split {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+      gap: 24px;
+      align-items: start;
+      margin-top: 8px;
     }
     @media (max-width: 1200px) {
-      .rev-body { grid-template-columns: 1fr; }
+      .fts-split { grid-template-columns: 1fr; }
     }
-    .rev-main { min-width: 0; }
-    .rev-history-col {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 12px; padding: 16px 18px;
+    .fts-edit-col {
+      min-width: 0; display: flex; flex-direction: column; gap: 16px;
+    }
+    .fts-history-col {
+      min-width: 0; display: flex; flex-direction: column; gap: 16px;
+    }
+    .rev-history-panel {
+      background: var(--surface-alt); border: 1px solid var(--border);
+      border-radius: 14px; padding: 18px 20px;
       min-width: 0;
     }
     .rev-history-header {
@@ -1048,9 +1057,11 @@
     html[data-theme="dark"] .rev-field {
       background: var(--surface-muted); border-color: var(--border);
     }
-    html[data-theme="dark"] .rev-current,
-    html[data-theme="dark"] .rev-history-col {
+    html[data-theme="dark"] .rev-current {
       background: var(--surface-alt); border-color: var(--border); color: var(--text);
+    }
+    html[data-theme="dark"] .rev-history-panel {
+      background: var(--surface-muted); border-color: var(--border); color: var(--text);
     }
     html[data-theme="dark"] .rh-empty-state {
       background: var(--surface-muted); border-color: var(--border-strong);
@@ -2616,7 +2627,7 @@
               ${w.watch_url ? `<div class="fw-link"><a href="${esc(w.watch_url)}" target="_blank" rel="noopener">광고 보기 →</a></div>` : ''}
             </div>`;
 
-          revisionHtml = ['concept', 'analysis'].map(field => {
+          const fieldsData = ['concept', 'analysis'].map(field => {
             const original = getOriginalText(w, field);
             const revList = adRevisions[revKey(w.id, field)] || [];
             const revCount = revList.length;
@@ -2624,69 +2635,71 @@
             const meta = revCount === 0
               ? `<span class="rev-original-tag">원본</span><span>작성자: ${esc(w.author)}</span>`
               : `<span class="rev-original-tag">원본</span><span>작성자: ${esc(w.author)}</span><span style="color:#34c759;font-weight:600;">· 제안 ${revCount}건</span>`;
+            return { field, original, revList, revCount, hasContent, meta };
+          });
 
-            return `
-              <div class="rev-field">
-                <h4>${REV_FIELD_LABEL[field]} <button class="fts-section-copy" onclick="copyRevisionText('${w.id}','${field}')">📋 원본 복사</button></h4>
-                <div class="rev-body">
-                  <div class="rev-main">
-                    <div class="rev-current ${hasContent ? '' : 'no-content'}">${hasContent ? esc(original).replace(/\n/g,'<br>') : '(내용 없음)'}</div>
-                    <div class="rev-current-meta">${meta}</div>
+          const editHtml = fieldsData.map(({ field, original, hasContent, meta }) => `
+            <div class="rev-field">
+              <h4>${REV_FIELD_LABEL[field]} <button class="fts-section-copy" onclick="copyRevisionText('${w.id}','${field}')">📋 원본 복사</button></h4>
+              <div class="rev-current ${hasContent ? '' : 'no-content'}">${hasContent ? esc(original).replace(/\n/g,'<br>') : '(내용 없음)'}</div>
+              <div class="rev-current-meta">${meta}</div>
+              <div class="rev-actions">
+                <button class="btn-propose" onclick="toggleRevisionEditor('${w.id}','${field}')">✏️ 수정 제안 추가</button>
+              </div>
+              <div class="rev-editor" id="rev-editor-${w.id}-${field}" style="display:none;">
+                <h5>✏️ 수정 제안 — ${REV_FIELD_LABEL[field]}</h5>
+                <div style="font-size:12px;color:var(--text-dim);margin-bottom:8px;">제안은 원본을 덮어쓰지 않고 우측 이력에만 기록됩니다.</div>
+                <span class="re-label">수정 후 내용</span>
+                <textarea id="rev-after-${w.id}-${field}" placeholder="원본을 복사해 편집하거나, 새로 작성하세요.">${esc(original)}</textarea>
+                <span class="re-label">수정 이유 (필수)</span>
+                <input type="text" id="rev-reason-${w.id}-${field}" placeholder="예: 'UCS를 탄산→자연 이미지로 재해석하여 정확도 향상'">
+                <div class="rev-editor-actions">
+                  <button class="btn-cancel" onclick="toggleRevisionEditor('${w.id}','${field}')">취소</button>
+                  <button class="btn-save" onclick="proposeRevision(${t.id},'${w.id}','${field}')">제안 저장</button>
+                </div>
+              </div>
+            </div>`).join('');
 
-                    <div class="rev-actions">
-                      <button class="btn-propose" onclick="toggleRevisionEditor('${w.id}','${field}')">✏️ 수정 제안 추가</button>
+          const historyHtml = fieldsData.map(({ field, revList, revCount }) => `
+            <div class="rev-history-panel">
+              <div class="rev-history-header">
+                <span class="rh-title">📋 ${REV_FIELD_LABEL[field]} · 수정 이력</span>
+                <span class="rh-count">${revCount}건</span>
+              </div>
+              ${revCount > 0 ? `
+              <div class="rev-history" id="rev-history-${w.id}-${field}">
+                ${revList.map((r, idx) => `
+                  <div class="rh-item">
+                    <div class="rh-head">
+                      <span class="rh-editor">${esc(r.editor)}</span>
+                      <span class="rh-time">${new Date(r.created_at).toLocaleString('ko-KR')}</span>
+                      <span style="font-size:11px;color:var(--text-dim);">(#${revCount - idx})</span>
                     </div>
-
-                    <div class="rev-editor" id="rev-editor-${w.id}-${field}" style="display:none;">
-                      <h5>✏️ 수정 제안 — ${REV_FIELD_LABEL[field]}</h5>
-                      <div style="font-size:12px;color:var(--text-dim);margin-bottom:8px;">제안은 원본을 덮어쓰지 않고 우측 이력에만 기록됩니다.</div>
-                      <span class="re-label">수정 후 내용</span>
-                      <textarea id="rev-after-${w.id}-${field}" placeholder="원본을 복사해 편집하거나, 새로 작성하세요.">${esc(original)}</textarea>
-                      <span class="re-label">수정 이유 (필수)</span>
-                      <input type="text" id="rev-reason-${w.id}-${field}" placeholder="예: 'UCS를 탄산→자연 이미지로 재해석하여 정확도 향상'">
-                      <div class="rev-editor-actions">
-                        <button class="btn-cancel" onclick="toggleRevisionEditor('${w.id}','${field}')">취소</button>
-                        <button class="btn-save" onclick="proposeRevision(${t.id},'${w.id}','${field}')">제안 저장</button>
+                    <div class="rh-actions">
+                      <button class="btn-accept-rev" onclick="acceptRevision('${r.id}','${w.id}','${field}')" title="이 제안을 원본에 반영">✅ 원본에 반영</button>
+                      <button class="btn-delete-rev" onclick="deleteRevision('${r.id}','${w.id}','${field}')" title="이 제안 삭제">🗑 삭제</button>
+                    </div>
+                    <div class="rh-reason">${esc(r.reason)}</div>
+                    <div class="rh-diff">
+                      <div class="rh-col rh-before">
+                        <h6>원본</h6>
+                        <div class="rh-text">${esc(r.before_text || '(비어 있음)').replace(/\n/g,'<br>')}</div>
+                      </div>
+                      <div class="rh-col rh-after">
+                        <h6>제안</h6>
+                        <div class="rh-text">${esc(r.after_text || '(비어 있음)').replace(/\n/g,'<br>')}</div>
                       </div>
                     </div>
                   </div>
+                `).join('')}
+              </div>` : `<div class="rh-empty-state">아직 수정 제안이 없습니다.<br>좌측 <strong>수정 제안 추가</strong> 버튼으로 첫 제안을 등록해보세요.</div>`}
+            </div>`).join('');
 
-                  <aside class="rev-history-col">
-                    <div class="rev-history-header">
-                      <span class="rh-title">📋 수정 제안 이력</span>
-                      <span class="rh-count">${revCount}건</span>
-                    </div>
-                    ${revCount > 0 ? `
-                    <div class="rev-history" id="rev-history-${w.id}-${field}">
-                      ${revList.map((r, idx) => `
-                        <div class="rh-item">
-                          <div class="rh-head">
-                            <span class="rh-editor">${esc(r.editor)}</span>
-                            <span class="rh-time">${new Date(r.created_at).toLocaleString('ko-KR')}</span>
-                            <span style="font-size:11px;color:var(--text-dim);">(#${revCount - idx})</span>
-                          </div>
-                          <div class="rh-actions">
-                            <button class="btn-accept-rev" onclick="acceptRevision('${r.id}','${w.id}','${field}')" title="이 제안을 원본에 반영">✅ 원본에 반영</button>
-                            <button class="btn-delete-rev" onclick="deleteRevision('${r.id}','${w.id}','${field}')" title="이 제안 삭제">🗑 삭제</button>
-                          </div>
-                          <div class="rh-reason">${esc(r.reason)}</div>
-                          <div class="rh-diff">
-                            <div class="rh-col rh-before">
-                              <h6>원본</h6>
-                              <div class="rh-text">${esc(r.before_text || '(비어 있음)').replace(/\n/g,'<br>')}</div>
-                            </div>
-                            <div class="rh-col rh-after">
-                              <h6>제안</h6>
-                              <div class="rh-text">${esc(r.after_text || '(비어 있음)').replace(/\n/g,'<br>')}</div>
-                            </div>
-                          </div>
-                        </div>
-                      `).join('')}
-                    </div>` : `<div class="rh-empty-state">아직 수정 제안이 없습니다.<br>좌측 <strong>수정 제안 추가</strong> 버튼으로 첫 제안을 등록해보세요.</div>`}
-                  </aside>
-                </div>
-              </div>`;
-          }).join('');
+          revisionHtml = `
+            <div class="fts-split">
+              <div class="fts-edit-col">${editHtml}</div>
+              <aside class="fts-history-col">${historyHtml}</aside>
+            </div>`;
         }
 
         // 선정이 모두 완료되어 pin/unpin/타이브레이크 UI는 제거됨
