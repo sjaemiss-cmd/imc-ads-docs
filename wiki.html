@@ -5,16 +5,118 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>IMC 팀 과제 위키</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>
+    (function() {
+      try {
+        const saved = localStorage.getItem('imc-theme');
+        const prefers = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const theme = saved || (prefers ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {}
+    })();
+    function toggleTheme() {
+      const cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      const next = cur === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem('imc-theme', next); } catch (e) {}
+      const icon = document.getElementById('tt-icon');
+      const label = document.getElementById('tt-label');
+      if (icon) icon.textContent = next === 'dark' ? '☀️' : '🌙';
+      if (label) label.textContent = next === 'dark' ? '라이트' : '다크';
+    }
+    window.addEventListener('DOMContentLoaded', () => {
+      const theme = document.documentElement.getAttribute('data-theme');
+      const icon = document.getElementById('tt-icon');
+      const label = document.getElementById('tt-label');
+      if (icon) icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+      if (label) label.textContent = theme === 'dark' ? '라이트' : '다크';
+    });
+  </script>
   <style>
+    /* ── Theme Tokens ── */
+    :root {
+      --bg: #f5f5f7;
+      --surface: #ffffff;
+      --surface-alt: #fafafa;
+      --surface-muted: #f5f5f7;
+      --surface-hover: #f5f5f7;
+      --surface-subtle: #f0f0f2;
+      --border: #e5e5ea;
+      --border-strong: #d2d2d7;
+      --text: #1d1d1f;
+      --text-muted: #424245;
+      --text-dim: #6e6e73;
+      --text-faint: #aeaeb2;
+      --primary: #0066cc;
+      --primary-hover: #0055b3;
+      --primary-soft: #eaf2fc;
+      --primary-pale: #e8f0fe;
+      --success: #137333;
+      --success-soft: #e6f4ea;
+      --warning: #b06000;
+      --warning-soft: #fef7e0;
+      --danger: #d93025;
+      --danger-soft: #fce8e6;
+      --amber: #b85900;
+      --amber-soft: #fff4e5;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,.06);
+      --shadow-md: 0 1px 3px rgba(0,0,0,.08);
+      --shadow-lg: 0 4px 12px rgba(0,0,0,.1);
+      --before-bg: #fff2f0;
+      --before-text: #5f2120;
+      --after-bg: #eaf7ec;
+      --after-text: #1e4620;
+      --reason-bg: #fff7e0;
+      --reason-text: #5d4c00;
+      --reason-accent: #f4b400;
+    }
+    html[data-theme="dark"] {
+      --bg: #0f1115;
+      --surface: #1a1d23;
+      --surface-alt: #20242b;
+      --surface-muted: #262a33;
+      --surface-hover: #262a33;
+      --surface-subtle: #2d323c;
+      --border: #2d323c;
+      --border-strong: #3a4050;
+      --text: #f2f3f5;
+      --text-muted: #c9ccd2;
+      --text-dim: #9199a3;
+      --text-faint: #6b7280;
+      --primary: #4da3ff;
+      --primary-hover: #6bb4ff;
+      --primary-soft: #1e3656;
+      --primary-pale: #1a2e49;
+      --success: #4cd27a;
+      --success-soft: #1f3a28;
+      --warning: #f5a623;
+      --warning-soft: #3a2e15;
+      --danger: #ff6b5e;
+      --danger-soft: #3a201d;
+      --amber: #f5a623;
+      --amber-soft: #3a2a15;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,.4);
+      --shadow-md: 0 2px 6px rgba(0,0,0,.5);
+      --shadow-lg: 0 6px 18px rgba(0,0,0,.6);
+      --before-bg: #3a201d;
+      --before-text: #ffb0a8;
+      --after-bg: #1f3a28;
+      --after-text: #a8e6b8;
+      --reason-bg: #3a2e15;
+      --reason-text: #ffd980;
+      --reason-accent: #f5a623;
+    }
+
     /* ── Reset & Base ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #f5f5f7; color: #1d1d1f; line-height: 1.7;
+      background: var(--bg); color: var(--text); line-height: 1.7;
       font-size: 16px;
       -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+      transition: background .25s ease, color .25s ease;
     }
-    a { color: #0066cc; text-decoration: none; }
+    a { color: var(--primary); text-decoration: none; }
     a:hover { text-decoration: underline; }
     button { cursor: pointer; font-family: inherit; }
 
@@ -477,21 +579,64 @@
     .topic-vote-badge.not-voted { background: #fce8e6; color: #d93025; }
     .topic-leading { font-size: 11px; color: #6e6e73; margin-top: 2px; }
 
-    /* ── Dashboard Tabs ── */
-    .dashboard-tabs {
-      display: flex; gap: 2px; margin-bottom: 20px;
-      background: #fff; border-radius: 14px; padding: 6px;
-      border: 1px solid #e5e5ea; box-shadow: 0 1px 3px rgba(0,0,0,.04);
-      max-width: max-content;
+    /* ── Sidebar Shell ── */
+    .app-shell {
+      display: grid; grid-template-columns: 240px 1fr;
+      gap: 24px; align-items: start;
     }
-    .dash-tab {
-      padding: 11px 28px; border: none; background: transparent;
-      border-radius: 10px; font-size: 15px; font-weight: 600;
-      color: #6e6e73; cursor: pointer; transition: all .15s; text-align: center;
-      letter-spacing: -0.1px;
+    .sidebar {
+      position: sticky; top: 20px;
+      background: #fff; border-radius: 16px;
+      padding: 14px 12px; box-shadow: 0 1px 3px rgba(0,0,0,.08);
+      max-height: calc(100vh - 40px); overflow-y: auto;
     }
-    .dash-tab.active { background: #0066cc; color: #fff; box-shadow: 0 2px 6px rgba(0,102,204,.28); }
-    .dash-tab:hover:not(.active) { color: #0066cc; background: #f5f5f7; }
+    .sidebar-title {
+      font-size: 11.5px; font-weight: 700; color: #aeaeb2;
+      text-transform: uppercase; letter-spacing: 0.6px;
+      padding: 6px 12px 10px;
+    }
+    .sidebar-nav { display: flex; flex-direction: column; gap: 2px; }
+    .nav-item {
+      text-align: left; padding: 11px 14px; border: none; background: transparent;
+      border-radius: 10px; font-size: 14.5px; font-weight: 600; color: #424245;
+      cursor: pointer; transition: all .15s;
+      display: flex; align-items: center; gap: 10px;
+      width: 100%;
+    }
+    .nav-item:hover:not(.active) { background: #f5f5f7; color: #0066cc; }
+    .nav-item.active { background: #0066cc; color: #fff; box-shadow: 0 2px 6px rgba(0,102,204,.28); }
+    .nav-item .nav-icon { font-size: 15px; }
+    .nav-item .nav-chevron {
+      margin-left: auto; font-size: 11px; transition: transform .2s;
+      opacity: .8;
+    }
+    .nav-item.expanded .nav-chevron { transform: rotate(90deg); }
+    .nav-sublist {
+      display: none; flex-direction: column; gap: 2px;
+      margin: 4px 0 8px; padding: 4px 0 4px 10px;
+      border-left: 2px solid #e5e5ea;
+    }
+    .nav-sublist.show { display: flex; }
+    .nav-subitem {
+      text-align: left; padding: 8px 10px; border: none; background: transparent;
+      border-radius: 8px; cursor: pointer; transition: all .15s;
+      display: flex; gap: 8px; align-items: center; width: 100%;
+    }
+    .nav-subitem:hover { background: #eaf2fc; }
+    .nav-subitem.current { background: #eaf2fc; }
+    .nav-subitem .nav-sub-q {
+      font-size: 11px; font-weight: 700; background: #f0f0f2; color: #6e6e73;
+      padding: 2px 7px; border-radius: 8px; min-width: 32px; text-align: center;
+      flex-shrink: 0;
+    }
+    .nav-subitem.decided .nav-sub-q { background: #e6f4ea; color: #137333; }
+    .nav-subitem .nav-sub-title {
+      font-size: 12.5px; color: #424245; line-height: 1.4;
+      overflow: hidden; text-overflow: ellipsis;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+      flex: 1;
+    }
+    .nav-subitem:hover .nav-sub-title { color: #0066cc; }
 
     /* ── Results Dashboard ── */
     .results-dashboard { display: none; }
@@ -567,7 +712,23 @@
       border-radius: 12px; background: #f0f0f2; color: #424245;
     }
     .final-topic-section h3 { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; }
-    .final-topic-section .fts-desc { font-size: 15px; color: #424245; width: 100%; margin-top: 8px; line-height: 1.75; }
+    .final-topic-section .fts-desc-wrap { width: 100%; margin-top: 6px; }
+    .final-topic-section .fts-desc-wrap summary {
+      font-size: 12.5px; color: var(--text-dim); cursor: pointer;
+      padding: 4px 10px; display: inline-block;
+      background: var(--surface-muted); border-radius: 8px; list-style: none;
+      transition: background .15s;
+    }
+    .final-topic-section .fts-desc-wrap summary::before {
+      content: '▸ '; display: inline-block; transition: transform .15s;
+    }
+    .final-topic-section .fts-desc-wrap[open] summary::before { content: '▾ '; }
+    .final-topic-section .fts-desc-wrap summary:hover { background: var(--primary-soft); color: var(--primary); }
+    .final-topic-section .fts-desc {
+      font-size: 14.5px; color: var(--text-muted); width: 100%; margin-top: 10px;
+      line-height: 1.75; padding: 12px 16px; background: var(--surface-muted);
+      border-radius: 10px;
+    }
 
     .fts-winner {
       background: #f5f5f7; border-radius: 12px; padding: 18px 22px; margin-bottom: 18px;
@@ -651,21 +812,30 @@
 
     /* ── Revision Editor ── */
     .rev-field {
-      border-top: 1px dashed #e5e5ea; padding-top: 14px; margin-top: 10px;
+      background: var(--surface-alt); border: 1px solid var(--border);
+      border-radius: 14px; padding: 22px 24px;
+      margin-top: 16px;
+      position: relative;
+    }
+    .rev-field::before {
+      content: ''; position: absolute; left: 0; top: 18px; bottom: 18px; width: 4px;
+      background: var(--primary); border-radius: 4px;
     }
     .rev-field h4 {
-      font-size: 15px; font-weight: 700; color: #0066cc; margin-bottom: 10px;
-      display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+      font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 14px;
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+      padding-left: 4px; line-height: 1.35;
     }
+    .rev-field h4 .fts-section-copy { margin-left: auto; }
     .rev-current {
-      background: #fafafa; border: 1px solid #e5e5ea; border-radius: 10px;
-      padding: 14px 16px; font-size: 15.5px; line-height: 1.85; white-space: pre-wrap;
-      color: #1d1d1f; min-height: 40px; letter-spacing: -0.1px;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+      padding: 18px 22px; font-size: 16px; line-height: 1.9; white-space: pre-wrap;
+      color: var(--text); min-height: 50px; letter-spacing: -0.1px;
     }
-    .rev-current.no-content { color: #aeaeb2; font-style: italic; }
+    .rev-current.no-content { color: var(--text-faint); font-style: italic; }
     .rev-current-meta {
-      font-size: 12.5px; color: #6e6e73; margin-top: 6px;
-      display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+      font-size: 13px; color: var(--text-dim); margin-top: 10px;
+      display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
     }
     .rev-current-meta .rev-latest-tag {
       background: #137333; color: #fff; padding: 1px 6px; border-radius: 6px;
@@ -726,8 +896,8 @@
     }
 
     .rev-history {
-      margin-top: 14px; background: #fafafa; border: 1px solid #e5e5ea;
-      border-radius: 10px; padding: 14px 16px;
+      margin-top: 16px; background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 18px 20px;
     }
     .rev-history .rh-item {
       border-top: 1px solid #eee; padding: 14px 0; font-size: 14px;
@@ -795,13 +965,199 @@
       box-shadow: 0 0 0 3px rgba(0,102,204,.12);
     }
 
+    /* ── Anchor Highlight ── */
+    .fts-highlight {
+      animation: ftsPulse 1.6s ease-out;
+    }
+    @keyframes ftsPulse {
+      0%   { box-shadow: 0 0 0 5px rgba(0,102,204,.35), var(--shadow-sm); }
+      100% { box-shadow: 0 0 0 0 rgba(0,102,204,0), var(--shadow-sm); }
+    }
+
+    /* ── Theme Toggle ── */
+    .theme-toggle {
+      background: var(--surface-muted); border: 1px solid var(--border);
+      border-radius: 999px; padding: 7px 14px;
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 13px; font-weight: 600; color: var(--text-muted);
+      transition: all .2s;
+    }
+    .theme-toggle:hover { border-color: var(--primary); color: var(--primary); }
+    .theme-toggle .tt-icon { font-size: 14px; }
+
+    /* ── Dark Theme Overrides ── */
+    html[data-theme="dark"] .header,
+    html[data-theme="dark"] .sidebar,
+    html[data-theme="dark"] .topic-card,
+    html[data-theme="dark"] .detail-panel,
+    html[data-theme="dark"] .submission-card,
+    html[data-theme="dark"] .final-topic-section,
+    html[data-theme="dark"] .result-card,
+    html[data-theme="dark"] .results-progress,
+    html[data-theme="dark"] .guide-toggle,
+    html[data-theme="dark"] .guide-body,
+    html[data-theme="dark"] .dashboard-tabs {
+      background: var(--surface); color: var(--text);
+      border-color: var(--border);
+      box-shadow: var(--shadow-sm);
+    }
+    html[data-theme="dark"] .detail-header .question,
+    html[data-theme="dark"] .final-topic-section .fts-desc,
+    html[data-theme="dark"] .volume-checker,
+    html[data-theme="dark"] .fts-winner,
+    html[data-theme="dark"] .result-winner {
+      background: var(--surface-muted);
+      border-color: var(--border);
+      color: var(--text);
+    }
+    html[data-theme="dark"] .rev-field {
+      background: var(--surface-muted); border-color: var(--border);
+    }
+    html[data-theme="dark"] .rev-current,
+    html[data-theme="dark"] .rev-history {
+      background: var(--surface-alt); border-color: var(--border); color: var(--text);
+    }
+    html[data-theme="dark"] .rev-editor {
+      background: var(--primary-soft); border-color: var(--primary);
+    }
+    html[data-theme="dark"] .rev-editor textarea,
+    html[data-theme="dark"] .rev-editor input[type="text"],
+    html[data-theme="dark"] .form-group input,
+    html[data-theme="dark"] .form-group textarea,
+    html[data-theme="dark"] .form-group select,
+    html[data-theme="dark"] .sub-edit-form input,
+    html[data-theme="dark"] .sub-edit-form textarea,
+    html[data-theme="dark"] .fts-deep-field textarea,
+    html[data-theme="dark"] .rev-note-field textarea {
+      background: var(--surface-alt); color: var(--text);
+      border-color: var(--border-strong);
+    }
+    html[data-theme="dark"] .rev-editor textarea:focus,
+    html[data-theme="dark"] .rev-editor input[type="text"]:focus,
+    html[data-theme="dark"] .form-group input:focus,
+    html[data-theme="dark"] .form-group textarea:focus,
+    html[data-theme="dark"] .sub-edit-form input:focus,
+    html[data-theme="dark"] .sub-edit-form textarea:focus {
+      background: var(--surface); border-color: var(--primary);
+    }
+    html[data-theme="dark"] .column-header {
+      color: var(--text-dim); border-bottom-color: var(--border);
+    }
+    html[data-theme="dark"] .detail-back,
+    html[data-theme="dark"] .comments-toggle,
+    html[data-theme="dark"] .sub-info,
+    html[data-theme="dark"] .sub-time,
+    html[data-theme="dark"] .sub-campaign,
+    html[data-theme="dark"] .sub-body h4,
+    html[data-theme="dark"] .fw-meta,
+    html[data-theme="dark"] .final-doc-hint,
+    html[data-theme="dark"] .comment-time {
+      color: var(--text-dim);
+    }
+    html[data-theme="dark"] .sub-body,
+    html[data-theme="dark"] .fw-body,
+    html[data-theme="dark"] .comment-body {
+      color: var(--text);
+    }
+    html[data-theme="dark"] .rev-history .rh-item {
+      border-top-color: var(--border);
+    }
+    html[data-theme="dark"] .rev-history .rh-time,
+    html[data-theme="dark"] .rev-history .rh-diff .rh-col h6 {
+      color: var(--text-dim);
+    }
+    html[data-theme="dark"] .rev-history .rh-diff .rh-before .rh-text {
+      background: var(--before-bg); color: var(--before-text);
+    }
+    html[data-theme="dark"] .rev-history .rh-diff .rh-after .rh-text {
+      background: var(--after-bg); color: var(--after-text);
+    }
+    html[data-theme="dark"] .rev-history .rh-reason {
+      background: var(--reason-bg); color: var(--reason-text);
+      border-left-color: var(--reason-accent);
+    }
+    html[data-theme="dark"] .rev-editor .before-block {
+      background: var(--before-bg); color: var(--before-text);
+    }
+    html[data-theme="dark"] .btn-export.secondary {
+      background: var(--surface-alt); color: var(--primary);
+    }
+    html[data-theme="dark"] .final-doc-actions {
+      background: rgba(15,17,21,.92);
+      border-bottom-color: var(--border);
+    }
+    html[data-theme="dark"] .guide-body h4,
+    html[data-theme="dark"] .guide-body li {
+      color: var(--text);
+    }
+    html[data-theme="dark"] .setup-banner.connected {
+      background: var(--success-soft); border-color: var(--success); color: var(--text);
+    }
+    html[data-theme="dark"] .trans-badge {
+      background: var(--surface); color: var(--text); border-color: var(--border);
+    }
+    html[data-theme="dark"] .results-progress-bar,
+    html[data-theme="dark"] .vc-bar {
+      background: var(--surface-muted);
+    }
+    html[data-theme="dark"] .assignee-badge {
+      background: var(--primary-soft); color: var(--primary);
+    }
+    html[data-theme="dark"] .vc-row {
+      border-bottom-color: var(--border);
+    }
+    html[data-theme="dark"] .fts-section-copy {
+      background: var(--surface-alt); color: var(--text-muted);
+      border-color: var(--border-strong);
+    }
+    html[data-theme="dark"] .nav-subitem .nav-sub-q {
+      background: var(--surface-alt); color: var(--text-dim);
+    }
+    html[data-theme="dark"] .nav-subitem .nav-sub-title { color: var(--text-muted); }
+    html[data-theme="dark"] .nav-subitem:hover,
+    html[data-theme="dark"] .nav-subitem.current {
+      background: var(--primary-soft);
+    }
+    html[data-theme="dark"] .nav-item:hover:not(.active) {
+      background: var(--surface-muted);
+    }
+    html[data-theme="dark"] .eval-result,
+    html[data-theme="dark"] .eval-crit,
+    html[data-theme="dark"] .dup-checker {
+      background: var(--surface-alt); border-color: var(--border); color: var(--text);
+    }
+    html[data-theme="dark"] .draft-restore-bar {
+      background: var(--primary-soft); color: var(--primary);
+      border-color: var(--primary);
+    }
+
     /* ── Responsive ── */
     @media (max-width: 1100px) {
       .final-topic-section { padding: 26px 28px; }
       .detail-panel { padding: 26px 28px; }
+      .app-shell { grid-template-columns: 200px 1fr; gap: 18px; }
     }
     @media (max-width: 900px) {
       .dashboard-columns { grid-template-columns: 1fr; gap: 20px; }
+      .app-shell { grid-template-columns: 1fr; gap: 16px; }
+      .sidebar {
+        position: static; max-height: none;
+        padding: 10px;
+      }
+      .sidebar-title { padding: 4px 10px 6px; }
+      .sidebar-nav {
+        flex-direction: row; flex-wrap: wrap; gap: 4px;
+      }
+      .nav-item { flex: 1; min-width: 130px; justify-content: center; }
+      .nav-item .nav-chevron { display: none; }
+      .nav-sublist {
+        width: 100%; flex-direction: row; overflow-x: auto;
+        margin: 6px 0 2px; padding: 6px 0; border-left: none;
+        border-top: 2px solid var(--border);
+      }
+      .nav-subitem {
+        flex-shrink: 0; min-width: 180px;
+      }
     }
     @media (max-width: 640px) {
       .form-grid { grid-template-columns: 1fr; }
@@ -827,6 +1183,10 @@
           <p>중간대체과제 10문항 — 팀원들이 함께 광고 사례를 찾아 올리는 공간</p>
         </div>
         <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+          <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="테마 전환">
+            <span class="tt-icon" id="tt-icon">🌙</span>
+            <span id="tt-label">다크</span>
+          </button>
           <div class="lang-toggle">
             <button class="lang-btn active" data-lang="ko" onclick="switchLanguage('ko')">한국어</button>
             <button class="lang-btn" data-lang="my" onclick="switchLanguage('my')">မြန်မာ</button>
@@ -920,52 +1280,65 @@
       설정해주세요. 자세한 방법은 <code>SETUP.md</code>를 참고하세요.
     </div>
 
-    <!-- Dashboard Tabs -->
-    <div class="dashboard-tabs" id="dashboard-tabs">
-      <button class="dash-tab active" onclick="showTab('topics')">문제 목록</button>
-      <button class="dash-tab" onclick="showTab('results')">선정 결과</button>
-      <button class="dash-tab" onclick="showTab('final')">최종 문서</button>
-    </div>
+    <!-- App Shell: Sidebar Nav + Main Content -->
+    <div class="app-shell" id="app-shell">
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-title">워크스페이스</div>
+        <nav class="sidebar-nav">
+          <button class="nav-item active" data-tab="topics" onclick="showTab('topics')">
+            <span class="nav-icon">📋</span><span>문제 목록</span>
+          </button>
+          <button class="nav-item" data-tab="results" onclick="showTab('results')">
+            <span class="nav-icon">🏆</span><span>선정 결과</span>
+          </button>
+          <button class="nav-item" data-tab="final" onclick="showTab('final')">
+            <span class="nav-icon">📄</span><span>최종 문서</span>
+            <span class="nav-chevron">▸</span>
+          </button>
+          <div class="nav-sublist" id="nav-final-sublist"></div>
+        </nav>
+      </aside>
 
-    <!-- Dashboard (two-column layout) -->
-    <div id="dashboard">
-      <div class="dashboard-columns">
-        <div class="dash-column">
-          <div class="column-header">
-            <span>Q1 ~ Q5</span>
-            <div class="column-assignees" id="assignees-left"></div>
+      <main class="main-content">
+        <!-- Dashboard (two-column layout) -->
+        <div id="dashboard">
+          <div class="dashboard-columns">
+            <div class="dash-column">
+              <div class="column-header">
+                <span>Q1 ~ Q5</span>
+                <div class="column-assignees" id="assignees-left"></div>
+              </div>
+              <div id="topics-col-left"></div>
+            </div>
+            <div class="dash-column">
+              <div class="column-header">
+                <span>Q6 ~ Q10</span>
+                <div class="column-assignees" id="assignees-right"></div>
+              </div>
+              <div id="topics-col-right"></div>
+            </div>
           </div>
-          <div id="topics-col-left"></div>
         </div>
-        <div class="dash-column">
-          <div class="column-header">
-            <span>Q6 ~ Q10</span>
-            <div class="column-assignees" id="assignees-right"></div>
+
+        <!-- Results Dashboard (선정 결과) -->
+        <div id="results-dashboard" class="results-dashboard">
+          <div class="results-progress" id="results-progress"></div>
+          <div class="results-grid" id="results-grid"></div>
+        </div>
+
+        <!-- Final Document Dashboard (최종 문서) -->
+        <div id="final-doc-dashboard" class="final-doc-dashboard">
+          <div class="final-doc-actions">
+            <button class="btn-export primary" onclick="copyFinalDocument()">📋 전체 문서 복사</button>
+            <button class="btn-export secondary" onclick="downloadFinalDocument()">⬇ Markdown 다운로드</button>
+            <span class="spacer"></span>
+            <span class="final-doc-hint">Google Docs에 붙여넣으면 제목/목록이 자동 변환됩니다</span>
           </div>
-          <div id="topics-col-right"></div>
+          <div id="final-doc-grid"></div>
         </div>
-      </div>
-    </div>
 
-    <!-- Results Dashboard (선정 결과) -->
-    <div id="results-dashboard" class="results-dashboard">
-      <div class="results-progress" id="results-progress"></div>
-      <div class="results-grid" id="results-grid"></div>
-    </div>
-
-    <!-- Final Document Dashboard (최종 문서) -->
-    <div id="final-doc-dashboard" class="final-doc-dashboard">
-      <div class="final-doc-actions">
-        <button class="btn-export primary" onclick="copyFinalDocument()">📋 전체 문서 복사</button>
-        <button class="btn-export secondary" onclick="downloadFinalDocument()">⬇ Markdown 다운로드</button>
-        <span class="spacer"></span>
-        <span class="final-doc-hint">Google Docs에 붙여넣으면 제목/목록이 자동 변환됩니다</span>
-      </div>
-      <div id="final-doc-grid"></div>
-    </div>
-
-    <!-- Detail Panel -->
-    <div id="detail-panel" class="detail-panel" hidden>
+        <!-- Detail Panel -->
+        <div id="detail-panel" class="detail-panel" hidden>
       <button class="detail-back" onclick="showDashboard()">← 전체 문제로 돌아가기</button>
       <div class="detail-header">
         <h2 id="detail-title"></h2>
@@ -1050,6 +1423,8 @@
           <div class="vc-summary" id="vc-summary">내용을 입력하면 분량이 표시됩니다</div>
         </div>
       </div>
+    </div>
+      </main>
     </div>
   </div>
 
@@ -1253,7 +1628,9 @@
 
       document.getElementById('dashboard').hidden = true;
       document.getElementById('results-dashboard').classList.remove('show');
-      document.getElementById('dashboard-tabs').style.display = 'none';
+      document.getElementById('final-doc-dashboard').classList.remove('show');
+      document.getElementById('sidebar').style.display = 'none';
+      document.getElementById('app-shell').classList.add('detail-mode');
       document.getElementById('detail-panel').hidden = false;
       document.getElementById('detail-title').textContent = `Q${topic.question_num}. ${topic.title}`;
       document.getElementById('detail-question').textContent = topic.description;
@@ -1369,9 +1746,13 @@
       document.getElementById('dashboard').style.display = '';
       document.getElementById('detail-panel').hidden = true;
       document.getElementById('results-dashboard').classList.remove('show');
-      document.getElementById('dashboard-tabs').style.display = '';
-      const tabs = document.querySelectorAll('.dash-tab');
-      if (tabs.length) { tabs[0].classList.add('active'); tabs[1].classList.remove('active'); }
+      document.getElementById('final-doc-dashboard').classList.remove('show');
+      document.getElementById('sidebar').style.display = '';
+      document.getElementById('app-shell').classList.remove('detail-mode');
+      document.querySelectorAll('.nav-item').forEach(el => {
+        el.classList.toggle('active', el.dataset.tab === 'topics');
+      });
+      document.getElementById('nav-final-sublist').classList.remove('show');
       currentTopicId = null;
       renderDashboard();
     }
@@ -1772,15 +2153,49 @@
     // Dashboard Tabs & Results
     // ================================================================
     function showTab(tab) {
-      const tabs = document.querySelectorAll('.dash-tab');
-      tabs[0].classList.toggle('active', tab === 'topics');
-      tabs[1].classList.toggle('active', tab === 'results');
-      if (tabs[2]) tabs[2].classList.toggle('active', tab === 'final');
+      document.querySelectorAll('.nav-item').forEach(el => {
+        const isActive = el.dataset.tab === tab;
+        el.classList.toggle('active', isActive);
+        if (el.dataset.tab === 'final') el.classList.toggle('expanded', tab === 'final');
+      });
       document.getElementById('dashboard').style.display = tab === 'topics' ? '' : 'none';
       document.getElementById('results-dashboard').classList.toggle('show', tab === 'results');
       document.getElementById('final-doc-dashboard').classList.toggle('show', tab === 'final');
+      document.getElementById('nav-final-sublist').classList.toggle('show', tab === 'final');
+      document.getElementById('detail-panel').hidden = true;
       if (tab === 'results') renderResultsDashboard();
-      if (tab === 'final') renderFinalDocDashboard();
+      if (tab === 'final') {
+        renderFinalDocDashboard();
+        renderFinalSublist();
+      }
+    }
+
+    function renderFinalSublist() {
+      const subMap = {};
+      const list = topics.map(t => `
+        <button class="nav-subitem" data-topic="${t.id}" onclick="jumpToTopic(${t.id})">
+          <span class="nav-sub-q">Q${t.question_num}</span>
+          <span class="nav-sub-title">${esc(t.title)}</span>
+        </button>
+      `).join('');
+      document.getElementById('nav-final-sublist').innerHTML = list;
+    }
+
+    function jumpToTopic(topicId) {
+      if (!document.getElementById('final-doc-dashboard').classList.contains('show')) {
+        showTab('final');
+      }
+      document.querySelectorAll('.nav-subitem').forEach(el => {
+        el.classList.toggle('current', parseInt(el.dataset.topic, 10) === topicId);
+      });
+      setTimeout(() => {
+        const el = document.getElementById('fts-' + topicId);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          el.classList.add('fts-highlight');
+          setTimeout(() => el.classList.remove('fts-highlight'), 1600);
+        }
+      }, 80);
     }
 
     async function renderResultsDashboard() {
@@ -2242,7 +2657,10 @@
             <div class="fts-header">
               <span class="fts-q">Q${t.question_num} · ${esc(t.chapter)}</span>
               <h3>${esc(t.title)}</h3>
-              <div class="fts-desc">${esc(t.description)}</div>
+              <details class="fts-desc-wrap">
+                <summary>문제 전문 보기</summary>
+                <div class="fts-desc">${esc(t.description)}</div>
+              </details>
             </div>
             ${headerHtml}
             ${revisionHtml}
