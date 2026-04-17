@@ -138,10 +138,31 @@
     .header {
       background: #fff; border-radius: 18px; padding: 28px 36px; margin-bottom: 24px;
       box-shadow: 0 1px 3px rgba(0,0,0,.08);
+      transition: padding .2s ease;
     }
     .header h1 { font-size: 26px; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.3px; }
     .header p { font-size: 15px; color: #6e6e73; }
     .header-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+
+    /* ── 최종 문서 탭: 상단 영역 압축 ──
+       작업 공간 확보를 위해 헤더 축소 + 과제/평가 안내 패널 숨김.
+       안내는 '문제 목록' 탭에서 전체 노출. */
+    .app.compact-top .header {
+      padding: 10px 20px;
+      margin-bottom: 10px;
+      border-radius: 12px;
+    }
+    .app.compact-top .header h1 { font-size: 16px; margin-bottom: 0; }
+    .app.compact-top .header p,
+    .app.compact-top #tt-label { display: none; }
+    .app.compact-top .theme-toggle,
+    .app.compact-top .lang-toggle .lang-btn { padding: 4px 8px; font-size: 11.5px; }
+    .app.compact-top .deadline-badge { font-size: 11.5px; padding: 3px 9px; }
+    .app.compact-top > .guide-toggle,
+    .app.compact-top > .guide-body,
+    .app.compact-top > #eval-guide-toggle,
+    .app.compact-top > #eval-guide-body { display: none !important; }
+    .app.compact-top > .header { margin-bottom: 10px; }
     .deadline-badge {
       background: #ff3b30; color: #fff; font-size: 14px; font-weight: 600;
       padding: 8px 16px; border-radius: 20px; white-space: nowrap;
@@ -1914,6 +1935,8 @@
       document.getElementById('final-doc-dashboard').classList.remove('show');
       document.getElementById('sidebar').style.display = '';
       document.getElementById('app-shell').classList.remove('detail-mode');
+      document.getElementById('app-shell').classList.remove('right-panel-on');
+      document.querySelector('.app').classList.remove('compact-top');
       document.querySelectorAll('.nav-item').forEach(el => {
         el.classList.toggle('active', el.dataset.tab === 'topics');
       });
@@ -2329,6 +2352,7 @@
       document.getElementById('nav-final-sublist').classList.toggle('show', tab === 'final');
       document.getElementById('detail-panel').hidden = true;
       document.getElementById('app-shell').classList.toggle('right-panel-on', tab === 'final');
+      document.querySelector('.app').classList.toggle('compact-top', tab === 'final');
       if (tab === 'results') renderResultsDashboard();
       if (tab === 'final') {
         renderFinalDocDashboard();
