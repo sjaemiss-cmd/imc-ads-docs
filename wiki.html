@@ -521,6 +521,268 @@
     .results-progress-fill { height: 100%; background: #34c759; border-radius: 4px; transition: width .3s; }
     .results-progress-text { font-size: 14px; font-weight: 600; color: #424245; white-space: nowrap; }
 
+    /* ── Final Document Tab ── */
+    .final-doc-dashboard { display: none; }
+    .final-doc-dashboard.show { display: block; }
+    .final-doc-actions {
+      position: sticky; top: 0; z-index: 10;
+      background: rgba(245,245,247,.92); backdrop-filter: blur(10px);
+      padding: 12px 0; margin-bottom: 16px;
+      display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+      border-bottom: 1px solid #e5e5ea;
+    }
+    .final-doc-actions .spacer { flex: 1; }
+    .btn-export {
+      padding: 10px 16px; border: none; border-radius: 10px; font-size: 14px;
+      font-weight: 600; cursor: pointer; transition: all .15s;
+    }
+    .btn-export.primary { background: #0066cc; color: #fff; }
+    .btn-export.primary:hover { background: #0055b3; }
+    .btn-export.secondary { background: #fff; color: #0066cc; border: 1px solid #0066cc; }
+    .btn-export.secondary:hover { background: #e8f0fe; }
+    .final-doc-hint { font-size: 12px; color: #6e6e73; }
+
+    .final-topic-section {
+      background: #fff; border-radius: 14px; padding: 18px 20px; margin-bottom: 14px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.06);
+    }
+    .final-topic-section .fts-header {
+      display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+      padding-bottom: 10px; border-bottom: 1px solid #f0f0f2; margin-bottom: 12px;
+    }
+    .final-topic-section .fts-q {
+      font-size: 11px; font-weight: 700; padding: 3px 10px;
+      border-radius: 12px; background: #f0f0f2; color: #424245;
+    }
+    .final-topic-section h3 { font-size: 16px; font-weight: 700; }
+    .final-topic-section .fts-desc { font-size: 12px; color: #6e6e73; width: 100%; margin-top: 4px; line-height: 1.5; }
+
+    .fts-winner {
+      background: #f5f5f7; border-radius: 10px; padding: 12px 14px; margin-bottom: 12px;
+    }
+    .fts-winner .fw-badge {
+      display: inline-block; font-size: 11px; font-weight: 700;
+      padding: 2px 8px; border-radius: 8px; margin-right: 8px;
+    }
+    .fw-badge.pinned { background: #fff4e5; color: #b85900; }
+    .fw-badge.vote-leader { background: #e6f4ea; color: #137333; }
+    .fw-badge.none { background: #fce8e6; color: #d93025; }
+    .fts-winner .fw-brand { font-weight: 700; font-size: 15px; margin-right: 6px; }
+    .fts-winner .fw-campaign { color: #6e6e73; font-size: 13px; }
+    .fts-winner .fw-author-chip {
+      font-size: 11px; font-weight: 600; background: #0066cc; color: #fff;
+      padding: 1px 8px; border-radius: 8px; margin-left: 6px;
+    }
+    .fts-winner .fw-meta { font-size: 12px; color: #6e6e73; margin-top: 4px; }
+    .fts-winner .fw-link { font-size: 12px; margin-top: 4px; }
+    .fts-winner .fw-body { margin-top: 8px; font-size: 13px; line-height: 1.6; color: #1d1d1f; }
+    .fts-winner .fw-body h5 { font-size: 12px; font-weight: 700; color: #424245; margin: 6px 0 2px; }
+    .fts-winner .fw-empty { font-size: 13px; color: #d93025; font-style: italic; }
+
+    .fts-pin-row {
+      display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+      margin-bottom: 12px; font-size: 13px;
+    }
+    .fts-pin-row select {
+      flex: 1; min-width: 200px; padding: 6px 10px;
+      border: 1px solid #d2d2d7; border-radius: 8px; font-size: 13px;
+      background: #fff;
+    }
+    .fts-pin-row button {
+      padding: 6px 12px; border: none; border-radius: 8px;
+      font-size: 12px; font-weight: 600; cursor: pointer;
+    }
+    .fts-pin-row .btn-pin { background: #0066cc; color: #fff; }
+    .fts-pin-row .btn-pin:hover { background: #0055b3; }
+    .fts-pin-row .btn-unpin { background: #fff; color: #d93025; border: 1px solid #d93025; }
+    .fts-pin-row .btn-unpin:hover { background: #fce8e6; }
+    .fts-pin-row .pin-info { font-size: 11px; color: #6e6e73; }
+
+    .fts-deep {
+      border-top: 1px dashed #e5e5ea; padding-top: 12px; margin-top: 8px;
+    }
+    .fts-deep h4 {
+      font-size: 13px; font-weight: 700; color: #0066cc; margin-bottom: 6px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .fts-deep-field { margin-bottom: 12px; }
+    .fts-deep-field label {
+      display: block; font-size: 12px; font-weight: 600; color: #424245;
+      margin-bottom: 4px;
+    }
+    .fts-deep-field textarea {
+      width: 100%; border: 1px solid #d2d2d7; border-radius: 8px;
+      padding: 8px 10px; font-size: 13px; line-height: 1.6;
+      font-family: inherit; resize: vertical; min-height: 70px;
+      background: #fafafa;
+    }
+    .fts-deep-field textarea:focus {
+      outline: none; border-color: #0066cc; background: #fff;
+      box-shadow: 0 0 0 3px rgba(0,102,204,.12);
+    }
+    .fts-deep-meta {
+      font-size: 11px; color: #6e6e73; margin-top: 6px;
+      display: flex; gap: 8px; align-items: center;
+    }
+    .fts-deep-meta .save-indicator {
+      font-weight: 600;
+    }
+    .save-indicator.saving { color: #b85900; }
+    .save-indicator.saved { color: #137333; }
+    .save-indicator.error { color: #d93025; }
+
+    .fts-section-copy {
+      font-size: 11px; padding: 4px 10px; border: 1px solid #d2d2d7;
+      background: #fff; border-radius: 8px; cursor: pointer; color: #424245;
+    }
+    .fts-section-copy:hover { border-color: #0066cc; color: #0066cc; }
+
+    /* ── Revision Editor ── */
+    .rev-field {
+      border-top: 1px dashed #e5e5ea; padding-top: 14px; margin-top: 10px;
+    }
+    .rev-field h4 {
+      font-size: 13px; font-weight: 700; color: #0066cc; margin-bottom: 8px;
+      display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    }
+    .rev-current {
+      background: #fafafa; border: 1px solid #e5e5ea; border-radius: 8px;
+      padding: 10px 12px; font-size: 13px; line-height: 1.7; white-space: pre-wrap;
+      color: #1d1d1f; min-height: 40px;
+    }
+    .rev-current.no-content { color: #aeaeb2; font-style: italic; }
+    .rev-current-meta {
+      font-size: 11px; color: #6e6e73; margin-top: 4px;
+      display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+    }
+    .rev-current-meta .rev-latest-tag {
+      background: #137333; color: #fff; padding: 1px 6px; border-radius: 6px;
+      font-weight: 600; font-size: 10px;
+    }
+    .rev-current-meta .rev-original-tag {
+      background: #6e6e73; color: #fff; padding: 1px 6px; border-radius: 6px;
+      font-weight: 600; font-size: 10px;
+    }
+
+    .rev-actions { margin-top: 8px; display: flex; gap: 8px; flex-wrap: wrap; }
+    .btn-propose {
+      padding: 6px 14px; border: none; border-radius: 8px; background: #0066cc;
+      color: #fff; font-size: 12px; font-weight: 600; cursor: pointer;
+    }
+    .btn-propose:hover { background: #0055b3; }
+    .btn-history-toggle {
+      padding: 6px 12px; border: 1px solid #d2d2d7; background: #fff;
+      border-radius: 8px; font-size: 12px; color: #424245; cursor: pointer;
+    }
+    .btn-history-toggle:hover { border-color: #0066cc; color: #0066cc; }
+
+    .rev-editor {
+      margin-top: 10px; padding: 12px; border: 1px solid #0066cc;
+      border-radius: 10px; background: #f6fbff;
+    }
+    .rev-editor h5 { font-size: 12px; font-weight: 700; color: #0066cc; margin-bottom: 6px; }
+    .rev-editor .before-block {
+      background: #fff2f0; border-left: 3px solid #d93025; padding: 8px 10px;
+      font-size: 12px; line-height: 1.6; white-space: pre-wrap;
+      border-radius: 4px; margin-bottom: 10px; color: #5f2120;
+    }
+    .rev-editor textarea {
+      width: 100%; border: 1px solid #d2d2d7; border-radius: 8px;
+      padding: 8px 10px; font-size: 13px; line-height: 1.6;
+      font-family: inherit; resize: vertical; min-height: 90px; background: #fff;
+    }
+    .rev-editor input[type="text"] {
+      width: 100%; border: 1px solid #d2d2d7; border-radius: 8px;
+      padding: 7px 10px; font-size: 13px; font-family: inherit; background: #fff;
+    }
+    .rev-editor textarea:focus, .rev-editor input[type="text"]:focus {
+      outline: none; border-color: #0066cc; box-shadow: 0 0 0 3px rgba(0,102,204,.12);
+    }
+    .rev-editor .re-label {
+      display: block; font-size: 11px; font-weight: 700; color: #424245;
+      margin: 10px 0 4px;
+    }
+    .rev-editor-actions { margin-top: 10px; display: flex; gap: 8px; justify-content: flex-end; }
+    .rev-editor-actions .btn-save {
+      padding: 7px 14px; border: none; border-radius: 8px; background: #0066cc;
+      color: #fff; font-size: 12px; font-weight: 700; cursor: pointer;
+    }
+    .rev-editor-actions .btn-save:hover { background: #0055b3; }
+    .rev-editor-actions .btn-cancel {
+      padding: 7px 14px; border: 1px solid #6e6e73; border-radius: 8px; background: #fff;
+      color: #6e6e73; font-size: 12px; font-weight: 600; cursor: pointer;
+    }
+
+    .rev-history {
+      margin-top: 12px; background: #fafafa; border: 1px solid #e5e5ea;
+      border-radius: 8px; padding: 8px 12px;
+    }
+    .rev-history .rh-item {
+      border-top: 1px solid #eee; padding: 10px 0; font-size: 12px;
+    }
+    .rev-history .rh-item:first-child { border-top: none; padding-top: 4px; }
+    .rev-history .rh-head {
+      display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+      margin-bottom: 4px;
+    }
+    .rev-history .rh-editor {
+      background: #0066cc; color: #fff; padding: 1px 8px; border-radius: 8px;
+      font-weight: 600; font-size: 11px;
+    }
+    .rev-history .rh-time { color: #6e6e73; font-size: 11px; }
+    .rev-history .btn-accept-rev,
+    .rev-history .btn-delete-rev {
+      border: none; padding: 3px 10px; border-radius: 12px; font-size: 11px;
+      font-weight: 600; cursor: pointer; transition: filter .15s;
+    }
+    .rev-history .btn-accept-rev { background: #34c759; color: #fff; }
+    .rev-history .btn-accept-rev:hover { filter: brightness(.92); }
+    .rev-history .btn-delete-rev { background: #fbeaea; color: #c0392b; }
+    .rev-history .btn-delete-rev:hover { background: #f5d0cd; }
+    .rev-history .rh-reason {
+      background: #fff7e0; padding: 6px 10px; border-radius: 6px;
+      border-left: 3px solid #f4b400; font-size: 12px; line-height: 1.6;
+      color: #5d4c00; margin: 6px 0;
+    }
+    .rev-history .rh-reason::before { content: "수정 이유: "; font-weight: 700; }
+    .rev-history .rh-diff {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 4px;
+    }
+    .rev-history .rh-diff .rh-col h6 {
+      font-size: 10px; font-weight: 700; color: #6e6e73;
+      text-transform: uppercase; margin-bottom: 3px;
+    }
+    .rev-history .rh-diff .rh-col .rh-text {
+      padding: 6px 8px; border-radius: 6px; font-size: 11px; line-height: 1.6;
+      white-space: pre-wrap; min-height: 40px;
+    }
+    .rev-history .rh-diff .rh-before .rh-text { background: #fff2f0; color: #5f2120; }
+    .rev-history .rh-diff .rh-after .rh-text { background: #eaf7ec; color: #1e4620; }
+    .rev-history .rh-empty {
+      color: #aeaeb2; font-size: 12px; font-style: italic; padding: 6px 0;
+    }
+
+    @media (max-width: 640px) {
+      .rev-history .rh-diff { grid-template-columns: 1fr; }
+    }
+
+    .rev-note-field {
+      margin-top: 16px; padding-top: 12px; border-top: 1px dashed #e5e5ea;
+    }
+    .rev-note-field label {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 12px; font-weight: 700; color: #424245; margin-bottom: 6px;
+    }
+    .rev-note-field textarea {
+      width: 100%; border: 1px solid #d2d2d7; border-radius: 8px;
+      padding: 8px 10px; font-size: 13px; line-height: 1.6;
+      font-family: inherit; resize: vertical; min-height: 60px; background: #fafafa;
+    }
+    .rev-note-field textarea:focus {
+      outline: none; border-color: #0066cc; background: #fff;
+      box-shadow: 0 0 0 3px rgba(0,102,204,.12);
+    }
+
     /* ── Responsive ── */
     @media (max-width: 640px) {
       .form-grid { grid-template-columns: 1fr; }
@@ -639,6 +901,7 @@
     <div class="dashboard-tabs" id="dashboard-tabs">
       <button class="dash-tab active" onclick="showTab('topics')">문제 목록</button>
       <button class="dash-tab" onclick="showTab('results')">선정 결과</button>
+      <button class="dash-tab" onclick="showTab('final')">최종 문서</button>
     </div>
 
     <!-- Dashboard (two-column layout) -->
@@ -665,6 +928,17 @@
     <div id="results-dashboard" class="results-dashboard">
       <div class="results-progress" id="results-progress"></div>
       <div class="results-grid" id="results-grid"></div>
+    </div>
+
+    <!-- Final Document Dashboard (최종 문서) -->
+    <div id="final-doc-dashboard" class="final-doc-dashboard">
+      <div class="final-doc-actions">
+        <button class="btn-export primary" onclick="copyFinalDocument()">📋 전체 문서 복사</button>
+        <button class="btn-export secondary" onclick="downloadFinalDocument()">⬇ Markdown 다운로드</button>
+        <span class="spacer"></span>
+        <span class="final-doc-hint">Google Docs에 붙여넣으면 제목/목록이 자동 변환됩니다</span>
+      </div>
+      <div id="final-doc-grid"></div>
     </div>
 
     <!-- Detail Panel -->
@@ -1325,6 +1599,63 @@
           if (currentTopicId) renderSubmissions(currentTopicId);
           renderDashboard();
           if (document.getElementById('results-dashboard').classList.contains('show')) renderResultsDashboard();
+          if (document.getElementById('final-doc-dashboard').classList.contains('show')) renderFinalDocDashboard();
+        })
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'final_selections' }, () => {
+          if (document.getElementById('results-dashboard').classList.contains('show')) renderResultsDashboard();
+          if (document.getElementById('final-doc-dashboard').classList.contains('show')) renderFinalDocDashboard();
+        })
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'ad_revisions' }, (payload) => {
+          const row = payload.new || payload.old;
+          if (!row) return;
+          const k = revKey(row.submission_id, row.field);
+          if (payload.eventType === 'DELETE') {
+            adRevisions[k] = (adRevisions[k] || []).filter(r => r.id !== row.id);
+          } else if (payload.eventType === 'INSERT') {
+            if (!adRevisions[k]) adRevisions[k] = [];
+            if (!adRevisions[k].some(r => r.id === row.id)) {
+              adRevisions[k].unshift(row);
+            }
+          } else if (payload.eventType === 'UPDATE') {
+            if (!adRevisions[k]) adRevisions[k] = [];
+            const idx = adRevisions[k].findIndex(r => r.id === row.id);
+            if (idx >= 0) adRevisions[k][idx] = row;
+            else adRevisions[k].unshift(row);
+          }
+          saveLocalAdRevisions();
+          // Don't re-render if user is actively typing in a revision editor
+          const active = document.activeElement;
+          const isEditing = active && active.closest && active.closest('.rev-editor');
+          if (isEditing) return;
+          if (document.getElementById('final-doc-dashboard').classList.contains('show')) {
+            renderFinalDocDashboard();
+          }
+        })
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'deep_analyses' }, (payload) => {
+          // Do not re-render entire tab if the user is currently typing — just merge state
+          const row = payload.new || payload.old;
+          if (!row) return;
+          if (payload.eventType === 'DELETE') {
+            delete deepAnalyses[row.topic_id];
+          } else {
+            deepAnalyses[row.topic_id] = row;
+          }
+          saveLocalDeepAnalyses();
+          // Update the indicator only (don't disrupt active textareas)
+          const active = document.activeElement;
+          if (active && active.dataset && active.dataset.topic == row.topic_id) return;
+          if (document.getElementById('final-doc-dashboard').classList.contains('show')) {
+            const el = document.getElementById('save-indicator-' + row.topic_id);
+            if (el && row.updated_by) {
+              el.className = 'save-indicator saved';
+              el.textContent = `✓ 저장됨 · ${row.updated_by} · ${new Date(row.updated_at).toLocaleString('ko-KR')}`;
+            }
+            // Refresh textareas if not focused
+            ['concept_deep', 'analysis_deep', 'presentation_note'].forEach(f => {
+              const ta = document.querySelector(`#final-doc-grid textarea[data-topic="${row.topic_id}"][data-field="${f}"]`);
+              if (ta && document.activeElement !== ta) ta.value = row[f] || '';
+            });
+          }
         })
         .subscribe();
     }
@@ -1421,52 +1752,52 @@
       const tabs = document.querySelectorAll('.dash-tab');
       tabs[0].classList.toggle('active', tab === 'topics');
       tabs[1].classList.toggle('active', tab === 'results');
+      if (tabs[2]) tabs[2].classList.toggle('active', tab === 'final');
       document.getElementById('dashboard').style.display = tab === 'topics' ? '' : 'none';
-      const resultsEl = document.getElementById('results-dashboard');
-      resultsEl.classList.toggle('show', tab === 'results');
+      document.getElementById('results-dashboard').classList.toggle('show', tab === 'results');
+      document.getElementById('final-doc-dashboard').classList.toggle('show', tab === 'final');
       if (tab === 'results') renderResultsDashboard();
+      if (tab === 'final') renderFinalDocDashboard();
     }
 
     async function renderResultsDashboard() {
       const voteSummary = await getAllVoteSummary();
-      let allSubs = [];
-      if (sb) {
-        const { data } = await sb.from('submissions').select('*');
-        allSubs = data || [];
-      } else {
-        allSubs = localSubmissions;
-      }
-      const subMap = {};
-      allSubs.forEach(s => { subMap[s.id] = s; });
+      const subMap = await getSubmissionsMap();
+      await loadFinalSelections();
 
       let decidedCount = 0;
       const cards = topics.map(t => {
-        const topicVotes = voteSummary.byTopic[t.id] || {};
-        let leadingSubId = null, maxVotes = 0, isTie = false;
-        for (const [subId, count] of Object.entries(topicVotes)) {
-          if (count > maxVotes) { maxVotes = count; leadingSubId = subId; isTie = false; }
-          else if (count === maxVotes && count > 0) { isTie = true; }
-        }
-        if (maxVotes > 0 && !isTie) decidedCount++;
-        const winner = leadingSubId ? subMap[leadingSubId] : null;
+        const resolution = resolveWinner(t.id, voteSummary, subMap);
         const chipClass = 'chip-' + t.chapter.charAt(0);
-        const totalVoters = Object.values(topicVotes).reduce((a, b) => a + b, 0);
 
-        if (!winner || maxVotes === 0) {
+        if (resolution.kind === 'pinned' || (resolution.kind === 'vote' && !resolution.isTie)) {
+          decidedCount++;
+        }
+
+        if (resolution.kind === 'none') {
           return `<div class="result-card undecided" onclick="openTopic(${t.id})">
             <span class="result-q ${chipClass}">Q${t.question_num} · ${t.chapter}</span>
             <h4>${esc(t.title)}</h4>
-            <div class="result-no-votes">아직 투표가 없습니다</div>
+            <div class="result-no-votes">아직 선정되지 않았습니다</div>
           </div>`;
         }
-        return `<div class="result-card ${!isTie ? 'decided' : 'undecided'}" onclick="openTopic(${t.id})">
-          <span class="result-q ${chipClass}">Q${t.question_num} · ${t.chapter}</span>
+
+        const winner = resolution.submission;
+        const badge = resolution.kind === 'pinned'
+          ? `<span class="fw-badge pinned" style="font-size:10px;padding:2px 6px;border-radius:6px;background:#fff4e5;color:#b85900;font-weight:700;margin-left:4px;">📌 확정</span>`
+          : '';
+        const voteLine = resolution.kind === 'vote'
+          ? `<div class="rw-votes">${resolution.maxVotes}/${resolution.totalVoters}표${resolution.isTie ? ' (동점)' : ''}</div>`
+          : `<div class="rw-votes">최종 확정됨</div>`;
+
+        return `<div class="result-card ${resolution.kind === 'pinned' || !resolution.isTie ? 'decided' : 'undecided'}" onclick="openTopic(${t.id})">
+          <span class="result-q ${chipClass}">Q${t.question_num} · ${t.chapter}</span>${badge}
           <h4>${esc(t.title)}</h4>
           <div class="result-winner">
             <span class="rw-brand">${esc(winner.brand)}</span>
             <span class="rw-author">${esc(winner.author)}</span>
             <div style="font-size:12px;color:#6e6e73;margin-top:2px;">${esc(winner.campaign)}</div>
-            <div class="rw-votes">${maxVotes}/${totalVoters}표${isTie ? ' (동점 — 추가 투표 필요)' : ''}</div>
+            ${voteLine}
           </div>
         </div>`;
       }).join('');
@@ -1475,6 +1806,675 @@
         <div class="results-progress-bar"><div class="results-progress-fill" style="width:${decidedCount * 10}%"></div></div>
         <span class="results-progress-text">${decidedCount}/10 선정 완료</span>`;
       document.getElementById('results-grid').innerHTML = cards;
+    }
+
+    // ================================================================
+    // Final Selections (핀 확정), Deep Notes, Ad Revisions
+    // ================================================================
+    let finalSelections = {};           // { topic_id: { submission_id, pinned_by, updated_at } }
+    let deepAnalyses = {};              // { topic_id: { presentation_note, updated_by, updated_at } }
+    let adRevisions = {};               // { "<submissionId>:<field>": [revision, ...newestFirst] }
+    try { finalSelections = JSON.parse(localStorage.getItem('imc-final-selections') || '{}'); } catch { finalSelections = {}; }
+    try { deepAnalyses = JSON.parse(localStorage.getItem('imc-deep-analyses') || '{}'); } catch { deepAnalyses = {}; }
+    try { adRevisions = JSON.parse(localStorage.getItem('imc-ad-revisions') || '{}'); } catch { adRevisions = {}; }
+    function saveLocalFinalSelections() { localStorage.setItem('imc-final-selections', JSON.stringify(finalSelections)); }
+    function saveLocalDeepAnalyses() { localStorage.setItem('imc-deep-analyses', JSON.stringify(deepAnalyses)); }
+    function saveLocalAdRevisions() { localStorage.setItem('imc-ad-revisions', JSON.stringify(adRevisions)); }
+    function revKey(submissionId, field) { return submissionId + ':' + field; }
+
+    async function loadAdRevisions() {
+      if (!sb) return adRevisions;
+      const { data, error } = await sb.from('ad_revisions').select('*').order('created_at', { ascending: false });
+      if (error) { console.warn('ad_revisions load error', error); return adRevisions; }
+      adRevisions = {};
+      (data || []).forEach(r => {
+        const k = revKey(r.submission_id, r.field);
+        if (!adRevisions[k]) adRevisions[k] = [];
+        adRevisions[k].push(r);
+      });
+      saveLocalAdRevisions();
+      return adRevisions;
+    }
+
+    // Field map: submission columns vs revision field names
+    const REV_FIELD_COL = { concept: 'concept_summary', analysis: 'case_analysis' };
+    const REV_FIELD_LABEL = { concept: '개념/이론 설명', analysis: '광고 사례 분석' };
+
+    // 현재 본문은 항상 원본. 수정 제안은 이력(제안 로그)으로만 쌓임.
+    function getOriginalText(submission, field) {
+      if (!submission) return '';
+      return submission[REV_FIELD_COL[field]] || '';
+    }
+    // 하위 호환: 구 getLatestText를 쓰는 곳에서도 원본을 반환
+    const getLatestText = getOriginalText;
+
+    function hasRevisions(submission, field) {
+      return !!(submission && (adRevisions[revKey(submission.id, field)] || []).length);
+    }
+
+    async function proposeRevision(topicId, submissionId, field) {
+      const taAfter = document.getElementById(`rev-after-${submissionId}-${field}`);
+      const inReason = document.getElementById(`rev-reason-${submissionId}-${field}`);
+      if (!taAfter || !inReason) return;
+      const afterText = taAfter.value.trim();
+      const reason = inReason.value.trim();
+      if (!afterText) { toast('수정 후 내용을 입력해주세요'); return; }
+      if (!reason) { toast('수정 이유를 입력해주세요'); inReason.focus(); return; }
+
+      let editor = localStorage.getItem('imc-author');
+      if (!editor) {
+        const name = prompt('수정 제안을 위해 이름을 입력하세요:');
+        if (!name || !name.trim()) { toast('이름이 필요합니다'); return; }
+        editor = name.trim();
+        localStorage.setItem('imc-author', editor);
+      }
+
+      // "before" = 항상 원본 본문 (제안은 본문을 수정하지 않음 — 로그로만 남음)
+      const subMap = await getSubmissionsMap();
+      const sub = subMap[submissionId];
+      const beforeText = getOriginalText(sub, field);
+      if (afterText === beforeText) { toast('원본 내용과 동일합니다'); return; }
+
+      const record = {
+        topic_id: topicId,
+        submission_id: submissionId,
+        field,
+        before_text: beforeText,
+        after_text: afterText,
+        reason,
+        editor,
+        created_at: new Date().toISOString(),
+      };
+      if (sb) {
+        const { data, error } = await sb.from('ad_revisions').insert([record]).select().single();
+        if (error) { console.error(error); toast('저장 실패: ' + error.message); return; }
+        const k = revKey(submissionId, field);
+        if (!adRevisions[k]) adRevisions[k] = [];
+        adRevisions[k].unshift(data);
+      } else {
+        const k = revKey(submissionId, field);
+        if (!adRevisions[k]) adRevisions[k] = [];
+        adRevisions[k].unshift({ id: crypto.randomUUID(), ...record });
+      }
+      saveLocalAdRevisions();
+      toast('✓ 수정 제안이 저장되었습니다');
+      await renderFinalDocDashboard();
+    }
+
+    async function deleteRevision(revId, submissionId, field) {
+      if (!confirm('이 수정 제안을 삭제할까요?\n(복구할 수 없습니다)')) return;
+      if (sb) {
+        const { error } = await sb.from('ad_revisions').delete().eq('id', revId);
+        if (error) { console.error(error); toast('삭제 실패: ' + error.message); return; }
+      }
+      const k = revKey(submissionId, field);
+      if (adRevisions[k]) {
+        adRevisions[k] = adRevisions[k].filter(r => r.id !== revId);
+      }
+      saveLocalAdRevisions();
+      toast('✓ 제안이 삭제되었습니다');
+      await renderFinalDocDashboard();
+    }
+
+    async function acceptRevision(revId, submissionId, field) {
+      const list = adRevisions[revKey(submissionId, field)] || [];
+      const rev = list.find(r => r.id === revId);
+      if (!rev) { toast('제안을 찾을 수 없습니다'); return; }
+      const label = REV_FIELD_LABEL[field];
+      if (!confirm(`이 제안을 원본 "${label}"에 반영할까요?\n\n- 기존 원본이 이 제안 내용으로 덮어쓰여집니다.\n- 반영된 제안은 이력에서 제거됩니다.\n- 다른 제안 이력은 유지됩니다.`)) return;
+
+      const col = REV_FIELD_COL[field];
+      if (sb) {
+        const { error: uErr } = await sb.from('submissions').update({ [col]: rev.after_text }).eq('id', submissionId);
+        if (uErr) { console.error(uErr); toast('원본 업데이트 실패: ' + uErr.message); return; }
+        const { error: dErr } = await sb.from('ad_revisions').delete().eq('id', revId);
+        if (dErr) console.warn('제안 이력 정리 실패', dErr);
+      } else {
+        const idx = localSubmissions.findIndex(s => s.id === submissionId);
+        if (idx >= 0) {
+          localSubmissions[idx] = { ...localSubmissions[idx], [col]: rev.after_text };
+          localStorage.setItem('imc-submissions', JSON.stringify(localSubmissions));
+        }
+      }
+      const k = revKey(submissionId, field);
+      if (adRevisions[k]) {
+        adRevisions[k] = adRevisions[k].filter(r => r.id !== revId);
+      }
+      saveLocalAdRevisions();
+      toast('✓ 원본에 반영되었습니다');
+      await renderFinalDocDashboard();
+    }
+
+    function toggleRevisionEditor(submissionId, field) {
+      const ed = document.getElementById(`rev-editor-${submissionId}-${field}`);
+      if (!ed) return;
+      const opening = ed.style.display === 'none' || !ed.style.display;
+      ed.style.display = opening ? 'block' : 'none';
+      if (opening) {
+        const ta = document.getElementById(`rev-after-${submissionId}-${field}`);
+        if (ta) { ta.focus(); ta.selectionStart = ta.value.length; }
+      }
+    }
+
+    function toggleRevisionHistory(submissionId, field) {
+      const hx = document.getElementById(`rev-history-${submissionId}-${field}`);
+      const btn = document.getElementById(`rev-history-btn-${submissionId}-${field}`);
+      if (!hx) return;
+      const opening = hx.style.display === 'none' || !hx.style.display;
+      hx.style.display = opening ? 'block' : 'none';
+      if (btn) {
+        const count = (adRevisions[revKey(submissionId, field)] || []).length;
+        btn.textContent = opening ? `🕐 이력 숨기기 (${count})` : `🕐 이력 ${count}건 보기`;
+      }
+    }
+
+    async function loadFinalSelections() {
+      if (!sb) return finalSelections;
+      const { data, error } = await sb.from('final_selections').select('*');
+      if (error) { console.warn('final_selections load error', error); return finalSelections; }
+      finalSelections = {};
+      (data || []).forEach(r => { finalSelections[r.topic_id] = r; });
+      return finalSelections;
+    }
+
+    async function loadDeepAnalyses() {
+      if (!sb) return deepAnalyses;
+      const { data, error } = await sb.from('deep_analyses').select('*');
+      if (error) { console.warn('deep_analyses load error', error); return deepAnalyses; }
+      deepAnalyses = {};
+      (data || []).forEach(r => { deepAnalyses[r.topic_id] = r; });
+      return deepAnalyses;
+    }
+
+    async function getSubmissionsMap() {
+      const subMap = {};
+      if (sb) {
+        const { data } = await sb.from('submissions').select('*');
+        (data || []).forEach(s => { subMap[s.id] = s; });
+      } else {
+        localSubmissions.forEach(s => { subMap[s.id] = s; });
+      }
+      return subMap;
+    }
+
+    async function getSubmissionsForTopic(topicId) {
+      if (sb) {
+        const { data } = await sb.from('submissions').select('*').eq('topic_id', topicId).order('created_at');
+        return data || [];
+      }
+      return localSubmissions.filter(s => s.topic_id === topicId);
+    }
+
+    function resolveWinner(topicId, voteSummary, subMap) {
+      const pinned = finalSelections[topicId];
+      if (pinned && subMap[pinned.submission_id]) {
+        return { kind: 'pinned', submission: subMap[pinned.submission_id], pinnedBy: pinned.pinned_by };
+      }
+      const topicVotes = voteSummary.byTopic[topicId] || {};
+      let leadingSubId = null, maxVotes = 0, isTie = false;
+      for (const [subId, count] of Object.entries(topicVotes)) {
+        if (count > maxVotes) { maxVotes = count; leadingSubId = subId; isTie = false; }
+        else if (count === maxVotes && count > 0) { isTie = true; }
+      }
+      const totalVoters = Object.values(topicVotes).reduce((a, b) => a + b, 0);
+      if (leadingSubId && subMap[leadingSubId]) {
+        return { kind: 'vote', submission: subMap[leadingSubId], maxVotes, totalVoters, isTie };
+      }
+      return { kind: 'none' };
+    }
+
+    async function pinSubmission(topicId, submissionId) {
+      let who = localStorage.getItem('imc-author');
+      if (!who) {
+        const name = prompt('최종 확정을 위해 이름을 입력하세요:');
+        if (!name || !name.trim()) { toast('이름이 필요합니다'); return; }
+        localStorage.setItem('imc-author', name.trim());
+        who = name.trim();
+      }
+      const record = { topic_id: topicId, submission_id: submissionId, pinned_by: who, updated_at: new Date().toISOString() };
+      if (sb) {
+        const { error } = await sb.from('final_selections').upsert(record, { onConflict: 'topic_id' });
+        if (error) {
+          console.error(error);
+          toast('확정 실패: ' + error.message);
+          return;
+        }
+      }
+      finalSelections[topicId] = record;
+      saveLocalFinalSelections();
+      toast('최종 확정되었습니다');
+      await renderFinalDocDashboard();
+      if (document.getElementById('results-dashboard').classList.contains('show')) renderResultsDashboard();
+    }
+
+    async function unpinSubmission(topicId) {
+      if (!confirm('이 주제의 최종 확정을 해제하시겠습니까? (투표 1위로 되돌아갑니다)')) return;
+      if (sb) {
+        const { error } = await sb.from('final_selections').delete().eq('topic_id', topicId);
+        if (error) { toast('해제 실패: ' + error.message); return; }
+      }
+      delete finalSelections[topicId];
+      saveLocalFinalSelections();
+      toast('확정이 해제되었습니다');
+      await renderFinalDocDashboard();
+      if (document.getElementById('results-dashboard').classList.contains('show')) renderResultsDashboard();
+    }
+
+    // Debounced deep analysis save
+    const deepSaveTimers = {};
+    function scheduleSaveDeepAnalysis(topicId, field, value) {
+      const key = topicId + ':' + field;
+      if (deepSaveTimers[key]) clearTimeout(deepSaveTimers[key]);
+      setSaveIndicator(topicId, 'saving', '저장 중...');
+      deepSaveTimers[key] = setTimeout(() => saveDeepAnalysis(topicId, field, value), 700);
+    }
+
+    async function saveDeepAnalysis(topicId, field, value) {
+      let who = localStorage.getItem('imc-author') || '익명';
+      const current = deepAnalyses[topicId] || { topic_id: topicId, concept_deep: '', analysis_deep: '', presentation_note: '' };
+      const updated = { ...current, [field]: value, updated_by: who, updated_at: new Date().toISOString(), topic_id: topicId };
+      if (sb) {
+        const { error } = await sb.from('deep_analyses').upsert(updated, { onConflict: 'topic_id' });
+        if (error) {
+          console.error(error);
+          setSaveIndicator(topicId, 'error', '저장 실패');
+          return;
+        }
+      }
+      deepAnalyses[topicId] = updated;
+      saveLocalDeepAnalyses();
+      setSaveIndicator(topicId, 'saved', `✓ 저장됨 · ${who} · ${new Date().toLocaleTimeString('ko-KR')}`);
+    }
+
+    function setSaveIndicator(topicId, state, text) {
+      const el = document.getElementById('save-indicator-' + topicId);
+      if (!el) return;
+      el.className = 'save-indicator ' + state;
+      el.textContent = text;
+    }
+
+    // ================================================================
+    // Final Document Tab Renderer
+    // ================================================================
+    async function renderFinalDocDashboard() {
+      await Promise.all([
+        loadFinalSelections(),
+        loadDeepAnalyses(),
+        loadAdRevisions(),
+      ]);
+      const voteSummary = await getAllVoteSummary();
+      const subMap = await getSubmissionsMap();
+
+      // Group submissions by topic for the pin dropdown
+      const byTopic = {};
+      Object.values(subMap).forEach(s => {
+        if (!byTopic[s.topic_id]) byTopic[s.topic_id] = [];
+        byTopic[s.topic_id].push(s);
+      });
+
+      const sections = topics.map(t => {
+        const resolution = resolveWinner(t.id, voteSummary, subMap);
+        const topicSubs = (byTopic[t.id] || []).slice().sort((a, b) =>
+          new Date(a.created_at) - new Date(b.created_at)
+        );
+        const pinned = finalSelections[t.id];
+        const deep = deepAnalyses[t.id] || { presentation_note: '' };
+
+        let headerHtml, revisionHtml;
+        if (resolution.kind === 'none') {
+          headerHtml = `<div class="fts-winner"><div class="fw-empty">제출된 광고가 아직 없거나 투표/확정이 필요합니다.</div></div>`;
+          revisionHtml = '';
+        } else {
+          const w = resolution.submission;
+          const badge = resolution.kind === 'pinned'
+            ? `<span class="fw-badge pinned">📌 최종 확정</span>`
+            : `<span class="fw-badge vote-leader">🗳 투표 1위</span>`;
+          const voteInfo = resolution.kind === 'vote'
+            ? ` (${resolution.maxVotes}/${resolution.totalVoters}표${resolution.isTie ? ', 동점' : ''})`
+            : ` (확정자: ${esc(resolution.pinnedBy || '-')})`;
+
+          headerHtml = `
+            <div class="fts-winner">
+              <div>${badge}<span class="fw-brand">${esc(w.brand)}</span><span class="fw-campaign">— ${esc(w.campaign)}</span><span class="fw-author-chip">${esc(w.author)}</span></div>
+              <div class="fw-meta">${esc(w.published_at)} · ${esc(w.medium)}${voteInfo}</div>
+              ${w.watch_url ? `<div class="fw-link"><a href="${esc(w.watch_url)}" target="_blank" rel="noopener">광고 보기 →</a></div>` : ''}
+            </div>`;
+
+          revisionHtml = ['concept', 'analysis'].map(field => {
+            const original = getOriginalText(w, field);
+            const revList = adRevisions[revKey(w.id, field)] || [];
+            const revCount = revList.length;
+            const hasContent = (original || '').trim().length > 0;
+            const meta = revCount === 0
+              ? `<span class="rev-original-tag">원본</span><span>작성자: ${esc(w.author)}</span>`
+              : `<span class="rev-original-tag">원본</span><span>작성자: ${esc(w.author)}</span><span style="color:#34c759;font-weight:600;">· 제안 ${revCount}건</span>`;
+
+            return `
+              <div class="rev-field">
+                <h4>${REV_FIELD_LABEL[field]} <button class="fts-section-copy" onclick="copyRevisionText('${w.id}','${field}')">📋 원본 복사</button></h4>
+                <div class="rev-current ${hasContent ? '' : 'no-content'}">${hasContent ? esc(original).replace(/\n/g,'<br>') : '(내용 없음)'}</div>
+                <div class="rev-current-meta">${meta}</div>
+
+                <div class="rev-actions">
+                  <button class="btn-propose" onclick="toggleRevisionEditor('${w.id}','${field}')">✏️ 수정 제안 추가</button>
+                </div>
+
+                <div class="rev-editor" id="rev-editor-${w.id}-${field}" style="display:none;">
+                  <h5>✏️ 수정 제안 — ${REV_FIELD_LABEL[field]}</h5>
+                  <div style="font-size:12px;color:#6e6e73;margin-bottom:8px;">제안은 원본을 덮어쓰지 않고 아래 이력에만 기록됩니다.</div>
+                  <span class="re-label">수정 후 내용</span>
+                  <textarea id="rev-after-${w.id}-${field}" placeholder="원본을 복사해 편집하거나, 새로 작성하세요.">${esc(original)}</textarea>
+                  <span class="re-label">수정 이유 (필수)</span>
+                  <input type="text" id="rev-reason-${w.id}-${field}" placeholder="예: 'UCS를 탄산→자연 이미지로 재해석하여 정확도 향상'">
+                  <div class="rev-editor-actions">
+                    <button class="btn-cancel" onclick="toggleRevisionEditor('${w.id}','${field}')">취소</button>
+                    <button class="btn-save" onclick="proposeRevision(${t.id},'${w.id}','${field}')">제안 저장</button>
+                  </div>
+                </div>
+
+                ${revCount > 0 ? `
+                <div class="rev-history" id="rev-history-${w.id}-${field}">
+                  <div style="font-size:13px;font-weight:600;color:#1d1d1f;margin-bottom:10px;">📋 수정 제안 이력 (${revCount}건)</div>
+                  ${revList.map((r, idx) => `
+                    <div class="rh-item">
+                      <div class="rh-head">
+                        <span class="rh-editor">${esc(r.editor)}</span>
+                        <span class="rh-time">${new Date(r.created_at).toLocaleString('ko-KR')}</span>
+                        <span style="font-size:11px;color:#6e6e73;">(#${revCount - idx})</span>
+                        <span style="flex:1"></span>
+                        <button class="btn-accept-rev" onclick="acceptRevision('${r.id}','${w.id}','${field}')" title="이 제안을 원본에 반영">✅ 원본에 반영</button>
+                        <button class="btn-delete-rev" onclick="deleteRevision('${r.id}','${w.id}','${field}')" title="이 제안 삭제">🗑 삭제</button>
+                      </div>
+                      <div class="rh-reason">${esc(r.reason)}</div>
+                      <div class="rh-diff">
+                        <div class="rh-col rh-before">
+                          <h6>원본</h6>
+                          <div class="rh-text">${esc(r.before_text || '(비어 있음)').replace(/\n/g,'<br>')}</div>
+                        </div>
+                        <div class="rh-col rh-after">
+                          <h6>제안</h6>
+                          <div class="rh-text">${esc(r.after_text || '(비어 있음)').replace(/\n/g,'<br>')}</div>
+                        </div>
+                      </div>
+                    </div>
+                  `).join('')}
+                </div>` : ''}
+              </div>`;
+          }).join('');
+        }
+
+        // 선정이 모두 완료되어 pin/unpin/타이브레이크 UI는 제거됨
+
+        const noteHtml = resolution.kind === 'none' ? '' : `
+          <div class="rev-note-field">
+            <label>💬 팀 메모 · 발표 포인트 <span style="font-size:11px;color:#6e6e73;font-weight:400;">(자동 저장, 공유)</span></label>
+            <textarea data-topic="${t.id}" data-field="presentation_note" placeholder="발표 포인트 / 예상 질문 / 팀원 피드백 요약 등 자유롭게...">${esc(deep.presentation_note || '')}</textarea>
+            <div class="fts-deep-meta">
+              <span id="save-indicator-${t.id}" class="save-indicator">${deep.updated_by ? `✓ 저장됨 · ${esc(deep.updated_by)} · ${new Date(deep.updated_at).toLocaleString('ko-KR')}` : '입력하면 자동 저장됩니다'}</span>
+            </div>
+          </div>`;
+
+        return `
+          <div class="final-topic-section" id="fts-${t.id}">
+            <div class="fts-header">
+              <span class="fts-q">Q${t.question_num} · ${esc(t.chapter)}</span>
+              <h3>${esc(t.title)}</h3>
+              <div class="fts-desc">${esc(t.description)}</div>
+            </div>
+            ${headerHtml}
+            ${revisionHtml}
+            ${noteHtml}
+          </div>`;
+      }).join('');
+
+      document.getElementById('final-doc-grid').innerHTML = sections;
+
+      // Bind auto-save to presentation_note textareas
+      document.querySelectorAll('#final-doc-grid textarea[data-topic][data-field="presentation_note"]').forEach(ta => {
+        ta.addEventListener('input', () => {
+          const tid = parseInt(ta.dataset.topic, 10);
+          scheduleSaveDeepAnalysis(tid, 'presentation_note', ta.value);
+        });
+      });
+    }
+
+    async function copyRevisionText(submissionId, field) {
+      const subMap = await getSubmissionsMap();
+      const sub = subMap[submissionId];
+      if (!sub) { toast('광고를 찾을 수 없습니다'); return; }
+      const text = getLatestText(sub, field);
+      try {
+        await navigator.clipboard.writeText(text);
+        toast('✓ 복사됨');
+      } catch {
+        toast('복사 실패');
+      }
+    }
+
+    function handlePinFromDropdown(topicId) {
+      const sel = document.getElementById('pin-select-' + topicId);
+      if (!sel || !sel.value) { toast('광고를 선택해주세요'); return; }
+      pinSubmission(topicId, sel.value);
+    }
+
+
+    // ================================================================
+    // Export to Markdown / Clipboard
+    // ================================================================
+    async function buildFinalDocumentMarkdown() {
+      const [voteSummary] = await Promise.all([
+        getAllVoteSummary(),
+        loadFinalSelections(),
+        loadDeepAnalyses(),
+        loadAdRevisions(),
+      ]);
+      const subMap = await getSubmissionsMap();
+
+      const today = new Date().toLocaleDateString('ko-KR');
+      const lines = [];
+      lines.push(`# IMC 팀 과제 — 최종 선정 광고 문서`);
+      lines.push('');
+      lines.push(`_작성일: ${today}_`);
+      lines.push('');
+      lines.push(`---`);
+      lines.push('');
+
+      topics.forEach(t => {
+        const resolution = resolveWinner(t.id, voteSummary, subMap);
+        const deep = deepAnalyses[t.id] || {};
+
+        lines.push(`## Q${t.question_num}. ${t.title} (${t.chapter})`);
+        lines.push('');
+        lines.push(`**문제:** ${t.description}`);
+        lines.push('');
+
+        if (resolution.kind === 'none') {
+          lines.push(`> ⚠️ 선정된 광고가 없습니다.`);
+          lines.push('');
+        } else {
+          const w = resolution.submission;
+          const statusLabel = resolution.kind === 'pinned'
+            ? `📌 최종 확정 (확정자: ${resolution.pinnedBy || '-'})`
+            : `🗳 투표 1위 (${resolution.maxVotes}/${resolution.totalVoters}표${resolution.isTie ? ', 동점' : ''})`;
+          lines.push(`### 선정 광고 · ${statusLabel}`);
+          lines.push('');
+          lines.push(`- **브랜드:** ${w.brand}`);
+          lines.push(`- **캠페인/광고명:** ${w.campaign}`);
+          lines.push(`- **실행 시기:** ${w.published_at}`);
+          lines.push(`- **매체:** ${w.medium}`);
+          if (w.watch_url) lines.push(`- **광고 링크:** ${w.watch_url}`);
+          lines.push(`- **작성자:** ${w.author}`);
+          lines.push('');
+          const conceptText = getOriginalText(w, 'concept');
+          const analysisText = getOriginalText(w, 'analysis');
+          const conceptRevs = adRevisions[revKey(w.id, 'concept')] || [];
+          const analysisRevs = adRevisions[revKey(w.id, 'analysis')] || [];
+          const conceptTag = conceptRevs.length ? ` _(원본 · 제안 ${conceptRevs.length}건)_` : ` _(원본)_`;
+          const analysisTag = analysisRevs.length ? ` _(원본 · 제안 ${analysisRevs.length}건)_` : ` _(원본)_`;
+
+          lines.push(`#### 개념/이론 설명${conceptTag}`);
+          lines.push('');
+          lines.push(conceptText || '_(비어 있음)_');
+          lines.push('');
+          lines.push(`#### 광고 사례 분석${analysisTag}`);
+          lines.push('');
+          lines.push(analysisText || '_(비어 있음)_');
+          lines.push('');
+
+          // 수정 제안 이력 (있을 때만) — before/after 전문 포함
+          if (conceptRevs.length || analysisRevs.length) {
+            lines.push(`#### 수정 제안 이력`);
+            lines.push('');
+            ['concept', 'analysis'].forEach(field => {
+              const revs = adRevisions[revKey(w.id, field)] || [];
+              if (!revs.length) return;
+              lines.push(`**${REV_FIELD_LABEL[field]}** (제안 ${revs.length}건)`);
+              lines.push('');
+              // 오래된 순서로 출력
+              revs.slice().reverse().forEach((r, i) => {
+                const when = new Date(r.created_at).toLocaleString('ko-KR');
+                lines.push(`##### 제안 #${i + 1} · ${r.editor} · ${when}`);
+                lines.push('');
+                lines.push(`**수정 이유:** ${r.reason}`);
+                lines.push('');
+                lines.push(`**원본:**`);
+                lines.push('');
+                lines.push('> ' + (r.before_text || '(비어 있음)').replace(/\n/g, '\n> '));
+                lines.push('');
+                lines.push(`**제안:**`);
+                lines.push('');
+                lines.push('> ' + (r.after_text || '(비어 있음)').replace(/\n/g, '\n> '));
+                lines.push('');
+              });
+            });
+          }
+        }
+
+        const hasDeep = (deep.concept_deep || deep.analysis_deep || deep.presentation_note || '').trim().length > 0;
+        if (hasDeep) {
+          lines.push(`### 심화 분석`);
+          lines.push('');
+          if (deep.concept_deep?.trim()) {
+            lines.push(`#### ① 개념 재해석`);
+            lines.push('');
+            lines.push(deep.concept_deep.trim());
+            lines.push('');
+          }
+          if (deep.analysis_deep?.trim()) {
+            lines.push(`#### ② 광고 분석 심화`);
+            lines.push('');
+            lines.push(deep.analysis_deep.trim());
+            lines.push('');
+          }
+          if (deep.presentation_note?.trim()) {
+            lines.push(`#### ③ 발표 포인트 · 팀 의견`);
+            lines.push('');
+            lines.push(deep.presentation_note.trim());
+            lines.push('');
+          }
+          if (deep.updated_by) {
+            lines.push(`_마지막 수정: ${deep.updated_by} · ${new Date(deep.updated_at).toLocaleString('ko-KR')}_`);
+            lines.push('');
+          }
+        }
+
+        lines.push(`---`);
+        lines.push('');
+      });
+
+      return lines.join('\n');
+    }
+
+    async function buildTopicSectionMarkdown(topicId) {
+      const voteSummary = await getAllVoteSummary();
+      const subMap = await getSubmissionsMap();
+      await loadAdRevisions();
+      const t = topics.find(x => x.id === topicId);
+      if (!t) return '';
+      const resolution = resolveWinner(topicId, voteSummary, subMap);
+      const deep = deepAnalyses[topicId] || {};
+      const lines = [];
+      lines.push(`## Q${t.question_num}. ${t.title} (${t.chapter})`);
+      lines.push('');
+      lines.push(`**문제:** ${t.description}`);
+      lines.push('');
+      if (resolution.kind !== 'none') {
+        const w = resolution.submission;
+        lines.push(`**선정 광고:** ${w.brand} — ${w.campaign} (${w.author})`);
+        if (w.watch_url) lines.push(`**링크:** ${w.watch_url}`);
+        lines.push('');
+        const conceptRevs = adRevisions[revKey(w.id, 'concept')] || [];
+        const analysisRevs = adRevisions[revKey(w.id, 'analysis')] || [];
+        const conceptTag = conceptRevs.length ? ` _(원본 · 제안 ${conceptRevs.length}건)_` : '';
+        const analysisTag = analysisRevs.length ? ` _(원본 · 제안 ${analysisRevs.length}건)_` : '';
+        lines.push(`### 개념/이론 설명${conceptTag}`);
+        lines.push(getOriginalText(w, 'concept') || '');
+        lines.push('');
+        lines.push(`### 광고 사례 분석${analysisTag}`);
+        lines.push(getOriginalText(w, 'analysis') || '');
+        lines.push('');
+        if (conceptRevs.length || analysisRevs.length) {
+          lines.push(`### 수정 제안 이력`);
+          lines.push('');
+          ['concept', 'analysis'].forEach(field => {
+            const revs = adRevisions[revKey(w.id, field)] || [];
+            if (!revs.length) return;
+            lines.push(`**${REV_FIELD_LABEL[field]}** (제안 ${revs.length}건)`);
+            lines.push('');
+            revs.slice().reverse().forEach((r, i) => {
+              const when = new Date(r.created_at).toLocaleString('ko-KR');
+              lines.push(`- **#${i + 1}** · ${r.editor} · ${when} — ${r.reason}`);
+              lines.push(`    - 제안: ${(r.after_text || '').replace(/\n/g, ' ').slice(0, 200)}${(r.after_text || '').length > 200 ? '…' : ''}`);
+            });
+            lines.push('');
+          });
+        }
+      }
+      if (deep.concept_deep?.trim()) { lines.push(`### 심화 — 개념 재해석`); lines.push(deep.concept_deep.trim()); lines.push(''); }
+      if (deep.analysis_deep?.trim()) { lines.push(`### 심화 — 광고 분석`); lines.push(deep.analysis_deep.trim()); lines.push(''); }
+      if (deep.presentation_note?.trim()) { lines.push(`### 심화 — 발표 포인트`); lines.push(deep.presentation_note.trim()); lines.push(''); }
+      return lines.join('\n');
+    }
+
+    async function copyFinalDocument() {
+      const md = await buildFinalDocumentMarkdown();
+      try {
+        await navigator.clipboard.writeText(md);
+        toast('✓ 전체 문서가 클립보드에 복사되었습니다 (Google Docs에 붙여넣기)');
+      } catch (e) {
+        console.error(e);
+        // Fallback
+        const ta = document.createElement('textarea');
+        ta.value = md; document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); toast('✓ 복사됨'); }
+        catch { toast('복사 실패 — 다운로드를 이용해주세요'); }
+        document.body.removeChild(ta);
+      }
+    }
+
+    async function downloadFinalDocument() {
+      const md = await buildFinalDocumentMarkdown();
+      const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      const stamp = new Date().toISOString().slice(0, 10);
+      a.href = url;
+      a.download = `IMC_최종선정문서_${stamp}.md`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      toast('⬇ 다운로드 완료');
+    }
+
+    async function copyTopicSection(topicId) {
+      const md = await buildTopicSectionMarkdown(topicId);
+      try {
+        await navigator.clipboard.writeText(md);
+        toast('✓ 섹션이 복사되었습니다');
+      } catch (e) {
+        toast('복사 실패');
+      }
     }
 
     // ================================================================

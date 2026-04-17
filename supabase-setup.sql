@@ -163,7 +163,64 @@ create policy "votes_insert" on votes for insert with check (true);
 create policy "votes_update" on votes for update using (true);
 create policy "votes_delete" on votes for delete using (true);
 
--- 10. Realtime 활성화
+-- 10. final_selections 테이블: 주제별 최종 확정 광고 (투표 1위 override)
+create table if not exists final_selections (
+  topic_id       integer primary key references topics(id) on delete cascade,
+  submission_id  uuid references submissions(id) on delete cascade not null,
+  pinned_by      text not null,
+  updated_at     timestamptz default now()
+);
+
+create index if not exists idx_final_selections_submission on final_selections(submission_id);
+
+alter table final_selections enable row level security;
+create policy "final_selections_read"   on final_selections for select using (true);
+create policy "final_selections_insert" on final_selections for insert with check (true);
+create policy "final_selections_update" on final_selections for update using (true);
+create policy "final_selections_delete" on final_selections for delete using (true);
+
+-- 11. deep_analyses 테이블: 선정된 광고의 심화 분석 (주제당 1개, 팀 공유 편집)
+create table if not exists deep_analyses (
+  topic_id          integer primary key references topics(id) on delete cascade,
+  concept_deep      text default '',
+  analysis_deep     text default '',
+  presentation_note text default '',
+  updated_by        text,
+  updated_at        timestamptz default now()
+);
+
+alter table deep_analyses enable row level security;
+create policy "deep_analyses_read"   on deep_analyses for select using (true);
+create policy "deep_analyses_insert" on deep_analyses for insert with check (true);
+create policy "deep_analyses_update" on deep_analyses for update using (true);
+create policy "deep_analyses_delete" on deep_analyses for delete using (true);
+
+-- 12. ad_revisions 테이블: 선정된 광고의 내용 수정 제안 이력 (before/after/reason)
+create table if not exists ad_revisions (
+  id            uuid default gen_random_uuid() primary key,
+  topic_id      integer references topics(id) on delete cascade not null,
+  submission_id uuid references submissions(id) on delete cascade not null,
+  field         text not null check (field in ('concept', 'analysis')),
+  before_text   text not null,
+  after_text    text not null,
+  reason        text not null,
+  editor        text not null,
+  created_at    timestamptz default now()
+);
+
+create index if not exists idx_ad_revisions_lookup on ad_revisions(submission_id, field, created_at desc);
+create index if not exists idx_ad_revisions_topic on ad_revisions(topic_id, created_at desc);
+
+alter table ad_revisions enable row level security;
+create policy "ad_revisions_read"   on ad_revisions for select using (true);
+create policy "ad_revisions_insert" on ad_revisions for insert with check (true);
+create policy "ad_revisions_update" on ad_revisions for update using (true);
+create policy "ad_revisions_delete" on ad_revisions for delete using (true);
+
+-- 13. Realtime 활성화
 alter publication supabase_realtime add table submissions;
 alter publication supabase_realtime add table comments;
 alter publication supabase_realtime add table votes;
+alter publication supabase_realtime add table final_selections;
+alter publication supabase_realtime add table deep_analyses;
+alter publication supabase_realtime add table ad_revisions;
