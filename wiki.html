@@ -586,12 +586,12 @@
       display: grid; grid-template-columns: 240px 1fr;
       gap: 24px; align-items: start;
     }
-    /* 최종 문서 탭일 때만 우측 수정이력 패널 노출 → 3컬럼 */
+    /* 최종 문서 탭일 때만 우측 수정이력 패널 노출 → 3컬럼 (본문:이력 = 5:5) */
     .app-shell.right-panel-on {
-      grid-template-columns: 240px minmax(0, 1fr) 400px;
+      grid-template-columns: 240px minmax(0, 1fr) minmax(0, 1fr);
     }
     @media (max-width: 1500px) {
-      .app-shell.right-panel-on { grid-template-columns: 220px minmax(0, 1fr) 340px; }
+      .app-shell.right-panel-on { grid-template-columns: 220px minmax(0, 1fr) minmax(0, 1fr); }
     }
     .sidebar {
       position: sticky; top: 20px;
