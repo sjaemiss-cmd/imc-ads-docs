@@ -109,6 +109,7 @@
 
     /* ── Reset & Base ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; overflow: hidden; }
     body {
       font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       background: var(--bg); color: var(--text); line-height: 1.7;
@@ -120,14 +121,18 @@
     a:hover { text-decoration: underline; }
     button { cursor: pointer; font-family: inherit; }
 
-    /* ── Layout (wide SaaS) ── */
+    /* ── Layout: 앱쉘 독립 스크롤 (SaaS 패턴) ──
+       바디는 고정, 각 컬럼이 자기 영역에서만 스크롤되어 휠 이벤트 혼선 제거 */
     .app {
       max-width: none;
-      width: 100%;
-      margin: 0; padding: 24px 28px;
+      width: 100vw; height: 100vh;
+      margin: 0; padding: 20px 24px 16px;
+      display: flex; flex-direction: column;
+      overflow: hidden;
     }
-    @media (max-width: 1100px) { .app { padding: 20px 20px; } }
-    @media (max-width: 640px)  { .app { padding: 16px; } }
+    .app > .header { flex: 0 0 auto; margin-bottom: 16px; }
+    @media (max-width: 1100px) { .app { padding: 18px 18px 14px; } }
+    @media (max-width: 640px)  { .app { padding: 14px; } }
 
     /* ── Header ── */
     .header {
@@ -583,21 +588,82 @@
 
     /* ── Sidebar Shell ── */
     .app-shell {
+      flex: 1 1 auto; min-height: 0;
       display: grid; grid-template-columns: 240px 1fr;
-      gap: 24px; align-items: start;
+      gap: 20px; align-items: stretch;
+      overflow: hidden;
     }
     /* 최종 문서 탭일 때만 우측 수정이력 패널 노출 → 3컬럼 (본문:이력 = 5:5) */
     .app-shell.right-panel-on {
       grid-template-columns: 240px minmax(0, 1fr) minmax(0, 1fr);
     }
+    /* 상세 모드: 사이드바 숨김 → 본문만 전체 폭 */
+    .app-shell.detail-mode { grid-template-columns: minmax(0, 1fr); }
     @media (max-width: 1500px) {
       .app-shell.right-panel-on { grid-template-columns: 220px minmax(0, 1fr) minmax(0, 1fr); }
     }
+    /* 컬럼 공통: 자기 영역에서만 스크롤 */
+    .sidebar, .main-content, .right-rev-panel {
+      min-height: 0; max-height: 100%;
+      overflow-y: auto; overflow-x: hidden;
+      overscroll-behavior: contain;
+    }
+    .main-content { padding-right: 4px; }
+
+    /* ── 통합 스크롤바 디자인 (브랜드 톤) ── */
+    .sidebar, .main-content, .right-rev-panel,
+    .rev-editor textarea, .fts-deep-field textarea,
+    .rev-history, .rh-text {
+      scrollbar-width: thin;
+      scrollbar-color: var(--border-strong) transparent;
+    }
+    .sidebar::-webkit-scrollbar,
+    .main-content::-webkit-scrollbar,
+    .right-rev-panel::-webkit-scrollbar,
+    .rev-editor textarea::-webkit-scrollbar,
+    .fts-deep-field textarea::-webkit-scrollbar,
+    .rev-history::-webkit-scrollbar,
+    .rh-text::-webkit-scrollbar {
+      width: 10px; height: 10px;
+    }
+    .sidebar::-webkit-scrollbar-track,
+    .main-content::-webkit-scrollbar-track,
+    .right-rev-panel::-webkit-scrollbar-track,
+    .rev-editor textarea::-webkit-scrollbar-track,
+    .fts-deep-field textarea::-webkit-scrollbar-track,
+    .rev-history::-webkit-scrollbar-track,
+    .rh-text::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .sidebar::-webkit-scrollbar-thumb,
+    .main-content::-webkit-scrollbar-thumb,
+    .right-rev-panel::-webkit-scrollbar-thumb,
+    .rev-editor textarea::-webkit-scrollbar-thumb,
+    .fts-deep-field textarea::-webkit-scrollbar-thumb,
+    .rev-history::-webkit-scrollbar-thumb,
+    .rh-text::-webkit-scrollbar-thumb {
+      background: var(--border-strong);
+      border-radius: 10px;
+      border: 2px solid transparent;
+      background-clip: padding-box;
+      transition: background-color .2s ease;
+    }
+    .sidebar::-webkit-scrollbar-thumb:hover,
+    .main-content::-webkit-scrollbar-thumb:hover,
+    .right-rev-panel::-webkit-scrollbar-thumb:hover,
+    .rev-editor textarea::-webkit-scrollbar-thumb:hover,
+    .fts-deep-field textarea::-webkit-scrollbar-thumb:hover,
+    .rev-history::-webkit-scrollbar-thumb:hover,
+    .rh-text::-webkit-scrollbar-thumb:hover {
+      background: var(--primary);
+      background-clip: padding-box;
+    }
+    .sidebar::-webkit-scrollbar-corner,
+    .main-content::-webkit-scrollbar-corner,
+    .right-rev-panel::-webkit-scrollbar-corner { background: transparent; }
     .sidebar {
-      position: sticky; top: 20px;
       background: #fff; border-radius: 16px;
       padding: 14px 12px; box-shadow: 0 1px 3px rgba(0,0,0,.08);
-      max-height: calc(100vh - 40px); overflow-y: auto;
     }
     .sidebar-title {
       font-size: 11.5px; font-weight: 700; color: #aeaeb2;
@@ -839,8 +905,6 @@
 
     /* ── 우측 수정이력 전용 패널 (app-shell 3번째 컬럼) ── */
     .right-rev-panel {
-      position: sticky; top: 20px;
-      max-height: calc(100vh - 40px); overflow-y: auto;
       background: var(--surface); border: 1px solid var(--border);
       border-radius: 16px; padding: 18px 18px 20px;
       box-shadow: 0 1px 3px rgba(0,0,0,.08);
@@ -2765,6 +2829,7 @@
       if (_finalScrollObserver) { _finalScrollObserver.disconnect(); _finalScrollObserver = null; }
       const sections = document.querySelectorAll('#final-doc-grid .final-topic-section');
       if (!sections.length) return;
+      const scrollRoot = document.querySelector('.main-content') || null;
       _finalScrollObserver = new IntersectionObserver(entries => {
         const visible = entries
           .filter(e => e.isIntersecting)
@@ -2775,7 +2840,7 @@
         currentFinalTopic = id;
         syncNavCurrent(id);
         renderRightRevPanel(id);
-      }, { rootMargin: '-30% 0px -55% 0px', threshold: [0, 0.25, 0.5, 0.75, 1] });
+      }, { root: scrollRoot, rootMargin: '-20% 0px -60% 0px', threshold: [0, 0.25, 0.5, 0.75, 1] });
       sections.forEach(s => _finalScrollObserver.observe(s));
     }
 
