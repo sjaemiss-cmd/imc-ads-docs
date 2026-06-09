@@ -48,6 +48,7 @@
       --gradient-warm: linear-gradient(180deg, #dff3ff 0%, #fff7e8 100%);
       --gradient-panel: #ffffff;
       --gradient-active: #0d0d0d;
+      --ad-player-ratio: 648 / 365;
     }
     /* ── Reset & Base ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -205,23 +206,20 @@
     .ad-embed {
       margin-top: 12px; border: 1px solid var(--border); border-radius: 8px;
       background: #000; overflow: visible;
+      display: grid; place-items: center;
     }
     .ad-embed-open {
       flex-shrink: 0; color: var(--text); text-decoration: underline;
       text-decoration-thickness: 1px; text-underline-offset: 3px;
     }
     .ad-embed-frame {
-      display: block; width: 100%; aspect-ratio: 16 / 9; min-height: 220px;
+      display: block; width: 100%; aspect-ratio: var(--ad-player-ratio); min-height: 220px;
       border: 0; background: #000;
     }
 
-    .ad-embed.is-tvcf .ad-embed-frame {
-      aspect-ratio: 16 / 10;
-    }
-
     .ad-embed-video {
-      display: block; width: 100%; aspect-ratio: 16 / 9; background: var(--text);
-      object-fit: contain;
+      display: block; width: 100%; aspect-ratio: var(--ad-player-ratio); background: var(--text);
+      object-fit: contain; object-position: center center;
     }
     .sub-time { font-size: 12px; color: var(--text-faint); margin-top: 8px; }
     .no-submissions { text-align: center; padding: 32px; color: var(--text-faint); font-size: 14px; }
@@ -1636,20 +1634,17 @@
     .preview-frame-slot .ad-embed-video {
       width: 100%;
       height: auto;
-      aspect-ratio: 16 / 9;
+      aspect-ratio: var(--ad-player-ratio);
       min-height: 0;
       max-height: none;
       object-fit: contain;
-    }
-
-    .preview-frame-slot .ad-embed.is-tvcf .ad-embed-frame {
-      aspect-ratio: 16 / 10;
+      object-position: center center;
     }
     .preview-empty {
       display: grid;
       place-items: center;
       min-height: 220px;
-      aspect-ratio: 16 / 9;
+      aspect-ratio: var(--ad-player-ratio);
       border: 1px dashed var(--border-strong);
       border-radius: 12px;
       background: var(--surface-alt);
@@ -2302,15 +2297,17 @@
     .preview-frame-slot .ad-embed-video {
       display: block;
       width: 100%;
-      aspect-ratio: 16 / 9;
+      aspect-ratio: var(--ad-player-ratio);
       max-height: none;
       background: #000;
       object-fit: contain;
+      object-position: center center;
     }
 
-    .ad-embed.is-tvcf .ad-embed-frame,
-    .preview-frame-slot .ad-embed.is-tvcf .ad-embed-frame {
-      aspect-ratio: 16 / 10;
+    .ad-embed,
+    .preview-frame-slot .ad-embed {
+      display: grid;
+      place-items: center;
     }
 
     @media (max-width: 900px) {
