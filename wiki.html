@@ -2652,6 +2652,7 @@
       display: inline-flex !important;
       align-items: center;
       justify-content: center;
+      gap: 8px;
       width: 100%;
       min-height: 44px;
       margin: 0 0 16px !important;
@@ -2666,6 +2667,16 @@
       line-height: 1.2;
       text-align: center;
       text-decoration: none;
+    }
+
+    .detail-back::before {
+      content: '';
+      width: 0;
+      height: 0;
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      border-right: 7px solid currentColor;
+      flex: 0 0 auto;
     }
 
     .detail-back:hover,
