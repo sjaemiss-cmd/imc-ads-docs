@@ -206,12 +206,6 @@
       margin-top: 12px; border: 1px solid var(--border); border-radius: 8px;
       background: #000; overflow: visible;
     }
-    .ad-embed-header {
-      display: flex; align-items: center; justify-content: space-between; gap: 10px;
-      padding: 10px 12px; border-bottom: 1px solid var(--border);
-      color: var(--text-muted); font-size: 13px;
-    }
-    .ad-embed-title { font-weight: 600; color: var(--text); }
     .ad-embed-open {
       flex-shrink: 0; color: var(--text); text-decoration: underline;
       text-decoration-thickness: 1px; text-underline-offset: 3px;
@@ -220,13 +214,14 @@
       display: block; width: 100%; aspect-ratio: 16 / 9; min-height: 220px;
       border: 0; background: #000;
     }
+
+    .ad-embed.is-tvcf .ad-embed-frame {
+      aspect-ratio: 16 / 10;
+    }
+
     .ad-embed-video {
       display: block; width: 100%; aspect-ratio: 16 / 9; background: var(--text);
       object-fit: contain;
-    }
-    .ad-embed-note {
-      padding: 8px 12px; border-top: 1px solid var(--border);
-      color: var(--text-dim); font-size: 12px; line-height: 1.5;
     }
     .sub-time { font-size: 12px; color: var(--text-faint); margin-top: 8px; }
     .no-submissions { text-align: center; padding: 32px; color: var(--text-faint); font-size: 14px; }
@@ -1646,6 +1641,10 @@
       max-height: none;
       object-fit: contain;
     }
+
+    .preview-frame-slot .ad-embed.is-tvcf .ad-embed-frame {
+      aspect-ratio: 16 / 10;
+    }
     .preview-empty {
       display: grid;
       place-items: center;
@@ -2307,6 +2306,11 @@
       max-height: none;
       background: #000;
       object-fit: contain;
+    }
+
+    .ad-embed.is-tvcf .ad-embed-frame,
+    .preview-frame-slot .ad-embed.is-tvcf .ad-embed-frame {
+      aspect-ratio: 16 / 10;
     }
 
     @media (max-width: 900px) {
@@ -3008,9 +3012,7 @@
           : '<div class="preview-empty">광고 링크가 없습니다.</div>';
         previewMediaKey = mediaKey;
       } else if (panel && fixedUrl) {
-        const embedTitle = panel.querySelector('.ad-embed-title');
         const frame = panel.querySelector('.ad-embed-frame');
-        if (embedTitle) embedTitle.textContent = playerTitle;
         if (frame) frame.title = playerTitle;
       }
       if (mode === 'draft') {
@@ -3350,17 +3352,17 @@
 
       const tvcfId = getTvcfVideoId(parsed);
       if (tvcfId) {
-        return { type: 'iframe', src: 'https://play.tvcf.co.kr/embed/' + encodeURIComponent(tvcfId) };
+        return { type: 'iframe', provider: 'tvcf', src: 'https://play.tvcf.co.kr/embed/' + encodeURIComponent(tvcfId) };
       }
 
       const youtubeId = getYoutubeVideoId(parsed);
-      if (youtubeId) return { type: 'iframe', src: 'https://www.youtube.com/embed/' + encodeURIComponent(youtubeId) };
+      if (youtubeId) return { type: 'iframe', provider: 'youtube', src: 'https://www.youtube.com/embed/' + encodeURIComponent(youtubeId) };
 
       const vimeoId = getVimeoVideoId(parsed);
-      if (vimeoId) return { type: 'iframe', src: 'https://player.vimeo.com/video/' + encodeURIComponent(vimeoId) };
+      if (vimeoId) return { type: 'iframe', provider: 'vimeo', src: 'https://player.vimeo.com/video/' + encodeURIComponent(vimeoId) };
 
       if (/\.(mp4|webm|ogg)(?:$|[?#])/i.test(url)) {
-        return { type: 'video', src: url };
+        return { type: 'video', provider: 'file', src: url };
       }
 
       return null;
@@ -3369,30 +3371,15 @@
     function renderAdEmbed(url, title = '광고 재생') {
       const embed = getEmbeddedAdUrl(url);
       if (!embed) {
-        return '<div class="ad-embed ad-embed-fallback">' +
-          '<div class="ad-embed-header">' +
-            '<span class="ad-embed-title">' + esc(title) + '</span>' +
-            '<a class="ad-embed-open" href="' + esc(url) + '" target="_blank" rel="noopener">새 창으로 열기</a>' +
-          '</div>' +
-          '<div class="ad-embed-note">이 링크는 영상 원본을 확인할 수 없어 페이지 전체를 가져오지 않았습니다. YouTube, Vimeo, TVCF 플레이 링크 또는 mp4/webm 파일 링크를 넣으면 사이트 안에서 영상만 재생됩니다.</div>' +
-        '</div>';
+        return '<div class="preview-empty"><a class="ad-embed-open" href="' + esc(url) + '" target="_blank" rel="noopener">새 창으로 열기</a></div>';
       }
 
-      const escapedUrl = esc(url);
       const escapedSrc = esc(embed.src);
-      const isTvcf = /(^|\/\/)(?:www\.)?(?:play\.)?tvcf\.co\.kr/i.test(url);
-      const note = isTvcf
-        ? '<div class="ad-embed-note">TVCF 상세 페이지가 아니라 영상 플레이어만 불러옵니다.</div>'
-        : '<div class="ad-embed-note">광고 페이지 전체가 아니라 영상 플레이어만 불러옵니다.</div>';
       const media = embed.type === 'video'
         ? '<video class="ad-embed-video" src="' + escapedSrc + '" controls playsinline preload="metadata"></video>'
         : '<iframe class="ad-embed-frame" src="' + escapedSrc + '" title="' + esc(title) + '" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>';
 
-      return '<div class="ad-embed">' +
-        '<div class="ad-embed-header">' +
-          '<span class="ad-embed-title">' + esc(title) + '</span>' +
-          '<a class="ad-embed-open" href="' + escapedUrl + '" target="_blank" rel="noopener">새 창으로 열기</a>' +
-        '</div>' + media + note + '</div>';
+      return '<div class="ad-embed is-' + esc(embed.provider || 'generic') + '">' + media + '</div>';
     }
 
     function getSortedVisibleSubmissions() {
