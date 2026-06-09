@@ -2171,7 +2171,6 @@
 
     .sidebar-home,
     .nav-item,
-    .detail-back,
     .comments-toggle,
     .sub-edit,
     .sub-delete,
@@ -2649,6 +2648,34 @@
       letter-spacing: 0;
     }
 
+    .detail-back {
+      display: inline-flex !important;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 44px;
+      margin: 0 0 16px !important;
+      padding: 12px 18px !important;
+      border: 1px solid #111111 !important;
+      border-radius: 0 !important;
+      background: #111111 !important;
+      color: #ffffff !important;
+      box-shadow: none !important;
+      font-size: 14px !important;
+      font-weight: 800 !important;
+      line-height: 1.2;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    .detail-back:hover,
+    .detail-back:focus-visible {
+      background: #39393b !important;
+      border-color: #39393b !important;
+      color: #ffffff !important;
+      outline: none;
+    }
+
     .lang-toggle,
     .detail-mode-tab,
     .draft-restore-bar,
@@ -2931,7 +2958,7 @@
         </div>
         <div class="sidebar-detail" id="sidebar-detail">
           <div class="detail-context-panel" aria-label="문제 맥락 패널">
-            <button class="detail-back" onclick="showDashboard()">← 문제 목록</button>
+            <button class="detail-back" onclick="showDashboard()">문제 목록</button>
             <label class="mini-topic-list-title" for="detail-topic-select">문제 선택</label>
             <select class="detail-topic-select" id="detail-topic-select" onchange="openTopic(Number(this.value))"></select>
             <div class="detail-header">
