@@ -1,10 +1,8 @@
-const test = require('node:test');
-const assert = require('node:assert/strict');
+import test from 'node:test';
+import assert from 'node:assert/strict';
 
-const {
-  getCachedTranslation,
-  sanitizeTranslationCache,
-} = require('../assets/wiki-translation-cache.js');
+await import('../assets/wiki-translation-cache.js');
+const { getCachedTranslation, sanitizeTranslationCache } = globalThis.WikiTranslationCache;
 
 test('ignores polluted Korean->Burmese cache entries that kept the Korean source text', () => {
   const cache = {

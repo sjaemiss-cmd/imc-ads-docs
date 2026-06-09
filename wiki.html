@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>IMC 팀 과제 위키</title>
+  <title>IMC 기말 팀 과제 위키</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script>
     (function() {
@@ -1352,8 +1352,8 @@
     <div class="header">
       <div class="header-row">
         <div>
-          <h1>IMC 팀 과제 위키</h1>
-          <p>중간대체과제 10문항 — 팀원들이 함께 광고 사례를 찾아 올리는 공간</p>
+          <h1>IMC 기말 팀 과제 위키</h1>
+          <p>기말고사 대체 팀과제 10문항 — 팀원들이 함께 광고 사례를 찾아 올리는 공간</p>
         </div>
         <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
           <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="테마 전환">
@@ -1364,7 +1364,7 @@
             <button class="lang-btn active" data-lang="ko" onclick="switchLanguage('ko')">한국어</button>
             <button class="lang-btn" data-lang="my" onclick="switchLanguage('my')">မြန်မာ</button>
           </div>
-          <span class="deadline-badge" id="deadline-badge">D-day: 4/18(토) 자정</span>
+          <span class="deadline-badge" id="deadline-badge">D-day: 6/16(화) 자정</span>
         </div>
       </div>
     </div>
@@ -1382,19 +1382,19 @@
     </button>
     <div class="guide-body" id="guide-body">
       <h4>과제 목적</h4>
-      <p>소비자 심리 및 행동 관련 개념들이 실제 광고 활동에 어떻게 적용되는가를 스스로 점검하고, 다양한 광고물을 접하며 광고에 대한 이해를 증진하는 것.</p>
+      <p>소비자 심리 및 행동 관련 개념들이 실제 광고 활동에 어떻게 적용되는가를 스스로 점검하고, 사례광고물을 찾는 과정에서 다양한 광고물을 접하며 광고에 대한 이해를 증진하는 것.</p>
 
       <h4>답안 작성 방법 (문제당)</h4>
       <ul>
         <li><strong>분량</strong>: PPT 1장 또는 A4 1/2 페이지</li>
-        <li><strong>① 개념/이론 설명</strong> — 자기 말로 서술 (강의노트·서적 그대로 붙이기 금지!)</li>
-        <li><strong>② 광고 사례 분석</strong> — 구체적으로 어떤 장면에, 어떻게 적용되어 있는지 설명</li>
+        <li><strong>① 개념/이론 설명</strong> — 각 문제와 관련된 개념이나 이론을 자신이 이해한 대로 서술 (강의노트·서적·자료 그대로 붙이기 금지!)</li>
+        <li><strong>② 광고 사례 분석</strong> — 이러한 개념이나 이론이 사례광고물의 어떤 장면에, 어떻게 포함되어 있는지 명확히 설명</li>
         <li><strong>③ 배경 설명</strong> — 필요 시 브랜드·광고 배경을 간결하게 포함</li>
       </ul>
 
       <h4>제출 형식</h4>
       <ul>
-        <li>PPT 또는 MS워드 등 <strong>집현캠퍼스에서 바로 열리는 확장자</strong></li>
+        <li>PPT 또는 MS워드 등 <strong>집현캠퍼스에서 확인이 쉬운 문서 형식</strong></li>
         <li><strong>문제 순서대로</strong> 답안 배치</li>
       </ul>
 
@@ -1408,7 +1408,7 @@
       </ul>
 
       <h4>마감</h4>
-      <p><strong>4월 18일 (토) 밤 12시</strong> — 집현캠퍼스 중간고사 과제방 업로드 (시간 엄수, 늦은 과제 감점)</p>
+      <p><strong>6월 16일 (화) 밤 12시</strong> — 집현캠퍼스 기말고사 과제방 업로드 (시간 엄수, 늦은 과제 감점)</p>
 
       <div class="warn">
         <strong>주의!</strong> 세상은 넓고 광고는 수도 없이 많습니다. 토론방에서 이미 쓰인 광고를 그대로 가져오지 마세요. 문제마다 반드시 다른 광고를 찾아야 합니다.
@@ -1422,7 +1422,7 @@
     </button>
     <div class="guide-body" id="eval-guide-body">
       <h4>평가 개요</h4>
-      <p>제출된 광고 사례의 <strong>AI 평가</strong> 버튼을 누르면 5개 기준으로 자동 평가합니다. 평가 결과는 참고용이며, 최종 선정은 팀 토론을 통해 결정하세요.</p>
+      <p>제출된 답안/광고 사례의 <strong>AI 평가</strong> 버튼을 누르면 5개 기준으로 자동 평가합니다. 평가 결과는 참고용이며, 최종 선정은 팀 토론을 통해 결정하세요.</p>
 
       <h4>평가 기준 (총 100점)</h4>
       <ul>
@@ -1518,12 +1518,12 @@
         <div id="detail-question" class="question"></div>
         <div id="detail-hint" class="hint"></div>
       </div>
-      <h3 class="submissions-title">제출된 광고 사례 (<span id="sub-count">0</span>건)</h3>
+      <h3 class="submissions-title">제출된 답안/광고 사례 (<span id="sub-count">0</span>건)</h3>
       <div id="submissions-list"></div>
 
       <!-- Form -->
       <div class="form-section">
-        <h3>새 광고 사례 올리기 <span class="draft-badge" id="draft-badge"></span></h3>
+        <h3>새 답안/광고 사례 올리기 <span class="draft-badge" id="draft-badge"></span></h3>
         <div class="draft-restore-bar" id="draft-restore-bar">
           <span id="draft-restore-msg">이전에 작성 중이던 초안이 있습니다.</span>
           <div>
@@ -1538,32 +1538,32 @@
               <input id="f-author" required placeholder="홍길동" />
             </div>
             <div class="form-group">
-              <label for="f-brand">브랜드</label>
-              <input id="f-brand" required placeholder="삼성전자" />
+              <label for="f-brand">브랜드/주제</label>
+              <input id="f-brand" required placeholder="삼성전자 또는 팀과제 회고" />
             </div>
             <div class="form-group">
-              <label for="f-campaign">캠페인/광고명</label>
-              <input id="f-campaign" required placeholder="Galaxy S25 울트라" />
+              <label for="f-campaign">캠페인/답안 제목</label>
+              <input id="f-campaign" required placeholder="Galaxy S25 울트라 또는 팀원별 회고" />
             </div>
             <div class="form-group">
-              <label for="f-published">광고 실행 시기</label>
-              <input id="f-published" required placeholder="2025.01" />
+              <label for="f-published">광고 실행 시기/작성 기준</label>
+              <input id="f-published" required placeholder="2025.01 또는 2026 기말" />
             </div>
             <div class="form-group">
-              <label for="f-medium">매체</label>
-              <input id="f-medium" required placeholder="TVCF / YouTube / SNS" />
+              <label for="f-medium">매체/자료 형태</label>
+              <input id="f-medium" required placeholder="TVCF / YouTube / SNS / 회고" />
             </div>
             <div class="form-group">
-              <label for="f-url">광고 링크 (TVCF: 검색→광고 클릭→주소창 복사)</label>
+              <label for="f-url">광고/참고 링크 (TVCF: 검색→광고 클릭→주소창 복사)</label>
               <input id="f-url" type="url" placeholder="https://tvcf.co.kr/play/bh00000-000000" />
             </div>
             <div class="form-group full">
-              <label for="f-concept">개념/이론 설명 (자기 말로)</label>
-              <textarea id="f-concept" required rows="3" placeholder="이 문제와 관련된 개념을 자신의 말로 설명..."></textarea>
+              <label for="f-concept">개념/이론 설명 또는 느낀 점</label>
+              <textarea id="f-concept" required rows="3" placeholder="이 문제와 관련된 개념을 자신의 말로 설명하거나, 10번은 팀원별 느낀 점을 정리..."></textarea>
             </div>
             <div class="form-group full">
-              <label for="f-analysis">광고 사례 분석 (구체적 장면/요소)</label>
-              <textarea id="f-analysis" required rows="4" placeholder="이 광고에서 해당 개념이 어떻게 적용되었는지 구체적으로..."></textarea>
+              <label for="f-analysis">광고 사례 분석 또는 개선 의견</label>
+              <textarea id="f-analysis" required rows="4" placeholder="광고에서는 해당 개념이 어떻게 적용되었는지, 10번은 좋았던 점/유지할 점/개선할 점을 구체적으로..."></textarea>
             </div>
           </div>
           <!-- Duplicate Checker -->
@@ -1581,11 +1581,11 @@
         <div class="volume-checker" id="volume-checker">
           <h4>분량 체커 (PPT 1장 / A4 반 페이지 기준)</h4>
           <div class="vc-row">
-            <span class="vc-label">개념/이론 설명</span>
+            <span class="vc-label">개념/이론 설명 또는 느낀 점</span>
             <span class="vc-value" id="vc-concept">0자</span>
           </div>
           <div class="vc-row">
-            <span class="vc-label">사례 분석</span>
+            <span class="vc-label">사례 분석 또는 개선 의견</span>
             <span class="vc-value" id="vc-analysis">0자</span>
           </div>
           <div class="vc-row">
@@ -1624,6 +1624,8 @@
     // ================================================================
     const SUPABASE_URL = 'https://vouuqxtclcnhkugmomci.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_KSv29b6X75xsbt23Nwc9Fg_JY5WbvK3';
+    const ASSIGNMENT_ID = 'final-2026';
+    const ASSIGNMENT_START_ISO = '2026-06-09T00:00:00+09:00';
 
     // ================================================================
     // Init
@@ -1632,8 +1634,8 @@
     let topics = [];
     let currentTopicId = null;
     let localVotes = [];
-    try { localVotes = JSON.parse(localStorage.getItem('imc-votes') || '[]'); } catch { localVotes = []; }
-    function saveLocalVotes() { localStorage.setItem('imc-votes', JSON.stringify(localVotes)); }
+    try { localVotes = JSON.parse(localStorage.getItem(`${ASSIGNMENT_ID}-votes`) || '[]'); } catch { localVotes = []; }
+    function saveLocalVotes() { localStorage.setItem(`${ASSIGNMENT_ID}-votes`, JSON.stringify(localVotes)); }
 
     function initSupabase() {
       if (!SUPABASE_URL || !SUPABASE_KEY) {
@@ -1648,30 +1650,30 @@
     // ================================================================
     // Fallback — Supabase 미연결 시 로컬 데모 데이터 사용
     // ================================================================
-    const FALLBACK_TOPICS = [
-      { id:1,  question_num:1,  chapter:'1장', title:'해석주의적 관점', description:'사회와 소비자의 관계를 해석주의적 관점에서 바라본 광고의 사례를 찾아서 설명하시오.', concept_hint:'소비자를 의미 해석자로 봄.' },
-      { id:2,  question_num:2,  chapter:'3장', title:'오감 자극: 청각', description:'소비자의 오감 중 청각을 집중 자극하는 광고 사례를 찾아서 설명하시오.', concept_hint:'청각-미각 교차감각.' },
-      { id:3,  question_num:3,  chapter:'3장', title:'차등적 식역 (JND)', description:'차등적 식역의 개념을 설명하고 광고 사례를 서술하시오.', concept_hint:'JND 초과 수치로 차이 인식 유도.' },
-      { id:4,  question_num:4,  chapter:'3장', title:'자극물의 주의 요인 (2개+)', description:'자극물 자체의 주의 요인을 2개 이상 찾아 설명하시오.', concept_hint:'크기, 색 대비, 움직임, 독특함.' },
-      { id:5,  question_num:5,  chapter:'4장', title:'의미적 부호화', description:'의미적 부호화를 설명하고 광고 사례를 찾아서 설명하시오.', concept_hint:'익숙한 스키마 활용.' },
-      { id:6,  question_num:6,  chapter:'4장', title:'절차기억 (스크립트)', description:'절차기억의 개념을 설명하고 광고 사례를 찾아서 설명하시오.', concept_hint:'순서화된 행동 흐름의 기억.' },
-      { id:7,  question_num:7,  chapter:'4장', title:'재인적 단서', description:'재인을 설명하고 재인적 단서가 포함된 광고를 찾아서 설명하시오.', concept_hint:'패키지, 로고, 실루엣 단서.' },
-      { id:8,  question_num:8,  chapter:'5장', title:'고전적 조건화', description:'모델이나 음악 이외의 무조건자극 사례를 찾아 그림으로 설명하시오.', concept_hint:'모델/음악 외 자극 필수. 그림 필요.' },
-      { id:9,  question_num:9,  chapter:'5장', title:'부정적 강화', description:'부정적 강화의 개념을 설명하고 광고 사례를 찾아서 설명하시오.', concept_hint:'불쾌 자극 제거 → 행동 증가. ≠처벌.' },
-      { id:10, question_num:10, chapter:'5장', title:'고정비율 강화', description:'고정비율 강화의 광고 사례를 찾아서 설명하시오.', concept_hint:'예측 가능한 보상 → 행동 반복.' },
+    const FINAL_TOPICS = [
+      { id:1,  question_num:1,  chapter:'6장', title:'경험적 위계', description:'소비자의 태도형성 과정 중 경험적 위계의 과정을 설명하고, 이러한 과정을 기반으로 실행된 광고의 예를 찾아서 이러한 과정을 기술하시오.', concept_hint:'감정/느낌 반응이 먼저 형성되고 이후 행동과 인지가 이어지는 태도 형성 흐름.' },
+      { id:2,  question_num:2,  chapter:'6장', title:'다속성 모형과 태도 변화 전략', description:'다속성 모형에 근거하여 브랜드나 제품에 대한 태도를 증가, 감소시키기 위한 전략을 설명하고, 이러한 메시지가 포함된 광고물 사례 1개를 찾아서 구체적으로 기술하시오.', concept_hint:'속성 신념, 속성 중요도, 이상점 변화 등을 통해 전체 태도를 변화시키는 방식.' },
+      { id:3,  question_num:3,  chapter:'6장', title:'주관적 규범', description:'소비자의 주관적 규범의 개념을 설명하고, 규범에 순응하는 소비의 예를 포함하는 광고 사례를 찾아서 어떻게 적용되어 있는지 기술하시오.', concept_hint:'중요한 타인이나 집단의 기대를 의식해 특정 소비 행동을 선택하는 압력.' },
+      { id:4,  question_num:4,  chapter:'7장', title:'ELM 주변 경로와 주변적 단서', description:'정교화 가능성 모형의 주변 경로를 설명하고, 브랜드에 대한 태도를 변화시키기 위한 주변적 단서를 포함된 광고 사례를 찾아서 주변적 단서가 무엇이며, 어떻게 처리되어 있는지 기술하시오.', concept_hint:'낮은 관여나 낮은 처리 동기 상황에서 모델, 분위기, 음악, 반복, 디자인 같은 단서로 태도를 변화시키는 경로.' },
+      { id:5,  question_num:5,  chapter:'8장', title:'비보상적 평가 방식 메시지', description:'소비자에게 대안의 평가 방식중 비보상적 메시지를 포함하는 광고의 사례를 찾아서 개념이 어떻게 적용되어 있는가를 설명하시오.', concept_hint:'한 속성의 부족을 다른 장점으로 보상하지 않고, 컷오프나 핵심 조건 충족 여부로 대안을 평가.' },
+      { id:6,  question_num:6,  chapter:'자아와 소비', title:'거울에 비친 자아', description:'거울에 비친 자아의 개념을 설명하고, 이를 이용한 메시지를 포함하는 광고 사례를 찾아서 적용해보시오.', concept_hint:'타인이 나를 어떻게 볼지에 대한 상상과 사회적 평가가 자아 및 소비 선택에 영향을 줌.' },
+      { id:7,  question_num:7,  chapter:'소비문화', title:'새로운 성역할', description:'새로운 성역할을 보여주는 광고사례를 찾아서 새로운 성역할이 무엇이며, 이를 메시지나 전술에서 어떻게 표상하고 있는 지 설명하시오.', concept_hint:'전통적 성역할을 전복하거나 확장하는 인물, 관계, 직업, 가사/돌봄, 라이프스타일 표상.' },
+      { id:8,  question_num:8,  chapter:'소비문화', title:'이상적인 바디 이미지', description:'이상적인 바디 이미지를 광고 메시지로 전달하는 광고사례를 찾아서, 이상적인 바디 이미지가 무엇이며, 이를 어떻게 광고에서 구성하는 지 설명하시오.', concept_hint:'몸에 대한 이상, 아름다움/건강/자기관리 기준이 광고의 모델, 카피, 연출에서 구성되는 방식.' },
+      { id:9,  question_num:9,  chapter:'세대 소비', title:'X세대 타깃 광고', description:'X 세대를 겨냥한 광고 사례를 찾아서 광고의 메시지에 X세대의 특성이 어떻게 반영되어 있는 지 설명하시오.', concept_hint:'독립성, 실용성, 아날로그와 디지털 경험의 공존, 가족/커리어 맥락 등 X세대 특성과 메시지 연결.' },
+      { id:10, question_num:10, chapter:'회고', title:'팀과제 회고', description:'IMC와 소비자 수업 광고 찾기 팀과제를 하면서 느낀 점을 팀원 모두 서술하시오. 과제를 하면서 좋았던 점, 유지하면 좋은 점, 개선이 필요하다고 생각한 점을 포함하시오.', concept_hint:'팀원별로 좋았던 점, 유지할 점, 개선이 필요한 점을 구체적으로 기록.' },
     ];
     let localSubmissions = [];
 
     function loadFallbackData() {
-      topics = FALLBACK_TOPICS;
+      topics = FINAL_TOPICS.map(t => ({ ...t, assignees: [] }));
       try {
-        localSubmissions = JSON.parse(localStorage.getItem('imc-submissions') || '[]');
+        localSubmissions = JSON.parse(localStorage.getItem(`${ASSIGNMENT_ID}-submissions`) || '[]');
       } catch { localSubmissions = []; }
       renderDashboard();
     }
 
     function saveFallback() {
-      localStorage.setItem('imc-submissions', JSON.stringify(localSubmissions));
+      localStorage.setItem(`${ASSIGNMENT_ID}-submissions`, JSON.stringify(localSubmissions));
     }
 
     // ================================================================
@@ -1681,7 +1683,11 @@
       if (!sb) return;
       const { data, error } = await sb.from('topics').select('*').order('question_num');
       if (error) { console.error(error); return; }
-      topics = data;
+      const byQuestion = new Map((data || []).map(t => [t.question_num, t]));
+      topics = FINAL_TOPICS.map(t => ({
+        ...t,
+        assignees: byQuestion.get(t.question_num)?.assignees || [],
+      }));
     }
 
     async function loadSubmissions(topicId) {
@@ -1692,6 +1698,7 @@
         .from('submissions')
         .select('*')
         .eq('topic_id', topicId)
+        .gte('created_at', ASSIGNMENT_START_ISO)
         .order('created_at', { ascending: false });
       if (error) { console.error(error); return []; }
       return data;
@@ -1705,7 +1712,7 @@
         });
         return counts;
       }
-      const { data, error } = await sb.from('submissions').select('topic_id');
+      const { data, error } = await sb.from('submissions').select('topic_id').gte('created_at', ASSIGNMENT_START_ISO);
       if (error) return {};
       const counts = {};
       data.forEach(s => { counts[s.topic_id] = (counts[s.topic_id] || 0) + 1; });
@@ -1838,7 +1845,7 @@
       const list = document.getElementById('submissions-list');
 
       if (subs.length === 0) {
-        list.innerHTML = '<div class="no-submissions">아직 제출된 사례가 없습니다. 첫 번째로 올려보세요!</div>';
+        list.innerHTML = '<div class="no-submissions">아직 제출된 답안/사례가 없습니다. 첫 번째로 올려보세요!</div>';
         return;
       }
 
@@ -1865,9 +1872,9 @@
           </div>
           <div class="sub-info">${esc(s.published_at)} · ${esc(s.medium)}</div>
           <div class="sub-body">
-            <h4>개념/이론 설명</h4>
+            <h4>개념/이론 설명 또는 느낀 점</h4>
             <p>${esc(s.concept_summary)}</p>
-            <h4>사례 분석</h4>
+            <h4>사례 분석 또는 개선 의견</h4>
             <p>${esc(s.case_analysis)}</p>
           </div>
           ${s.watch_url ? `<div class="sub-link"><a href="${esc(s.watch_url)}" target="_blank" rel="noopener">광고 보기 →</a>${/tvcf\.co\.kr\/play\/\d+$/.test(s.watch_url) ? ' <span style="color:#e74c3c;font-size:0.8em;">(⚠ 로그인 필요 링크 — 수정 필요)</span>' : ''}</div>` : ''}
@@ -1877,18 +1884,18 @@
           </div>
           <div class="eval-result" id="eval-result-${s.id}" style="display:none;"></div>
           <div class="vote-area">
-            <button class="vote-btn ${isMyVote ? 'voted' : ''}" onclick="castVote(${topicId}, '${s.id}')">${isMyVote ? '&#10003; 선정됨' : '&#9734; 이 광고 선정'}</button>
+            <button class="vote-btn ${isMyVote ? 'voted' : ''}" onclick="castVote(${topicId}, '${s.id}')">${isMyVote ? '&#10003; 선정됨' : '&#9734; 이 답안 선정'}</button>
             <span class="vote-count"><strong>${vc}</strong>명 투표</span>
           </div>
           <div class="sub-edit-form" id="edit-form-${s.id}" hidden>
             <div class="form-grid">
-              <div class="form-group"><label>브랜드</label><input id="edit-brand-${s.id}" value="${esc(s.brand)}" /></div>
-              <div class="form-group"><label>캠페인/광고명</label><input id="edit-campaign-${s.id}" value="${esc(s.campaign)}" /></div>
-              <div class="form-group"><label>실행 시기</label><input id="edit-published-${s.id}" value="${esc(s.published_at)}" /></div>
-              <div class="form-group"><label>매체</label><input id="edit-medium-${s.id}" value="${esc(s.medium)}" /></div>
-              <div class="form-group full"><label>광고 링크</label><input id="edit-url-${s.id}" value="${esc(s.watch_url)}" /></div>
-              <div class="form-group full"><label>개념/이론 설명</label><textarea id="edit-concept-${s.id}" rows="4">${esc(s.concept_summary)}</textarea></div>
-              <div class="form-group full"><label>사례 분석</label><textarea id="edit-analysis-${s.id}" rows="5">${esc(s.case_analysis)}</textarea></div>
+              <div class="form-group"><label>브랜드/주제</label><input id="edit-brand-${s.id}" value="${esc(s.brand)}" /></div>
+              <div class="form-group"><label>캠페인/답안 제목</label><input id="edit-campaign-${s.id}" value="${esc(s.campaign)}" /></div>
+              <div class="form-group"><label>광고 실행 시기/작성 기준</label><input id="edit-published-${s.id}" value="${esc(s.published_at)}" /></div>
+              <div class="form-group"><label>매체/자료 형태</label><input id="edit-medium-${s.id}" value="${esc(s.medium)}" /></div>
+              <div class="form-group full"><label>광고/참고 링크</label><input id="edit-url-${s.id}" value="${esc(s.watch_url)}" /></div>
+              <div class="form-group full"><label>개념/이론 설명 또는 느낀 점</label><textarea id="edit-concept-${s.id}" rows="4">${esc(s.concept_summary)}</textarea></div>
+              <div class="form-group full"><label>사례 분석 또는 개선 의견</label><textarea id="edit-analysis-${s.id}" rows="5">${esc(s.case_analysis)}</textarea></div>
             </div>
             <div class="sub-edit-actions">
               <button class="btn-edit-save" onclick="saveEdit('${s.id}')">저장</button>
@@ -2257,7 +2264,7 @@
     // ================================================================
     async function getVotesForTopic(topicId) {
       if (sb) {
-        const { data, error } = await sb.from('votes').select('*').eq('topic_id', topicId);
+        const { data, error } = await sb.from('votes').select('*').eq('topic_id', topicId).gte('created_at', ASSIGNMENT_START_ISO);
         if (error) { console.error(error); return []; }
         return data;
       }
@@ -2268,7 +2275,7 @@
       const voter = localStorage.getItem('imc-author');
       let votes = [];
       if (sb) {
-        const { data, error } = await sb.from('votes').select('topic_id, submission_id, voter');
+        const { data, error } = await sb.from('votes').select('topic_id, submission_id, voter').gte('created_at', ASSIGNMENT_START_ISO);
         if (!error && data) votes = data;
       } else {
         votes = localVotes;
@@ -2298,7 +2305,7 @@
 
       if (sb) {
         const { data: existing } = await sb.from('votes')
-          .select('*').eq('topic_id', topicId).eq('voter', voter).maybeSingle();
+          .select('*').eq('topic_id', topicId).eq('voter', voter).gte('created_at', ASSIGNMENT_START_ISO).maybeSingle();
         if (existing) {
           if (existing.submission_id === submissionId) {
             const { error } = await sb.from('votes').delete().eq('id', existing.id);
@@ -2561,7 +2568,7 @@
         const idx = localSubmissions.findIndex(s => s.id === submissionId);
         if (idx >= 0) {
           localSubmissions[idx] = { ...localSubmissions[idx], [col]: rev.after_text };
-          localStorage.setItem('imc-submissions', JSON.stringify(localSubmissions));
+          localStorage.setItem(`${ASSIGNMENT_ID}-submissions`, JSON.stringify(localSubmissions));
         }
       }
       const k = revKey(submissionId, field);
@@ -2617,7 +2624,7 @@
     async function getSubmissionsMap() {
       const subMap = {};
       if (sb) {
-        const { data } = await sb.from('submissions').select('*');
+        const { data } = await sb.from('submissions').select('*').gte('created_at', ASSIGNMENT_START_ISO);
         (data || []).forEach(s => { subMap[s.id] = s; });
       } else {
         localSubmissions.forEach(s => { subMap[s.id] = s; });
@@ -2627,7 +2634,7 @@
 
     async function getSubmissionsForTopic(topicId) {
       if (sb) {
-        const { data } = await sb.from('submissions').select('*').eq('topic_id', topicId).order('created_at');
+        const { data } = await sb.from('submissions').select('*').eq('topic_id', topicId).gte('created_at', ASSIGNMENT_START_ISO).order('created_at');
         return data || [];
       }
       return localSubmissions.filter(s => s.topic_id === topicId);
@@ -2750,7 +2757,7 @@
 
         let headerHtml, revisionHtml;
         if (resolution.kind === 'none') {
-          headerHtml = `<div class="fts-winner"><div class="fw-empty">제출된 광고가 아직 없거나 투표/확정이 필요합니다.</div></div>`;
+          headerHtml = `<div class="fts-winner"><div class="fw-empty">제출된 답안/사례가 아직 없거나 투표/확정이 필요합니다.</div></div>`;
           revisionHtml = '';
         } else {
           const w = resolution.submission;
@@ -2985,7 +2992,7 @@
 
       const today = new Date().toLocaleDateString('ko-KR');
       const lines = [];
-      lines.push(`# IMC 팀 과제 — 최종 선정 광고 문서`);
+      lines.push(`# IMC 기말 팀 과제 — 최종 선정 광고 문서`);
       lines.push('');
       lines.push(`_작성일: ${today}_`);
       lines.push('');
@@ -3225,7 +3232,7 @@
     const DRAFT_FIELDS = ['f-brand', 'f-campaign', 'f-published', 'f-medium', 'f-url', 'f-concept', 'f-analysis'];
 
     function draftKey(topicId) {
-      return 'imc-draft-' + (topicId || currentTopicId);
+      return `${ASSIGNMENT_ID}-draft-` + (topicId || currentTopicId);
     }
 
     function saveDraft() {
@@ -3398,7 +3405,7 @@
       // 2) 위키 내 다른 문제 제출물 체크
       let allSubs = [];
       if (sb) {
-        const { data } = await sb.from('submissions').select('brand, campaign, watch_url, topic_id');
+        const { data } = await sb.from('submissions').select('brand, campaign, watch_url, topic_id').gte('created_at', ASSIGNMENT_START_ISO);
         allSubs = data || [];
       } else {
         allSubs = localSubmissions;
@@ -3560,7 +3567,7 @@
     // ================================================================
     // Deadline Countdown
     // ================================================================
-    const DEADLINE = new Date('2026-04-18T23:59:59+09:00');
+    const DEADLINE = new Date('2026-06-16T23:59:59+09:00');
 
     function updateCountdown() {
       const badge = document.getElementById('deadline-badge');
@@ -3599,11 +3606,16 @@
     // Translation Layer — 한국어 ↔ မြန်မာ (Burmese)
     // 캐시: L1 메모리 → L2 localStorage → L3 Supabase → L4 OpenAI
     // ================================================================
-    const OPENAI_API_KEY = localStorage.getItem('openai-api-key') || (() => {
+    let OPENAI_API_KEY = localStorage.getItem('openai-api-key') || '';
+    function getOpenAIKeyForTranslation() {
+      if (OPENAI_API_KEY) return OPENAI_API_KEY;
       const k = prompt('번역 기능을 위해 OpenAI API 키를 입력하세요 (한 번만 입력하면 저장됩니다)\n\nဘာသာပြန်ရန် OpenAI API key ထည့်ပါ (တစ်ခါထည့်ရုံဖြင့် သိမ်းဆည်းပါမည်):');
-      if (k) localStorage.setItem('openai-api-key', k);
-      return k || '';
-    })();
+      if (k) {
+        localStorage.setItem('openai-api-key', k);
+        OPENAI_API_KEY = k;
+      }
+      return OPENAI_API_KEY;
+    }
     let wikiLang = localStorage.getItem('wiki-lang') || 'ko';
     let isTranslating = false;
     let translateDebounce = null;
@@ -3720,11 +3732,13 @@
 
     // OpenAI API 배치 번역
     async function apiBatchTranslate(textsObj, fl, tl) {
+      const apiKey = getOpenAIKeyForTranslation();
+      if (!apiKey) return null;
       const ln = { ko: 'Korean', my: 'Burmese (Myanmar)' };
       try {
         const res = await fetch('https://api.openai.com/v1/chat/completions', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${OPENAI_API_KEY}` },
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
           body: JSON.stringify({
             model: 'gpt-5-nano',
             messages: [
@@ -3922,9 +3936,9 @@
     // AI Evaluation — Cache Layer
     // ================================================================
     let localEvaluations = {};
-    try { localEvaluations = JSON.parse(localStorage.getItem('imc-evaluations') || '{}'); } catch {}
+    try { localEvaluations = JSON.parse(localStorage.getItem(`${ASSIGNMENT_ID}-evaluations`) || '{}'); } catch {}
     function saveLocalEvaluations() {
-      try { localStorage.setItem('imc-evaluations', JSON.stringify(localEvaluations)); } catch {}
+      try { localStorage.setItem(`${ASSIGNMENT_ID}-evaluations`, JSON.stringify(localEvaluations)); } catch {}
     }
 
     const { getContentSnapshot, validateEvalResult } = WikiEvalCache;
