@@ -1750,8 +1750,8 @@
               <div class="form-group"><label>광고 실행 시기/작성 기준</label><input id="edit-published-${s.id}" value="${esc(s.published_at)}" /></div>
               <div class="form-group"><label>매체/자료 형태</label><input id="edit-medium-${s.id}" value="${esc(s.medium)}" /></div>
               <div class="form-group full"><label>광고/참고 링크</label><input id="edit-url-${s.id}" value="${esc(s.watch_url)}" /></div>
-              <div class="form-group full"><label>개념/이론 설명 또는 느낀 점</label><textarea id="edit-concept-${s.id}" rows="4">${esc(s.concept_summary)}</textarea></div>
-              <div class="form-group full"><label>사례 분석 또는 개선 의견</label><textarea id="edit-analysis-${s.id}" rows="5">${esc(s.case_analysis)}</textarea></div>
+              <div class="form-group writing-pane"><label>개념/이론 설명 또는 느낀 점</label><textarea id="edit-concept-${s.id}" rows="12">${esc(s.concept_summary)}</textarea></div>
+              <div class="form-group writing-pane"><label>사례 분석 또는 개선 의견</label><textarea id="edit-analysis-${s.id}" rows="12">${esc(s.case_analysis)}</textarea></div>
             </div>
             <div class="sub-edit-actions">
               <button class="btn-edit-save" onclick="saveEdit('${s.id}')">저장</button>
