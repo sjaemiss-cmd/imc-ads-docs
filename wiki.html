@@ -3937,7 +3937,7 @@
       const escapedSrc = esc(embed.src);
       const media = embed.type === 'video'
         ? '<video class="ad-embed-video" src="' + escapedSrc + '" controls playsinline preload="metadata"></video>'
-        : '<iframe class="ad-embed-frame" src="' + escapedSrc + '" title="' + esc(title) + '" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>';
+        : '<iframe class="ad-embed-frame" src="' + escapedSrc + '" title="' + esc(title) + '" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" ' + (embed.provider === 'tvcf' ? 'sandbox="allow-scripts allow-same-origin allow-presentation allow-popups" ' : '') + 'allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>';
 
       return '<div class="ad-embed is-' + esc(embed.provider || 'generic') + '">' + media + '</div>';
     }
@@ -4186,7 +4186,7 @@
 
       if (sb) {
         const { error } = await sb.from('submissions').insert([record]);
-        if (error) { toast('제출 실패: ' + error.message); setSubmitButtons({ disabled: false, text: SUBMIT_READY_LABEL }); return; }
+        if (error) { toast(formatError('제출 실패', error)); setSubmitButtons({ disabled: false, text: SUBMIT_READY_LABEL }); return; }
       } else {
         record.id = crypto.randomUUID();
         record.created_at = new Date().toISOString();
@@ -4252,7 +4252,7 @@
 
       if (sb) {
         const { data, error } = await sb.from('submissions').update(updates).eq('id', id).select();
-        if (error) { toast('수정 실패: ' + error.message); return; }
+        if (error) { toast(formatError('수정 실패', error)); return; }
         if (!data || data.length === 0) {
           toast('수정 권한이 없습니다. Supabase RLS 정책을 확인하세요.');
           return;
@@ -4335,7 +4335,7 @@
 
       if (sb) {
         const { error } = await sb.from('comments').insert([{ submission_id: subId, author, body }]);
-        if (error) { toast('댓글 실패: ' + error.message); return; }
+        if (error) { toast(formatError('댓글 실패', error)); return; }
       } else {
         localComments.push({ id: crypto.randomUUID(), submission_id: subId, author, body, created_at: new Date().toISOString() });
         saveLocalComments();
@@ -4502,7 +4502,7 @@
         } else {
           const { error } = await sb.from('votes')
             .insert([{ topic_id: topicId, submission_id: submissionId, voter }]);
-          if (error) { toast('투표 실패: ' + error.message); return; }
+          if (error) { toast(formatError('투표 실패', error)); return; }
           toast('투표 완료!');
         }
       } else {
@@ -4727,7 +4727,7 @@
       };
       if (sb) {
         const { data, error } = await sb.from('ad_revisions').insert([record]).select().single();
-        if (error) { console.error(error); toast('저장 실패: ' + error.message); return; }
+        if (error) { console.error(error); toast(formatError('저장 실패', error)); return; }
         const k = revKey(submissionId, field);
         if (!adRevisions[k]) adRevisions[k] = [];
         adRevisions[k].unshift(data);
@@ -4745,7 +4745,7 @@
       if (!confirm('이 수정 제안을 삭제할까요?\n(복구할 수 없습니다)')) return;
       if (sb) {
         const { error } = await sb.from('ad_revisions').delete().eq('id', revId);
-        if (error) { console.error(error); toast('삭제 실패: ' + error.message); return; }
+        if (error) { console.error(error); toast(formatError('삭제 실패', error)); return; }
       }
       const k = revKey(submissionId, field);
       if (adRevisions[k]) {
@@ -4766,7 +4766,7 @@
       const col = REV_FIELD_COL[field];
       if (sb) {
         const { error: uErr } = await sb.from('submissions').update({ [col]: rev.after_text }).eq('id', submissionId);
-        if (uErr) { console.error(uErr); toast('원본 업데이트 실패: ' + uErr.message); return; }
+        if (uErr) { console.error(uErr); toast(formatError('원본 업데이트 실패', uErr)); return; }
         const { error: dErr } = await sb.from('ad_revisions').delete().eq('id', revId);
         if (dErr) console.warn('제안 이력 정리 실패', dErr);
       } else {
@@ -4876,7 +4876,7 @@
         const { error } = await sb.from('final_selections').upsert(record, { onConflict: 'topic_id' });
         if (error) {
           console.error(error);
-          toast('확정 실패: ' + error.message);
+          toast(formatError('확정 실패', error));
           return;
         }
       }
@@ -4891,7 +4891,7 @@
       if (!confirm('이 주제의 최종 확정을 해제하시겠습니까? (투표 1위로 되돌아갑니다)')) return;
       if (sb) {
         const { error } = await sb.from('final_selections').delete().eq('topic_id', topicId);
-        if (error) { toast('해제 실패: ' + error.message); return; }
+        if (error) { toast(formatError('해제 실패', error)); return; }
       }
       delete finalSelections[topicId];
       saveLocalFinalSelections();
@@ -5424,9 +5424,41 @@
       return d.innerHTML;
     }
 
+    function describeError(err, fallback = '알 수 없는 오류') {
+      if (!err) return fallback;
+      if (typeof err === 'string') return err.trim() || fallback;
+      const candidates = [
+        err.message,
+        err.error_description,
+        err.details,
+        err.hint,
+        err.code,
+        err.statusText,
+        err.name,
+      ];
+      for (const value of candidates) {
+        if (value !== undefined && value !== null && String(value).trim()) {
+          return String(value).trim();
+        }
+      }
+      try {
+        const json = JSON.stringify(err);
+        if (json && json !== '{}' && json !== '[]') return json;
+      } catch {}
+      return fallback;
+    }
+
+    function formatError(prefix, err, fallback = '알 수 없는 오류') {
+      return `${prefix}: ${describeError(err, fallback)}`;
+    }
+
     function toast(msg) {
       const el = document.getElementById('toast');
-      el.textContent = msg;
+      let text = msg === undefined || msg === null ? '알 수 없는 오류' : String(msg);
+      text = text
+        .replace(/(^|[:：]\s*)undefined\b/gi, '$1알 수 없는 오류')
+        .replace(/(^|[:：]\s*)null\b/gi, '$1알 수 없는 오류');
+      el.textContent = text;
       el.classList.add('show');
       setTimeout(() => el.classList.remove('show'), 2500);
     }
@@ -5927,7 +5959,8 @@
           await sb.from('translations').insert({
             source_lang: fl, target_lang: tl, source_text: p.source_text, translated: p.translated,
           }).then(({ error }) => {
-            if (error && !error.message.includes('duplicate')) console.warn('Translation save:', error.message);
+            const translatedError = describeError(error, '');
+            if (error && !translatedError.includes('duplicate')) console.warn('Translation save:', translatedError || error);
           });
         }
       } catch {}
@@ -6409,7 +6442,7 @@
         await saveEvaluation(subId, result, currentSnapshot);
       } catch (err) {
         console.error('Evaluation failed:', err);
-        toast('평가 실패: ' + err.message);
+        toast(formatError('평가 실패', err));
         btn.disabled = false;
         btn.textContent = 'AI 평가';
       } finally {
