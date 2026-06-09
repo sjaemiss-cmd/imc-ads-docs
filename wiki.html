@@ -1645,6 +1645,9 @@
     .preview-empty {
       display: grid;
       place-items: center;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
       min-height: 220px;
       aspect-ratio: var(--ad-player-ratio);
       border: 1px dashed var(--border-strong);
@@ -3063,8 +3066,8 @@
         <!-- Final Document Dashboard (최종 문서) -->
         <div id="final-doc-dashboard" class="final-doc-dashboard">
           <div class="final-doc-actions">
-            <button class="btn-export primary" onclick="copyFinalDocument()">📋 전체 문서 복사</button>
-            <button class="btn-export secondary" onclick="downloadFinalDocument()">⬇ Markdown 다운로드</button>
+            <button class="btn-export primary" onclick="copyFinalDocument()">전체 문서 복사</button>
+            <button class="btn-export secondary" onclick="downloadFinalDocument()">Markdown 다운로드</button>
             <span class="spacer"></span>
             <span class="final-doc-hint">Google Docs에 붙여넣으면 제목/목록이 자동 변환됩니다</span>
           </div>
@@ -3455,7 +3458,7 @@
                 <span class="count-num">${c}</span> 건 제출됨
               </div>
               <div style="display:flex;align-items:center;gap:6px;margin-top:4px;">
-                <span class="topic-vote-badge ${myVotedSub ? 'voted' : 'not-voted'}">${myVotedSub ? '&#10003; 투표함' : '&#9744; 미투표'}</span>
+                <span class="topic-vote-badge ${myVotedSub ? 'voted' : 'not-voted'}">${myVotedSub ? '투표함' : '미투표'}</span>
                 ${maxV > 0 ? `<span class="topic-leading">${maxV}표 선두</span>` : ''}
               </div>
             </div>
@@ -3649,7 +3652,7 @@
         <div class="inspector-section">
           <h4>액션</h4>
           <div class="inspector-actions">
-            <button class="vote-btn ${isMyVote ? 'voted' : ''}" onclick="castVote(${sub.topic_id}, '${sub.id}')">${isMyVote ? '&#10003; 선정됨' : '&#9734; 이 답안 선정'}</button>
+            <button class="vote-btn ${isMyVote ? 'voted' : ''}" onclick="castVote(${sub.topic_id}, '${sub.id}')">${isMyVote ? '선정됨' : '이 답안 선정'}</button>
             <span class="vote-count"><strong>${vc}</strong>명 투표</span>
             <button class="eval-btn" onclick="evaluateSubmission('${sub.id}')">AI 평가</button>
             ${sub.watch_url ? `<a class="ad-embed-open" href="${esc(sub.watch_url)}" target="_blank" rel="noopener">원본 열기</a>` : ''}
@@ -4006,7 +4009,7 @@
           </div>
           <div class="eval-result" id="eval-result-${s.id}" style="display:none;"></div>
           <div class="vote-area">
-            <button class="vote-btn ${isMyVote ? 'voted' : ''}" onclick="event.stopPropagation(); castVote(${s.topic_id}, '${s.id}')">${isMyVote ? '&#10003; 선정됨' : '&#9734; 이 답안 선정'}</button>
+            <button class="vote-btn ${isMyVote ? 'voted' : ''}" onclick="event.stopPropagation(); castVote(${s.topic_id}, '${s.id}')">${isMyVote ? '선정됨' : '이 답안 선정'}</button>
             <span class="vote-count"><strong>${vc}</strong>명 투표</span>
           </div>
           <div class="sub-edit-form" id="edit-form-${s.id}" hidden onclick="event.stopPropagation()">
@@ -4215,7 +4218,7 @@
         const { data, error } = await sb.from('submissions').delete().eq('id', id).select();
         if (error) { toast('삭제 실패'); return; }
         if (!data || data.length === 0) {
-          toast('⚠️ 삭제 권한이 없습니다. Supabase RLS 정책을 확인하세요.');
+          toast('삭제 권한이 없습니다. Supabase RLS 정책을 확인하세요.');
           return;
         }
       } else {
@@ -4251,7 +4254,7 @@
         const { data, error } = await sb.from('submissions').update(updates).eq('id', id).select();
         if (error) { toast('수정 실패: ' + error.message); return; }
         if (!data || data.length === 0) {
-          toast('⚠️ 수정 권한이 없습니다. Supabase RLS 정책을 확인하세요.');
+          toast('수정 권한이 없습니다. Supabase RLS 정책을 확인하세요.');
           return;
         }
       } else {
@@ -4425,7 +4428,7 @@
             const el = document.getElementById('save-indicator-' + row.topic_id);
             if (el && row.updated_by) {
               el.className = 'save-indicator saved';
-              el.textContent = `✓ 저장됨 · ${row.updated_by} · ${new Date(row.updated_at).toLocaleString('ko-KR')}`;
+              el.textContent = `저장됨 · ${row.updated_by} · ${new Date(row.updated_at).toLocaleString('ko-KR')}`;
             }
             // Refresh textareas if not focused
             ['concept_deep', 'analysis_deep', 'presentation_note'].forEach(f => {
@@ -4620,7 +4623,7 @@
         const thumbAttr = thumbnail ? ` data-result-thumb="${esc(thumbnail)}"` : '';
         const tvcfThumbAttr = tvcfId ? ` data-tvcf-thumb-id="${esc(tvcfId)}"` : '';
         const badge = resolution.kind === 'pinned'
-          ? `<span class="fw-badge pinned" style="font-size:10px;padding:2px 6px;border-radius:6px;background:var(--amber-soft);color:var(--amber);font-weight:700;margin-left:4px;">📌 확정</span>`
+          ? `<span class="fw-badge pinned" style="font-size:10px;padding:2px 6px;border-radius:6px;background:var(--amber-soft);color:var(--amber);font-weight:700;margin-left:4px;">PIN</span>`
           : '';
         const voteLine = resolution.kind === 'vote'
           ? `<div class="rw-votes">${resolution.maxVotes}/${resolution.totalVoters}표${resolution.isTie ? ' (동점)' : ''}</div>`
@@ -4734,7 +4737,7 @@
         adRevisions[k].unshift({ id: crypto.randomUUID(), ...record });
       }
       saveLocalAdRevisions();
-      toast('✓ 수정 제안이 저장되었습니다');
+      toast('수정 제안이 저장되었습니다');
       await renderFinalDocDashboard();
     }
 
@@ -4749,7 +4752,7 @@
         adRevisions[k] = adRevisions[k].filter(r => r.id !== revId);
       }
       saveLocalAdRevisions();
-      toast('✓ 제안이 삭제되었습니다');
+      toast('제안이 삭제되었습니다');
       await renderFinalDocDashboard();
     }
 
@@ -4778,7 +4781,7 @@
         adRevisions[k] = adRevisions[k].filter(r => r.id !== revId);
       }
       saveLocalAdRevisions();
-      toast('✓ 원본에 반영되었습니다');
+      toast('원본에 반영되었습니다');
       await renderFinalDocDashboard();
     }
 
@@ -4920,7 +4923,7 @@
       }
       deepAnalyses[topicId] = updated;
       saveLocalDeepAnalyses();
-      setSaveIndicator(topicId, 'saved', `✓ 저장됨 · ${who} · ${new Date().toLocaleTimeString('ko-KR')}`);
+      setSaveIndicator(topicId, 'saved', `저장됨 · ${who} · ${new Date().toLocaleTimeString('ko-KR')}`);
     }
 
     function setSaveIndicator(topicId, state, text) {
@@ -4964,8 +4967,8 @@
         } else {
           const w = resolution.submission;
           const badge = resolution.kind === 'pinned'
-            ? `<span class="fw-badge pinned">📌 최종 확정</span>`
-            : `<span class="fw-badge vote-leader">🗳 투표 1위</span>`;
+            ? `<span class="fw-badge pinned">PIN 최종 확정</span>`
+            : `<span class="fw-badge vote-leader">LEAD 투표 1위</span>`;
           const voteInfo = resolution.kind === 'vote'
             ? ` (${resolution.maxVotes}/${resolution.totalVoters}표${resolution.isTie ? ', 동점' : ''})`
             : ` (확정자: ${esc(resolution.pinnedBy || '-')})`;
@@ -4988,14 +4991,14 @@
 
             return `
               <div class="rev-field">
-                <h4>${REV_FIELD_LABEL[field]} <button class="fts-section-copy" onclick="copyRevisionText('${w.id}','${field}')">📋 원본 복사</button></h4>
+                <h4>${REV_FIELD_LABEL[field]} <button class="fts-section-copy" onclick="copyRevisionText('${w.id}','${field}')">원본 복사</button></h4>
                 <div class="rev-current ${hasContent ? '' : 'no-content'}">${hasContent ? esc(original).replace(/\n/g,'<br>') : '(내용 없음)'}</div>
                 <div class="rev-current-meta">${meta}</div>
                 <div class="rev-actions">
-                  <button class="btn-propose" onclick="toggleRevisionEditor('${w.id}','${field}')">✏️ 수정 제안 추가</button>
+                  <button class="btn-propose" onclick="toggleRevisionEditor('${w.id}','${field}')">수정 제안 추가</button>
                 </div>
                 <div class="rev-editor" id="rev-editor-${w.id}-${field}" style="display:none;">
-                  <h5>✏️ 수정 제안 — ${REV_FIELD_LABEL[field]}</h5>
+                  <h5>수정 제안 — ${REV_FIELD_LABEL[field]}</h5>
                   <div style="font-size:12px;color:var(--text-dim);margin-bottom:8px;">제안은 원본을 덮어쓰지 않고 우측 이력 패널에만 기록됩니다.</div>
                   <span class="re-label">수정 후 내용</span>
                   <textarea id="rev-after-${w.id}-${field}" placeholder="원본을 복사해 편집하거나, 새로 작성하세요.">${esc(original)}</textarea>
@@ -5014,10 +5017,10 @@
 
         const noteHtml = resolution.kind === 'none' ? '' : `
           <div class="rev-note-field">
-            <label>💬 팀 메모 · 발표 포인트 <span style="font-size:11px;color:var(--text-dim);font-weight:400;">(자동 저장, 공유)</span></label>
+            <label>팀 메모 · 발표 포인트 <span style="font-size:11px;color:var(--text-dim);font-weight:400;">(자동 저장, 공유)</span></label>
             <textarea data-topic="${t.id}" data-field="presentation_note" placeholder="발표 포인트 / 예상 질문 / 팀원 피드백 요약 등 자유롭게...">${esc(deep.presentation_note || '')}</textarea>
             <div class="fts-deep-meta">
-              <span id="save-indicator-${t.id}" class="save-indicator">${deep.updated_by ? `✓ 저장됨 · ${esc(deep.updated_by)} · ${new Date(deep.updated_at).toLocaleString('ko-KR')}` : '입력하면 자동 저장됩니다'}</span>
+              <span id="save-indicator-${t.id}" class="save-indicator">${deep.updated_by ? `저장됨 · ${esc(deep.updated_by)} · ${new Date(deep.updated_at).toLocaleString('ko-KR')}` : '입력하면 자동 저장됩니다'}</span>
             </div>
           </div>`;
 
@@ -5141,8 +5144,8 @@
                       <span style="font-size:11px;color:var(--text-dim);">(#${revCount - idx})</span>
                     </div>
                     <div class="rh-actions">
-                      <button class="btn-accept-rev" onclick="acceptRevision('${r.id}','${w.id}','${field}')" title="이 제안을 원본에 반영">✅ 원본에 반영</button>
-                      <button class="btn-delete-rev" onclick="deleteRevision('${r.id}','${w.id}','${field}')" title="이 제안 삭제">🗑 삭제</button>
+                      <button class="btn-accept-rev" onclick="acceptRevision('${r.id}','${w.id}','${field}')" title="이 제안을 원본에 반영">원본에 반영</button>
+                      <button class="btn-delete-rev" onclick="deleteRevision('${r.id}','${w.id}','${field}')" title="이 제안 삭제">삭제</button>
                     </div>
                     <div class="rh-reason">${esc(r.reason)}</div>
                     <div class="rh-diff">
@@ -5167,7 +5170,7 @@
       const text = getLatestText(sub, field);
       try {
         await navigator.clipboard.writeText(text);
-        toast('✓ 복사됨');
+        toast('복사되었습니다');
       } catch {
         toast('복사 실패');
       }
@@ -5211,13 +5214,13 @@
         lines.push('');
 
         if (resolution.kind === 'none') {
-          lines.push(`> ⚠️ 선정된 광고가 없습니다.`);
+          lines.push(`> 선정된 광고가 없습니다.`);
           lines.push('');
         } else {
           const w = resolution.submission;
           const statusLabel = resolution.kind === 'pinned'
-            ? `📌 최종 확정 (확정자: ${resolution.pinnedBy || '-'})`
-            : `🗳 투표 1위 (${resolution.maxVotes}/${resolution.totalVoters}표${resolution.isTie ? ', 동점' : ''})`;
+            ? `최종 확정 (확정자: ${resolution.pinnedBy || '-'})`
+            : `투표 1위 (${resolution.maxVotes}/${resolution.totalVoters}표${resolution.isTie ? ', 동점' : ''})`;
           lines.push(`### 선정 광고 · ${statusLabel}`);
           lines.push('');
           lines.push(`- **브랜드:** ${w.brand}`);
@@ -5362,13 +5365,13 @@
       const md = await buildFinalDocumentMarkdown();
       try {
         await navigator.clipboard.writeText(md);
-        toast('✓ 전체 문서가 클립보드에 복사되었습니다 (Google Docs에 붙여넣기)');
+        toast('전체 문서가 클립보드에 복사되었습니다 (Google Docs에 붙여넣기)');
       } catch (e) {
         console.error(e);
         // Fallback
         const ta = document.createElement('textarea');
         ta.value = md; document.body.appendChild(ta); ta.select();
-        try { document.execCommand('copy'); toast('✓ 복사됨'); }
+        try { document.execCommand('copy'); toast('복사되었습니다'); }
         catch { toast('복사 실패 — 다운로드를 이용해주세요'); }
         document.body.removeChild(ta);
       }
@@ -5386,14 +5389,14 @@
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      toast('⬇ 다운로드 완료');
+      toast('다운로드 완료');
     }
 
     async function copyTopicSection(topicId) {
       const md = await buildTopicSectionMarkdown(topicId);
       try {
         await navigator.clipboard.writeText(md);
-        toast('✓ 섹션이 복사되었습니다');
+        toast('섹션이 복사되었습니다');
       } catch (e) {
         toast('복사 실패');
       }
@@ -5408,7 +5411,7 @@
       // tvcf.co.kr/play/bh코드-숫자 → 로그인 없이 열림
       const badMatch = url.match(/tvcf\.co\.kr\/play\/(\d+)$/);
       if (badMatch) {
-        toast('⚠️ TVCF 링크가 로그인 필요 형식입니다. tvcf.co.kr에서 광고를 검색한 뒤, 광고 페이지의 URL(bh...-... 형식)을 복사해주세요.');
+        toast('TVCF 링크가 로그인 필요 형식입니다. tvcf.co.kr에서 광고를 검색한 뒤, 광고 페이지의 URL(bh...-... 형식)을 복사해주세요.');
         return url;
       }
       return url;
