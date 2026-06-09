@@ -6,42 +6,48 @@
   <title>IMC 기말 팀 과제 위키</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <style>
-    /* ── Theme Tokens ── */
+    /* IMC Mintlify Design Tokens */
     :root {
-      --bg: #f5f5f7;
-      --surface: #ffffff;
-      --surface-alt: #fafafa;
-      --surface-muted: #f5f5f7;
-      --surface-hover: #f5f5f7;
-      --surface-subtle: #f0f0f2;
-      --border: #e5e5ea;
-      --border-strong: #d2d2d7;
-      --text: #1d1d1f;
-      --text-muted: #424245;
-      --text-dim: #6e6e73;
-      --text-faint: #aeaeb2;
-      --primary: #0066cc;
-      --primary-hover: #0055b3;
-      --primary-soft: #eaf2fc;
-      --primary-pale: #e8f0fe;
-      --success: #137333;
-      --success-soft: #e6f4ea;
-      --warning: #b06000;
-      --warning-soft: #fef7e0;
-      --danger: #d93025;
-      --danger-soft: #fce8e6;
-      --amber: #b85900;
-      --amber-soft: #fff4e5;
-      --shadow-sm: 0 1px 3px rgba(0,0,0,.06);
-      --shadow-md: 0 1px 3px rgba(0,0,0,.08);
-      --shadow-lg: 0 4px 12px rgba(0,0,0,.1);
-      --before-bg: #fff2f0;
-      --before-text: #5f2120;
-      --after-bg: #eaf7ec;
-      --after-text: #1e4620;
-      --reason-bg: #fff7e0;
-      --reason-text: #5d4c00;
-      --reason-accent: #f4b400;
+      --bg: #ffffff;
+      --surface: #f7f8fa;
+      --surface-alt: #ffffff;
+      --surface-muted: #f7f8fa;
+      --surface-hover: #fbfbfc;
+      --surface-subtle: #f0f1f3;
+      --border: #e6e8ec;
+      --border-strong: #d5dae2;
+      --text: #0d0d0d;
+      --text-muted: #25272d;
+      --text-dim: #5d6675;
+      --text-faint: #9aa2af;
+      --primary: #0d0d0d;
+      --primary-hover: #25272d;
+      --primary-soft: #f7f8fa;
+      --primary-pale: rgba(0,212,164,.12);
+      --success: #00b98f;
+      --success-soft: rgba(0,212,164,.12);
+      --warning: #b57417;
+      --warning-soft: rgba(255,122,69,.12);
+      --danger: #f04438;
+      --danger-soft: rgba(240,68,56,.1);
+      --amber: #ff7a45;
+      --amber-soft: rgba(255,122,69,.12);
+      --shadow-sm: rgba(0,0,0,.04) 0 1px 2px;
+      --shadow-md: rgba(0,0,0,.08) 0 4px 12px;
+      --shadow-lg: rgba(0,0,0,.12) 0 24px 48px -8px;
+      --button-inset: none;
+      --focus-shadow: 0 0 0 3px rgba(0,212,164,.18);
+      --transparent: transparent;
+      --before-bg: rgba(240,111,97,.12);
+      --before-text: #a63f36;
+      --after-bg: rgba(74,191,138,.13);
+      --after-text: #176746;
+      --reason-bg: rgba(217,154,43,.14);
+      --reason-text: #7b5414;
+      --reason-accent: #d99a2b;
+      --gradient-warm: linear-gradient(180deg, #dff3ff 0%, #fff7e8 100%);
+      --gradient-panel: #ffffff;
+      --gradient-active: #0d0d0d;
     }
     /* ── Reset & Base ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -66,41 +72,14 @@
       display: flex; flex-direction: column;
       overflow: hidden;
     }
-    .app > .header { flex: 0 0 auto; margin-bottom: 16px; }
     @media (max-width: 1100px) { .app { padding: 18px 18px 14px; } }
     @media (max-width: 640px)  { .app { padding: 14px; } }
 
-    /* ── Header ── */
-    .header {
-      background: #fff; border-radius: 18px; padding: 28px 36px; margin-bottom: 24px;
-      box-shadow: 0 1px 3px rgba(0,0,0,.08);
-      transition: padding .2s ease;
-    }
-    .header h1 { font-size: 26px; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.3px; }
-    .header p { font-size: 15px; color: #6e6e73; }
-    .header-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
-
-    /* ── 최종 문서 탭: 상단 영역 압축 ──
-       작업 공간 확보를 위해 헤더 축소 + 과제/평가 안내 패널 숨김.
-       안내는 '문제 목록' 탭에서 전체 노출. */
-    .app.compact-top .header {
-      padding: 10px 20px;
-      margin-bottom: 10px;
-      border-radius: 12px;
-    }
-    .app.compact-top .header h1 { font-size: 16px; margin-bottom: 0; }
-    .app.compact-top .header p { display: none; }
-    .app.compact-top .lang-toggle .lang-btn { padding: 4px 8px; font-size: 11.5px; }
-    .app.compact-top .deadline-badge { font-size: 11.5px; padding: 3px 9px; }
-    .app.compact-top > .guide-toggle,
-    .app.compact-top > .guide-body,
-    .app.compact-top > #eval-guide-toggle,
-    .app.compact-top > #eval-guide-body { display: none !important; }
-    .app.compact-top > .header { margin-bottom: 10px; }
     .deadline-badge {
-      background: #ff3b30; color: #fff; font-size: 14px; font-weight: 600;
-      padding: 8px 16px; border-radius: 20px; white-space: nowrap;
-      min-width: 160px; text-align: center;
+      display: block; background: var(--danger); color: var(--surface-alt);
+      font-size: 12px; font-weight: 700;
+      padding: 8px 10px; border-radius: 10px; white-space: nowrap;
+      text-align: center;
     }
     .deadline-badge.urgent { animation: pulse-badge 1s ease-in-out infinite; }
     @keyframes pulse-badge {
@@ -110,22 +89,22 @@
 
     /* ── Setup Banner ── */
     .setup-banner {
-      background: #fff3cd; border: 1px solid #ffc107; border-radius: 12px;
+      background: var(--warning-soft); border: 1px solid var(--warning); border-radius: 12px;
       padding: 16px 20px; margin-bottom: 20px; font-size: 14px; line-height: 1.7;
     }
-    .setup-banner.connected { background: #d4edda; border-color: #28a745; }
+    .setup-banner.connected { background: var(--success-soft); border-color: var(--success); }
     .setup-banner code {
-      background: rgba(0,0,0,.06); padding: 2px 6px; border-radius: 4px; font-size: 13px;
+      background: var(--surface-hover); padding: 2px 6px; border-radius: 4px; font-size: 13px;
     }
 
     /* ── Two-Column Dashboard ── */
     .dashboard-columns {
       display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-bottom: 28px;
     }
-    .dash-column { display: flex; flex-direction: column; gap: 14px; }
+    .dash-column { display: flex; flex-direction: column; gap: 18px; }
     .column-header {
-      font-size: 14px; font-weight: 700; color: #6e6e73; padding: 8px 0;
-      border-bottom: 2px solid #e5e5ea; margin-bottom: 4px;
+      font-size: 14px; font-weight: 700; color: var(--text-dim); padding: 8px 16px 12px;
+      border-bottom: 2px solid var(--border); margin-bottom: 4px;
       display: flex; justify-content: space-between; align-items: center;
     }
     .column-assignees {
@@ -133,52 +112,52 @@
     }
     .assignee-badge {
       font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 10px;
-      background: #e8f0fe; color: #1a73e8;
+      background: var(--primary-pale); color: var(--primary);
     }
-    .assignee-badge.right { background: #fef7e0; color: #b06000; }
+    .assignee-badge.right { background: var(--warning-soft); color: var(--warning); }
     .assignee-badge.editable {
-      cursor: pointer; border: 1px dashed #aeaeb2; background: #fafafa; color: #aeaeb2;
+      cursor: pointer; border: 1px dashed var(--text-faint); background: var(--surface-alt); color: var(--text-faint);
     }
-    .assignee-badge.editable:hover { border-color: #0066cc; color: #0066cc; }
+    .assignee-badge.editable:hover { border-color: var(--primary); color: var(--primary); }
     .topic-card {
-      background: #fff; border-radius: 14px; padding: 18px 22px;
-      box-shadow: 0 1px 3px rgba(0,0,0,.06); cursor: pointer;
-      transition: transform .15s, box-shadow .15s; border: 2px solid transparent;
+      background: var(--surface-alt); border-radius: 14px; padding: 18px 22px;
+      box-shadow: inset 0 0 0 1px var(--border), 0 1px 0 var(--surface-hover); cursor: pointer;
+      transition: transform .15s, box-shadow .15s, border-color .15s; border: 1px solid var(--border);
     }
-    .topic-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,.1); }
-    .topic-card.active { border-color: #0066cc; }
+    .topic-card:hover { transform: translateY(-2px); box-shadow: inset 0 0 0 1px var(--border-strong), var(--focus-shadow); }
+    .topic-card.active { border-color: var(--primary); }
     .topic-chip {
       display: inline-block; font-size: 12px; font-weight: 600; padding: 4px 12px;
       border-radius: 12px; margin-bottom: 8px;
     }
-    .chip-1 { background: #e8f0fe; color: #1a73e8; }
-    .chip-3 { background: #fce8e6; color: #d93025; }
-    .chip-4 { background: #e6f4ea; color: #137333; }
-    .chip-5 { background: #fef7e0; color: #b06000; }
+    .chip-1 { background: var(--primary-pale); color: var(--primary); }
+    .chip-3 { background: var(--danger-soft); color: var(--danger); }
+    .chip-4 { background: var(--success-soft); color: var(--success); }
+    .chip-5 { background: var(--warning-soft); color: var(--warning); }
     .topic-card h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; line-height: 1.45; }
     .topic-card .count {
-      font-size: 13px; color: #6e6e73; display: flex; align-items: center; gap: 6px;
+      font-size: 13px; color: var(--text-dim); display: flex; align-items: center; gap: 6px;
     }
-    .count-num { font-weight: 700; color: #0066cc; font-size: 16px; }
+    .count-num { font-weight: 700; color: var(--primary); font-size: 16px; }
 
     /* ── Volume Checker ── */
     .volume-checker {
       margin-top: 20px; padding: 18px 22px; border-radius: 14px;
-      border: 1px solid #e5e5ea; background: #fafafa;
+      border: 1px solid var(--border); background: var(--surface-alt);
     }
     .volume-checker h4 { font-size: 15px; font-weight: 600; margin-bottom: 12px; }
     .vc-row {
       display: flex; justify-content: space-between; align-items: center;
-      padding: 7px 0; font-size: 14px; border-bottom: 1px solid #f0f0f2;
+      padding: 7px 0; font-size: 14px; border-bottom: 1px solid var(--surface-subtle);
     }
     .vc-row:last-child { border-bottom: none; }
-    .vc-label { color: #424245; }
+    .vc-label { color: var(--text-muted); }
     .vc-value { font-weight: 600; }
-    .vc-pass { color: #137333; }
-    .vc-warn { color: #b06000; }
-    .vc-fail { color: #d93025; }
+    .vc-pass { color: var(--success); }
+    .vc-warn { color: var(--warning); }
+    .vc-fail { color: var(--danger); }
     .vc-bar {
-      width: 100%; height: 6px; background: #e5e5ea; border-radius: 3px;
+      width: 100%; height: 6px; background: var(--border); border-radius: 3px;
       margin-top: 10px; overflow: hidden;
     }
     .vc-bar-fill {
@@ -190,42 +169,42 @@
 
     /* ── Detail Panel ── */
     .detail-panel {
-      background: #fff; border-radius: 18px; padding: 32px 36px;
-      box-shadow: 0 1px 3px rgba(0,0,0,.08); margin-bottom: 24px;
+      background: var(--surface-alt); border-radius: 18px; padding: 32px 36px;
+      box-shadow: 0 1px 3px var(--text-faint); margin-bottom: 24px;
     }
     .detail-panel[hidden] { display: none; }
     .detail-back {
-      font-size: 14px; color: #6e6e73; background: none; border: none;
+      font-size: 14px; color: var(--text-dim); background: none; border: none;
       margin-bottom: 20px; display: flex; align-items: center; gap: 4px;
     }
-    .detail-back:hover { color: #0066cc; }
+    .detail-back:hover { color: var(--primary); }
     .detail-header { margin-bottom: 24px; }
     .detail-header h2 { font-size: 24px; font-weight: 700; margin-bottom: 10px; letter-spacing: -0.3px; }
-    .detail-header .question { font-size: 15px; color: #424245; background: #f5f5f7; padding: 16px 20px; border-radius: 12px; line-height: 1.7; }
-    .detail-header .hint { font-size: 14px; color: #6e6e73; margin-top: 10px; font-style: italic; line-height: 1.7; }
+    .detail-header .question { font-size: 15px; color: var(--text-muted); background: var(--surface-muted); padding: 16px 20px; border-radius: 12px; line-height: 1.7; }
+    .detail-header .hint { font-size: 14px; color: var(--text-dim); margin-top: 10px; font-style: italic; line-height: 1.7; }
 
     /* ── Submissions List ── */
     .submissions-title { font-size: 18px; font-weight: 600; margin-bottom: 16px; }
     .submission-card {
-      border: 1px solid #e5e5ea; border-radius: 14px; padding: 22px 24px;
+      border: 1px solid var(--border); border-radius: 14px; padding: 22px 24px;
       margin-bottom: 14px; transition: border-color .15s;
     }
-    .submission-card:hover { border-color: #0066cc; }
+    .submission-card:hover { border-color: var(--primary); }
     .sub-meta { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; align-items: center; }
     .sub-author {
-      font-size: 13px; font-weight: 600; background: #0066cc; color: #fff;
+      font-size: 13px; font-weight: 600; background: var(--primary); color: var(--surface-alt);
       padding: 3px 12px; border-radius: 10px;
     }
     .sub-brand { font-size: 15.5px; font-weight: 700; }
-    .sub-campaign { font-size: 14px; color: #6e6e73; }
-    .sub-info { font-size: 13.5px; color: #6e6e73; margin-bottom: 8px; }
+    .sub-campaign { font-size: 14px; color: var(--text-dim); }
+    .sub-info { font-size: 13.5px; color: var(--text-dim); margin-bottom: 8px; }
     .sub-body { font-size: 14.5px; line-height: 1.75; }
-    .sub-body h4 { font-size: 13.5px; font-weight: 600; color: #424245; margin: 12px 0 5px; }
+    .sub-body h4 { font-size: 13.5px; font-weight: 600; color: var(--text-muted); margin: 12px 0 5px; }
     .sub-body p { margin-bottom: 6px; }
     .sub-link { font-size: 13px; margin-top: 8px; }
     .ad-embed {
       margin-top: 12px; border: 1px solid var(--border); border-radius: 8px;
-      background: var(--surface-muted); overflow: hidden;
+      background: #000; overflow: visible;
     }
     .ad-embed-header {
       display: flex; align-items: center; justify-content: space-between; gap: 10px;
@@ -239,100 +218,101 @@
     }
     .ad-embed-frame {
       display: block; width: 100%; aspect-ratio: 16 / 9; min-height: 220px;
-      border: 0; background: var(--surface-alt);
+      border: 0; background: #000;
     }
     .ad-embed-video {
       display: block; width: 100%; aspect-ratio: 16 / 9; background: var(--text);
+      object-fit: contain;
     }
     .ad-embed-note {
       padding: 8px 12px; border-top: 1px solid var(--border);
       color: var(--text-dim); font-size: 12px; line-height: 1.5;
     }
-    .sub-time { font-size: 12px; color: #aeaeb2; margin-top: 8px; }
-    .no-submissions { text-align: center; padding: 32px; color: #aeaeb2; font-size: 14px; }
+    .sub-time { font-size: 12px; color: var(--text-faint); margin-top: 8px; }
+    .no-submissions { text-align: center; padding: 32px; color: var(--text-faint); font-size: 14px; }
     .sub-actions { float: right; display: flex; gap: 4px; }
     .sub-delete, .sub-edit {
-      background: none; border: none; color: #aeaeb2; font-size: 14px; padding: 2px 6px;
+      background: none; border: none; color: var(--text-faint); font-size: 14px; padding: 2px 6px;
     }
-    .sub-delete:hover { color: #ff3b30; }
-    .sub-edit:hover { color: #0066cc; }
-    .sub-edit-form { margin-top: 12px; border-top: 1px solid #e5e5ea; padding-top: 12px; }
+    .sub-delete:hover { color: var(--danger); }
+    .sub-edit:hover { color: var(--primary); }
+    .sub-edit-form { margin-top: 12px; border-top: 1px solid var(--border); padding-top: 12px; }
     .sub-edit-form .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
     .sub-edit-form .form-group { display: flex; flex-direction: column; gap: 3px; }
     .sub-edit-form .form-group.full { grid-column: 1 / -1; }
-    .sub-edit-form label { font-size: 12px; font-weight: 600; color: #6e6e73; }
+    .sub-edit-form label { font-size: 12px; font-weight: 600; color: var(--text-dim); }
     .sub-edit-form input, .sub-edit-form textarea {
-      padding: 8px 10px; border: 1px solid #d2d2d7; border-radius: 8px;
-      font-size: 13px; font-family: inherit; background: #fafafa;
+      padding: 8px 10px; border: 1px solid var(--border-strong); border-radius: 8px;
+      font-size: 13px; font-family: inherit; background: var(--surface-alt);
     }
     .sub-edit-form input:focus, .sub-edit-form textarea:focus {
-      outline: none; border-color: #0066cc; background: #fff;
+      outline: none; border-color: var(--primary); background: var(--surface-alt);
     }
     .sub-edit-form textarea { resize: vertical; min-height: 70px; }
     .sub-edit-actions { margin-top: 8px; display: flex; gap: 8px; }
     .sub-edit-actions button {
       padding: 8px 18px; border: none; border-radius: 8px; font-size: 13px; font-weight: 600;
     }
-    .btn-edit-save { background: #0066cc; color: #fff; }
-    .btn-edit-save:hover { background: #0055b3; }
-    .btn-edit-cancel { background: #e5e5ea; color: #1d1d1f; }
+    .btn-edit-save { background: var(--primary); color: var(--surface-alt); }
+    .btn-edit-save:hover { background: var(--primary-hover); }
+    .btn-edit-cancel { background: var(--border); color: var(--text); }
 
     /* ── Comments ── */
-    .comments-section { margin-top: 12px; padding-top: 10px; border-top: 1px dashed #e5e5ea; }
+    .comments-section { margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--border); }
     .comments-toggle {
-      font-size: 13px; color: #6e6e73; background: none; border: none; padding: 0;
+      font-size: 13px; color: var(--text-dim); background: none; border: none; padding: 0;
       display: flex; align-items: center; gap: 4px;
     }
-    .comments-toggle:hover { color: #0066cc; }
+    .comments-toggle:hover { color: var(--primary); }
     .comments-list { margin-top: 8px; }
     .comment-item {
       display: flex; gap: 8px; padding: 8px 0; font-size: 13px;
-      border-bottom: 1px solid #f0f0f2;
+      border-bottom: 1px solid var(--surface-subtle);
     }
     .comment-item:last-child { border-bottom: none; }
     .comment-author {
-      font-weight: 600; color: #424245; white-space: nowrap; flex-shrink: 0;
+      font-weight: 600; color: var(--text-muted); white-space: nowrap; flex-shrink: 0;
     }
-    .comment-body { color: #1d1d1f; flex: 1; word-break: break-word; }
-    .comment-time { font-size: 11px; color: #aeaeb2; white-space: nowrap; flex-shrink: 0; }
+    .comment-body { color: var(--text); flex: 1; word-break: break-word; }
+    .comment-time { font-size: 11px; color: var(--text-faint); white-space: nowrap; flex-shrink: 0; }
     .comment-delete {
-      background: none; border: none; color: #aeaeb2; font-size: 14px; padding: 0 2px;
+      background: none; border: none; color: var(--text-faint); font-size: 14px; padding: 0 2px;
       flex-shrink: 0;
     }
-    .comment-delete:hover { color: #ff3b30; }
+    .comment-delete:hover { color: var(--danger); }
     .comment-form {
       display: flex; gap: 8px; margin-top: 8px; align-items: flex-start;
     }
     .comment-form input[name="c-author"] {
-      width: 80px; padding: 7px 10px; border: 1px solid #d2d2d7; border-radius: 8px;
-      font-size: 13px; background: #fafafa; flex-shrink: 0;
+      width: 80px; padding: 7px 10px; border: 1px solid var(--border-strong); border-radius: 8px;
+      font-size: 13px; background: var(--surface-alt); flex-shrink: 0;
     }
     .comment-form input[name="c-body"] {
-      flex: 1; padding: 7px 10px; border: 1px solid #d2d2d7; border-radius: 8px;
-      font-size: 13px; background: #fafafa;
+      flex: 1; padding: 7px 10px; border: 1px solid var(--border-strong); border-radius: 8px;
+      font-size: 13px; background: var(--surface-alt);
     }
-    .comment-form input:focus { outline: none; border-color: #0066cc; background: #fff; }
+    .comment-form input:focus { outline: none; border-color: var(--primary); background: var(--surface-alt); }
     .comment-form button {
-      padding: 7px 14px; background: #424245; color: #fff; border: none;
+      padding: 7px 14px; background: var(--text-muted); color: var(--surface-alt); border: none;
       border-radius: 8px; font-size: 13px; font-weight: 600; white-space: nowrap;
       flex-shrink: 0;
     }
-    .comment-form button:hover { background: #1d1d1f; }
+    .comment-form button:hover { background: var(--text); }
 
     /* ── Form ── */
-    .form-section { border-top: 1px solid #e5e5ea; padding-top: 20px; margin-top: 20px; }
+    .form-section { border-top: 1px solid var(--border); padding-top: 20px; margin-top: 20px; }
     .form-section h3 { font-size: 16px; font-weight: 600; margin-bottom: 14px; }
     .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .form-group { display: flex; flex-direction: column; gap: 4px; }
     .form-group.full { grid-column: 1 / -1; }
-    .form-group label { font-size: 13px; font-weight: 600; color: #424245; }
+    .form-group label { font-size: 13px; font-weight: 600; color: var(--text-muted); }
     .form-group input, .form-group textarea, .form-group select {
-      padding: 10px 12px; border: 1px solid #d2d2d7; border-radius: 10px;
-      font-size: 14px; font-family: inherit; background: #fafafa;
+      padding: 10px 12px; border: 1px solid var(--border-strong); border-radius: 10px;
+      font-size: 14px; font-family: inherit; background: var(--surface-alt);
       transition: border-color .15s;
     }
     .form-group input:focus, .form-group textarea:focus {
-      outline: none; border-color: #0066cc; background: #fff;
+      outline: none; border-color: var(--primary); background: var(--surface-alt);
     }
     .form-group textarea { resize: vertical; min-height: 80px; }
     .form-group.writing-pane {
@@ -346,85 +326,57 @@
     }
     .form-actions { margin-top: 14px; display: flex; gap: 10px; }
     .btn-submit {
-      background: #0066cc; color: #fff; border: none; padding: 12px 28px;
+      background: var(--primary); color: var(--surface-alt); border: none; padding: 12px 28px;
       border-radius: 12px; font-size: 15px; font-weight: 600;
       transition: background .15s;
+      cursor: pointer;
     }
-    .btn-submit:hover { background: #0055b3; }
-    .btn-submit:disabled { background: #aeaeb2; cursor: not-allowed; }
+    .btn-submit:hover { background: var(--primary-hover); }
+    .btn-submit:disabled { background: var(--text-faint); cursor: not-allowed; }
     .btn-cancel {
-      background: #e5e5ea; color: #1d1d1f; border: none; padding: 12px 20px;
+      background: var(--border); color: var(--text); border: none; padding: 12px 20px;
       border-radius: 12px; font-size: 15px;
     }
 
-    /* ── Guide Panel ── */
-    .guide-toggle {
-      width: 100%; background: #fff; border: 1px solid #e5e5ea; border-radius: 12px;
-      padding: 14px 20px; margin-bottom: 16px; font-size: 14px; font-weight: 600;
-      color: #424245; display: flex; justify-content: space-between; align-items: center;
-      transition: background .15s;
-    }
-    .guide-toggle:hover { background: #f5f5f7; }
-    .guide-toggle .arrow { transition: transform .2s; font-size: 12px; color: #aeaeb2; }
-    .guide-toggle.open .arrow { transform: rotate(180deg); }
-    .guide-body {
-      background: #fff; border: 1px solid #e5e5ea; border-radius: 12px;
-      padding: 20px 24px; margin-top: -8px; margin-bottom: 16px;
-      font-size: 14px; line-height: 1.8; display: none;
-    }
-    .guide-body.open { display: block; }
-    .guide-body h4 {
-      font-size: 14px; font-weight: 700; color: #1d1d1f;
-      margin: 16px 0 6px; padding-bottom: 4px; border-bottom: 1px solid #f0f0f2;
-    }
-    .guide-body h4:first-child { margin-top: 0; }
-    .guide-body ul { padding-left: 20px; margin: 4px 0 8px; }
-    .guide-body li { margin-bottom: 4px; color: #424245; }
-    .guide-body .warn {
-      background: #fff3cd; border-radius: 8px; padding: 10px 14px;
-      font-size: 13px; margin-top: 12px; line-height: 1.6;
-    }
-    .guide-body .warn strong { color: #b06000; }
-
     /* ── Draft Autosave Badge ── */
     .draft-badge {
-      display: none; font-size: 12px; color: #6e6e73;
+      display: none; font-size: 12px; color: var(--text-dim);
       margin-left: 8px; font-weight: 400;
     }
-    .draft-badge.saved { display: inline; color: #137333; }
-    .draft-badge.restoring { display: inline; color: #0066cc; }
+    .draft-badge.saved { display: inline; color: var(--success); }
+    .draft-badge.restoring { display: inline; color: var(--primary); }
     .draft-restore-bar {
-      display: none; background: #e8f0fe; border: 1px solid #c2d9fc;
+      display: none; background: var(--primary-pale); border: 1px solid var(--border);
       border-radius: 10px; padding: 10px 16px; margin-bottom: 14px;
-      font-size: 13px; color: #1a73e8;
+      font-size: 13px; color: var(--primary);
       justify-content: space-between; align-items: center;
     }
     .draft-restore-bar.show { display: flex; }
     .draft-restore-bar button {
-      background: none; border: 1px solid #1a73e8; color: #1a73e8;
+      background: none; border: 1px solid var(--primary); color: var(--primary);
       padding: 4px 12px; border-radius: 8px; font-size: 12px; font-weight: 600;
       margin-left: 8px;
     }
-    .draft-restore-bar button:hover { background: #1a73e8; color: #fff; }
+    .draft-restore-bar button:hover { background: var(--primary); color: var(--surface-alt); }
     .draft-restore-bar .draft-discard {
-      border-color: #aeaeb2; color: #6e6e73;
+      border-color: var(--text-faint); color: var(--text-dim);
     }
-    .draft-restore-bar .draft-discard:hover { background: #6e6e73; color: #fff; }
+    .draft-restore-bar .draft-discard:hover { background: var(--text-dim); color: var(--surface-alt); }
 
     /* ── Duplicate Checker ── */
     .dup-checker {
       margin-top: 12px; padding: 14px 18px; border-radius: 12px;
-      border: 1px solid #e5e5ea; background: #fafafa; display: none;
+      border: 1px solid var(--border); background: var(--surface-alt); display: none;
     }
     .dup-checker.show { display: block; }
     .dup-checker.dup-block {
-      background: #fce8e6; border-color: #d93025;
+      background: var(--danger-soft); border-color: var(--danger);
     }
     .dup-checker.dup-warn {
-      background: #fff3cd; border-color: #ffc107;
+      background: var(--warning-soft); border-color: var(--warning);
     }
     .dup-checker.dup-pass {
-      background: #e6f4ea; border-color: #34c759;
+      background: var(--success-soft); border-color: var(--success);
     }
     .dup-checker h4 {
       font-size: 14px; font-weight: 600; margin-bottom: 8px;
@@ -433,22 +385,22 @@
     .dup-checker .dup-icon { font-size: 16px; }
     .dup-item {
       font-size: 13px; padding: 8px 12px; margin-bottom: 6px;
-      background: rgba(255,255,255,.7); border-radius: 8px;
-      border: 1px solid rgba(0,0,0,.06);
+      background: var(--surface-alt); border-radius: 8px;
+      border: 1px solid var(--surface-hover);
     }
     .dup-item:last-child { margin-bottom: 0; }
     .dup-item .dup-source {
       font-weight: 600; font-size: 11px; padding: 2px 8px;
       border-radius: 6px; margin-right: 6px;
     }
-    .dup-item .dup-source.forum { background: #fce8e6; color: #d93025; }
-    .dup-item .dup-source.wiki { background: #e8f0fe; color: #1a73e8; }
-    .dup-item .dup-reason { color: #6e6e73; font-size: 12px; margin-top: 2px; }
+    .dup-item .dup-source.forum { background: var(--danger-soft); color: var(--danger); }
+    .dup-item .dup-source.wiki { background: var(--primary-pale); color: var(--primary); }
+    .dup-item .dup-reason { color: var(--text-dim); font-size: 12px; margin-top: 2px; }
 
     /* ── Toast ── */
     .toast {
       position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
-      background: #1d1d1f; color: #fff; padding: 12px 24px; border-radius: 12px;
+      background: var(--text); color: var(--surface-alt); padding: 12px 24px; border-radius: 12px;
       font-size: 14px; font-weight: 500; opacity: 0; transition: opacity .3s;
       pointer-events: none; z-index: 100;
     }
@@ -456,36 +408,36 @@
 
     /* ── Language Toggle ── */
     .lang-toggle {
-      display: flex; background: #f5f5f7; border-radius: 8px;
-      padding: 2px; border: 1px solid #e5e5ea;
+      display: flex; background: var(--surface-muted); border-radius: 8px;
+      padding: 2px; border: 1px solid var(--border);
     }
     .lang-btn {
-      padding: 5px 14px; border: none; background: transparent;
+      padding: 5px 14px; border: none; background: var(--transparent);
       border-radius: 6px; cursor: pointer; font-size: 13px;
-      font-weight: 600; transition: all .15s; color: #6e6e73;
+      font-weight: 600; transition: all .15s; color: var(--text-dim);
     }
     .lang-btn.active {
-      background: #0066cc; color: #fff;
-      box-shadow: 0 1px 3px rgba(0,102,204,.3);
+      background: var(--primary); color: var(--surface-alt);
+      box-shadow: 0 1px 3px var(--border-strong);
     }
     .trans-badge {
-      position: fixed; top: 12px; right: 16px; background: #fff;
-      border: 1px solid #e5e5ea; border-radius: 10px; padding: 8px 14px;
-      font-size: 13px; color: #6e6e73; box-shadow: 0 2px 8px rgba(0,0,0,.1);
+      position: fixed; top: 12px; right: 16px; background: var(--surface-alt);
+      border: 1px solid var(--border); border-radius: 10px; padding: 8px 14px;
+      font-size: 13px; color: var(--text-dim); box-shadow: 0 2px 8px var(--text-faint);
       z-index: 200; display: none; align-items: center; gap: 8px;
     }
     .trans-badge.show { display: flex; }
     .trans-spinner {
-      width: 14px; height: 14px; border: 2px solid #e5e5ea;
-      border-top-color: #0066cc; border-radius: 50%;
+      width: 14px; height: 14px; border: 2px solid var(--border);
+      border-top-color: var(--primary); border-radius: 50%;
       animation: trans-spin .6s linear infinite;
     }
     @keyframes trans-spin { to { transform: rotate(360deg); } }
 
     /* ── AI Evaluation ── */
     .eval-btn {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: #fff; border: none; padding: 8px 16px; border-radius: 10px;
+      background: var(--gradient-active);
+      color: var(--surface-alt); border: none; padding: 8px 16px; border-radius: 10px;
       font-size: 13px; font-weight: 600; cursor: pointer;
       transition: opacity .15s, transform .15s;
       display: inline-flex; align-items: center; gap: 6px;
@@ -495,33 +447,33 @@
 
     .eval-result {
       margin-top: 12px; padding: 16px; border-radius: 12px;
-      background: linear-gradient(135deg, #f8f9ff 0%, #f0f0ff 100%);
-      border: 1px solid #e0e0f0;
+      background: var(--gradient-panel);
+      border: 1px solid var(--surface-subtle);
     }
     .eval-header {
       display: flex; justify-content: space-between; align-items: center;
       margin-bottom: 14px;
     }
-    .eval-total { font-size: 28px; font-weight: 800; color: #1d1d1f; }
-    .eval-total-sub { font-size: 14px; color: #6e6e73; font-weight: 400; }
+    .eval-total { font-size: 28px; font-weight: 800; color: var(--text); }
+    .eval-total-sub { font-size: 14px; color: var(--text-dim); font-weight: 400; }
     .eval-grade {
-      font-size: 18px; font-weight: 800; padding: 4px 14px; border-radius: 10px; color: #fff;
+      font-size: 18px; font-weight: 800; padding: 4px 14px; border-radius: 10px; color: var(--surface-alt);
     }
-    .grade-S { background: linear-gradient(135deg, #667eea, #764ba2); }
-    .grade-A { background: #34c759; }
-    .grade-B { background: #0066cc; }
-    .grade-C { background: #ff9500; }
-    .grade-D { background: #ff3b30; }
+    .grade-S { background: var(--gradient-active); }
+    .grade-A { background: var(--success); }
+    .grade-B { background: var(--primary); }
+    .grade-C { background: var(--amber); }
+    .grade-D { background: var(--danger); }
 
     .eval-criteria { display: flex; flex-direction: column; gap: 8px; }
     .eval-criterion-row {
       display: flex; align-items: center; gap: 10px; font-size: 13px;
     }
     .eval-crit-name {
-      width: 90px; font-weight: 600; color: #424245; flex-shrink: 0; font-size: 12px;
+      width: 90px; font-weight: 600; color: var(--text-muted); flex-shrink: 0; font-size: 12px;
     }
     .eval-crit-bar {
-      flex: 1; height: 8px; background: #e5e5ea; border-radius: 4px; overflow: hidden;
+      flex: 1; height: 8px; background: var(--border); border-radius: 4px; overflow: hidden;
     }
     .eval-crit-fill {
       height: 100%; border-radius: 4px; transition: width .5s ease;
@@ -530,50 +482,50 @@
       width: 50px; text-align: right; font-weight: 700; font-size: 13px; flex-shrink: 0;
     }
     .eval-crit-comment {
-      font-size: 12px; color: #6e6e73; margin-top: 1px; padding-left: 100px;
+      font-size: 12px; color: var(--text-dim); margin-top: 1px; padding-left: 100px;
       margin-bottom: 4px;
     }
     .eval-summary-box {
       margin-top: 14px; padding: 12px; border-radius: 10px;
-      background: #fff; font-size: 13px; line-height: 1.6;
+      background: var(--surface-alt); font-size: 13px; line-height: 1.6;
     }
-    .eval-summary-box strong { color: #424245; }
+    .eval-summary-box strong { color: var(--text-muted); }
     .eval-improve-box {
       margin-top: 8px; padding: 10px 12px; border-radius: 10px;
-      background: #fff3cd; font-size: 13px; line-height: 1.5;
-      border: 1px solid #ffc107;
+      background: var(--warning-soft); font-size: 13px; line-height: 1.5;
+      border: 1px solid var(--warning);
     }
-    .eval-improve-box strong { color: #b06000; }
+    .eval-improve-box strong { color: var(--warning); }
     .eval-stale-badge {
       display: inline-block; font-size: 11px; font-weight: 600;
       padding: 2px 8px; border-radius: 6px; margin-left: 8px;
-      background: #fff3cd; color: #b06000; border: 1px solid #ffc107;
+      background: var(--warning-soft); color: var(--warning); border: 1px solid var(--warning);
     }
     .eval-btn[disabled] { opacity: 0.5; cursor: not-allowed; }
 
     /* ── Vote ── */
     .vote-area {
       display: flex; align-items: center; gap: 10px; margin-top: 10px;
-      padding-top: 10px; border-top: 1px solid #f0f0f2;
+      padding-top: 10px; border-top: 1px solid var(--surface-subtle);
     }
     .vote-btn {
       display: inline-flex; align-items: center; gap: 6px;
       padding: 8px 18px; border-radius: 10px; font-size: 13px; font-weight: 600;
-      border: 2px solid #e5e5ea; background: #fff; color: #424245;
+      border: 2px solid var(--border); background: var(--surface-alt); color: var(--text-muted);
       cursor: pointer; transition: all .2s;
     }
-    .vote-btn:hover { border-color: #0066cc; color: #0066cc; }
-    .vote-btn.voted { background: #0066cc; color: #fff; border-color: #0066cc; }
-    .vote-btn.voted:hover { background: #0055b3; border-color: #0055b3; }
-    .vote-count { font-size: 13px; color: #6e6e73; }
-    .vote-count strong { color: #0066cc; font-size: 15px; }
+    .vote-btn:hover { border-color: var(--primary); color: var(--primary); }
+    .vote-btn.voted { background: var(--primary); color: var(--surface-alt); border-color: var(--primary); }
+    .vote-btn.voted:hover { background: var(--primary-hover); border-color: var(--primary-hover); }
+    .vote-count { font-size: 13px; color: var(--text-dim); }
+    .vote-count strong { color: var(--primary); font-size: 15px; }
     .topic-vote-badge {
       display: inline-flex; align-items: center; gap: 4px;
       font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 8px;
     }
-    .topic-vote-badge.voted { background: #e6f4ea; color: #137333; }
-    .topic-vote-badge.not-voted { background: #fce8e6; color: #d93025; }
-    .topic-leading { font-size: 11px; color: #6e6e73; margin-top: 2px; }
+    .topic-vote-badge.voted { background: var(--success-soft); color: var(--success); }
+    .topic-vote-badge.not-voted { background: var(--danger-soft); color: var(--danger); }
+    .topic-leading { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
 
     /* ── Sidebar Shell ── */
     .app-shell {
@@ -604,7 +556,7 @@
     .rev-editor textarea, .fts-deep-field textarea,
     .rev-history, .rh-text {
       scrollbar-width: thin;
-      scrollbar-color: var(--border-strong) transparent;
+      scrollbar-color: var(--border-strong) var(--transparent);
     }
     .sidebar::-webkit-scrollbar,
     .main-content::-webkit-scrollbar,
@@ -622,7 +574,7 @@
     .fts-deep-field textarea::-webkit-scrollbar-track,
     .rev-history::-webkit-scrollbar-track,
     .rh-text::-webkit-scrollbar-track {
-      background: transparent;
+      background: var(--transparent);
     }
     .sidebar::-webkit-scrollbar-thumb,
     .main-content::-webkit-scrollbar-thumb,
@@ -633,7 +585,7 @@
     .rh-text::-webkit-scrollbar-thumb {
       background: var(--border-strong);
       border-radius: 10px;
-      border: 2px solid transparent;
+      border: 2px solid var(--transparent);
       background-clip: padding-box;
       transition: background-color .2s ease;
     }
@@ -649,26 +601,72 @@
     }
     .sidebar::-webkit-scrollbar-corner,
     .main-content::-webkit-scrollbar-corner,
-    .right-rev-panel::-webkit-scrollbar-corner { background: transparent; }
+    .right-rev-panel::-webkit-scrollbar-corner { background: var(--transparent); }
     .sidebar {
-      background: #fff; border-radius: 16px;
-      padding: 14px 12px; box-shadow: 0 1px 3px rgba(0,0,0,.08);
+      background: var(--surface-alt); border-radius: 16px;
+      padding: 14px 12px; box-shadow: 0 1px 3px var(--text-faint);
+      display: flex; flex-direction: column;
     }
+    .sidebar-home {
+      width: 100%; border: 0; background: var(--transparent);
+      color: var(--text); text-align: left; cursor: pointer;
+      padding: 8px 10px 12px; margin-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .sidebar-home strong {
+      display: block; font-size: 14px; font-weight: 800; line-height: 1.35;
+      letter-spacing: -0.1px;
+    }
+    .sidebar-home span {
+      display: block; margin-top: 3px; font-size: 11px; color: var(--text-dim);
+    }
+    .sidebar-home:hover strong { color: var(--primary); }
     .sidebar-title {
-      font-size: 11.5px; font-weight: 700; color: #aeaeb2;
+      font-size: 11px; font-weight: 700; color: var(--text-faint);
       text-transform: uppercase; letter-spacing: 0.6px;
-      padding: 6px 12px 10px;
+      padding: 4px 10px 8px;
     }
+    .sidebar-main { min-height: 0; display: flex; flex-direction: column; flex: 1; }
     .sidebar-nav { display: flex; flex-direction: column; gap: 2px; }
+    .sidebar-footer {
+      margin-top: auto; padding: 12px 10px 2px;
+      border-top: 1px solid var(--border);
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .sidebar-footer-label {
+      font-size: 11px; font-weight: 700; color: var(--text-faint);
+      text-transform: uppercase; letter-spacing: .5px;
+    }
+    .sidebar-footer .lang-toggle {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .sidebar-footer .lang-btn {
+      padding: 7px 8px;
+      font-size: 12px;
+    }
+    .sidebar-detail {
+      display: none;
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      padding: 0 2px;
+    }
+    .app-shell.detail-mode .sidebar-main { display: none; }
+    .app-shell.detail-mode .sidebar-detail { display: block; }
+    .app-shell.detail-mode .sidebar {
+      padding: 14px 12px;
+    }
     .nav-item {
-      text-align: left; padding: 11px 14px; border: none; background: transparent;
-      border-radius: 10px; font-size: 14.5px; font-weight: 600; color: #424245;
+      text-align: left; padding: 11px 14px; border: none; background: var(--transparent);
+      border-radius: 10px; font-size: 14.5px; font-weight: 600; color: var(--text-muted);
       cursor: pointer; transition: all .15s;
       display: flex; align-items: center; gap: 10px;
       width: 100%;
     }
-    .nav-item:hover:not(.active) { background: #f5f5f7; color: #0066cc; }
-    .nav-item.active { background: #0066cc; color: #fff; box-shadow: 0 2px 6px rgba(0,102,204,.28); }
+    .nav-item:hover:not(.active) { background: var(--surface-muted); color: var(--primary); }
+    .nav-item.active { background: var(--primary); color: var(--surface-alt); box-shadow: 0 2px 6px var(--border-strong); }
     .nav-item .nav-icon { font-size: 15px; }
     .nav-item .nav-chevron {
       margin-left: auto; font-size: 11px; transition: transform .2s;
@@ -678,29 +676,29 @@
     .nav-sublist {
       display: none; flex-direction: column; gap: 2px;
       margin: 4px 0 8px; padding: 4px 0 4px 10px;
-      border-left: 2px solid #e5e5ea;
+      border-left: 2px solid var(--border);
     }
     .nav-sublist.show { display: flex; }
     .nav-subitem {
-      text-align: left; padding: 8px 10px; border: none; background: transparent;
+      text-align: left; padding: 8px 10px; border: none; background: var(--transparent);
       border-radius: 8px; cursor: pointer; transition: all .15s;
       display: flex; gap: 8px; align-items: center; width: 100%;
     }
-    .nav-subitem:hover { background: #eaf2fc; }
-    .nav-subitem.current { background: #eaf2fc; }
+    .nav-subitem:hover { background: var(--primary-soft); }
+    .nav-subitem.current { background: var(--primary-soft); }
     .nav-subitem .nav-sub-q {
-      font-size: 11px; font-weight: 700; background: #f0f0f2; color: #6e6e73;
+      font-size: 11px; font-weight: 700; background: var(--surface-subtle); color: var(--text-dim);
       padding: 2px 7px; border-radius: 8px; min-width: 32px; text-align: center;
       flex-shrink: 0;
     }
-    .nav-subitem.decided .nav-sub-q { background: #e6f4ea; color: #137333; }
+    .nav-subitem.decided .nav-sub-q { background: var(--success-soft); color: var(--success); }
     .nav-subitem .nav-sub-title {
-      font-size: 12.5px; color: #424245; line-height: 1.4;
+      font-size: 12.5px; color: var(--text-muted); line-height: 1.4;
       overflow: hidden; text-overflow: ellipsis;
       display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
       flex: 1;
     }
-    .nav-subitem:hover .nav-sub-title { color: #0066cc; }
+    .nav-subitem:hover .nav-sub-title { color: var(--primary); }
 
     /* ── Results Dashboard ── */
     .results-dashboard { display: none; }
@@ -711,12 +709,57 @@
       gap: 18px;
     }
     .result-card {
-      background: #fff; border-radius: 14px; padding: 22px 24px;
-      box-shadow: 0 1px 3px rgba(0,0,0,.06);
-      border: 2px solid transparent; cursor: pointer; transition: border-color .15s;
+      position: relative; overflow: hidden;
+      background: var(--surface-alt); border-radius: 14px; padding: 22px 24px;
+      box-shadow: 0 1px 3px var(--surface-hover);
+      border: 2px solid var(--transparent); cursor: pointer; transition: border-color .15s;
     }
-    .result-card.decided { border-color: #34c759; }
-    .result-card.undecided { border-color: #ff9500; border-style: dashed; }
+    .result-card > * {
+      position: relative;
+      z-index: 2;
+    }
+    .result-card.decided { border-color: var(--success); }
+    .result-card.undecided { border-color: var(--amber); border-style: dashed; }
+    .result-card.has-thumb {
+      min-height: 210px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      background: #172033;
+      border-color: rgba(23,32,51,.12);
+      color: var(--surface-alt);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.16), 0 1px 2px rgba(23,32,51,.08);
+    }
+    .result-card.has-thumb::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background-image: var(--result-thumb);
+      background-size: cover;
+      background-position: center;
+      transform: scale(1.015);
+    }
+    .result-card.has-thumb::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,.36) 0%, rgba(0,0,0,.66) 58%, rgba(0,0,0,.82) 100%),
+        linear-gradient(90deg, rgba(0,0,0,.58) 0%, rgba(0,0,0,.16) 72%);
+    }
+    .result-card.has-thumb .result-q {
+      background: rgba(255,255,255,.14);
+      color: var(--surface-alt);
+      border: 1px solid rgba(255,255,255,.28);
+    }
+    .result-card.has-thumb h4 {
+      color: var(--surface-alt);
+      text-shadow: 0 1px 8px rgba(0,0,0,.4);
+    }
     .result-card .result-q {
       font-size: 12px; font-weight: 600; padding: 4px 12px;
       border-radius: 12px; display: inline-block; margin-bottom: 8px;
@@ -724,56 +767,124 @@
     .result-card h4 { font-size: 15.5px; font-weight: 600; margin-bottom: 6px; line-height: 1.45; }
     .result-winner {
       margin-top: 10px; padding: 14px 16px; border-radius: 12px;
-      background: #f5f5f7; font-size: 14px; line-height: 1.6;
+      background: var(--surface-muted); font-size: 14px; line-height: 1.6;
+    }
+    .result-card.has-thumb .result-winner {
+      background: rgba(0,0,0,.50);
+      border: 1px solid rgba(255,255,255,.16);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
     }
     .result-winner .rw-brand { font-weight: 700; font-size: 15.5px; }
     .result-winner .rw-author {
-      font-size: 12px; font-weight: 600; background: #0066cc; color: #fff;
+      font-size: 12px; font-weight: 600; background: var(--primary); color: var(--surface-alt);
       padding: 2px 10px; border-radius: 8px; margin-left: 8px;
     }
-    .result-winner .rw-votes { font-size: 13px; color: #137333; font-weight: 600; margin-top: 6px; }
-    .result-no-votes { font-size: 14px; color: #aeaeb2; font-style: italic; padding: 10px 0; }
+    .result-card.has-thumb .rw-author {
+      background: rgba(255,255,255,.16);
+      color: var(--surface-alt);
+      border: 1px solid rgba(255,255,255,.24);
+    }
+    .result-winner .rw-campaign { font-size: 12px; color: var(--text-dim); margin-top: 2px; }
+    .result-card.has-thumb .rw-campaign { color: rgba(255,255,255,.84); }
+    .result-winner .rw-votes { font-size: 13px; color: var(--success); font-weight: 600; margin-top: 6px; }
+    .result-card.has-thumb .rw-votes { color: #b9f2c6; }
+    .result-no-votes { font-size: 14px; color: var(--text-faint); font-style: italic; padding: 10px 0; }
     .results-progress {
       margin-bottom: 22px; padding: 18px 24px; border-radius: 14px;
-      background: #fff; border: 1px solid #e5e5ea;
+      background: var(--surface-alt); border: 1px solid var(--border);
       display: flex; align-items: center; gap: 16px;
     }
-    .results-progress-bar { flex: 1; height: 10px; background: #e5e5ea; border-radius: 5px; overflow: hidden; }
-    .results-progress-fill { height: 100%; background: #34c759; border-radius: 5px; transition: width .3s; }
-    .results-progress-text { font-size: 15px; font-weight: 600; color: #424245; white-space: nowrap; }
+    .results-progress-bar { flex: 1; height: 10px; background: var(--border); border-radius: 5px; overflow: hidden; }
+    .results-progress-fill { height: 100%; background: var(--success); border-radius: 5px; transition: width .3s; }
+    .results-progress-text { font-size: 15px; font-weight: 600; color: var(--text-muted); white-space: nowrap; }
+
+    /* ── Nav Content Pages ── */
+    .nav-page {
+      display: none;
+      max-width: 980px;
+      margin: 0 auto;
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 34px;
+      box-shadow: 0 1px 3px var(--text-faint);
+    }
+    .nav-page.show { display: block; }
+    .nav-page h2 {
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      letter-spacing: -0.2px;
+    }
+    .nav-page .page-lead {
+      font-size: 14px;
+      color: var(--text-dim);
+      line-height: 1.7;
+      margin-bottom: 20px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-page h4 {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text);
+      margin: 20px 0 8px;
+    }
+    .nav-page h4:first-of-type { margin-top: 0; }
+    .nav-page p,
+    .nav-page li {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.75;
+    }
+    .nav-page ul {
+      padding-left: 20px;
+      margin: 4px 0 10px;
+    }
+    .nav-page .warn {
+      margin-top: 18px;
+      padding: 14px 16px;
+      border-left: 4px solid var(--warning);
+      background: var(--warning-soft);
+      color: var(--reason-text);
+      border-radius: 10px;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+    .nav-page .warn strong { color: var(--warning); }
 
     /* ── Final Document Tab ── */
     .final-doc-dashboard { display: none; }
     .final-doc-dashboard.show { display: block; }
     .final-doc-actions {
       position: sticky; top: 0; z-index: 10;
-      background: rgba(245,245,247,.92); backdrop-filter: blur(10px);
+      background: var(--surface-alt);
       padding: 12px 0; margin-bottom: 16px;
       display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
-      border-bottom: 1px solid #e5e5ea;
+      border-bottom: 1px solid var(--border);
     }
     .final-doc-actions .spacer { flex: 1; }
     .btn-export {
       padding: 10px 16px; border: none; border-radius: 10px; font-size: 14px;
       font-weight: 600; cursor: pointer; transition: all .15s;
     }
-    .btn-export.primary { background: #0066cc; color: #fff; }
-    .btn-export.primary:hover { background: #0055b3; }
-    .btn-export.secondary { background: #fff; color: #0066cc; border: 1px solid #0066cc; }
-    .btn-export.secondary:hover { background: #e8f0fe; }
-    .final-doc-hint { font-size: 12px; color: #6e6e73; }
+    .btn-export.primary { background: var(--primary); color: var(--surface-alt); }
+    .btn-export.primary:hover { background: var(--primary-hover); }
+    .btn-export.secondary { background: var(--surface-alt); color: var(--primary); border: 1px solid var(--primary); }
+    .btn-export.secondary:hover { background: var(--primary-pale); }
+    .final-doc-hint { font-size: 12px; color: var(--text-dim); }
 
     .final-topic-section {
-      background: #fff; border-radius: 18px; padding: 32px 40px; margin-bottom: 24px;
-      box-shadow: 0 1px 3px rgba(0,0,0,.06);
+      background: var(--surface-alt); border-radius: 18px; padding: 32px 40px; margin-bottom: 24px;
+      box-shadow: 0 1px 3px var(--surface-hover);
     }
     .final-topic-section .fts-header {
       display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
-      padding-bottom: 18px; border-bottom: 1px solid #f0f0f2; margin-bottom: 22px;
+      padding-bottom: 18px; border-bottom: 1px solid var(--surface-subtle); margin-bottom: 22px;
     }
     .final-topic-section .fts-q {
       font-size: 13px; font-weight: 700; padding: 4px 12px;
-      border-radius: 12px; background: #f0f0f2; color: #424245;
+      border-radius: 12px; background: var(--surface-subtle); color: var(--text-muted);
     }
     .final-topic-section h3 { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; }
     .final-topic-section .fts-desc-wrap { width: 100%; margin-top: 6px; }
@@ -795,26 +906,26 @@
     }
 
     .fts-winner {
-      background: #f5f5f7; border-radius: 12px; padding: 18px 22px; margin-bottom: 18px;
+      background: var(--surface-muted); border-radius: 12px; padding: 18px 22px; margin-bottom: 18px;
     }
     .fts-winner .fw-badge {
       display: inline-block; font-size: 12px; font-weight: 700;
       padding: 3px 10px; border-radius: 10px; margin-right: 10px;
     }
-    .fw-badge.pinned { background: #fff4e5; color: #b85900; }
-    .fw-badge.vote-leader { background: #e6f4ea; color: #137333; }
-    .fw-badge.none { background: #fce8e6; color: #d93025; }
+    .fw-badge.pinned { background: var(--amber-soft); color: var(--amber); }
+    .fw-badge.vote-leader { background: var(--success-soft); color: var(--success); }
+    .fw-badge.none { background: var(--danger-soft); color: var(--danger); }
     .fts-winner .fw-brand { font-weight: 700; font-size: 19px; margin-right: 8px; }
-    .fts-winner .fw-campaign { color: #424245; font-size: 15.5px; }
+    .fts-winner .fw-campaign { color: var(--text-muted); font-size: 15.5px; }
     .fts-winner .fw-author-chip {
-      font-size: 12px; font-weight: 600; background: #0066cc; color: #fff;
+      font-size: 12px; font-weight: 600; background: var(--primary); color: var(--surface-alt);
       padding: 2px 10px; border-radius: 10px; margin-left: 8px;
     }
-    .fts-winner .fw-meta { font-size: 14px; color: #6e6e73; margin-top: 8px; }
+    .fts-winner .fw-meta { font-size: 14px; color: var(--text-dim); margin-top: 8px; }
     .fts-winner .fw-link { font-size: 14.5px; margin-top: 8px; }
-    .fts-winner .fw-body { margin-top: 12px; font-size: 14.5px; line-height: 1.75; color: #1d1d1f; }
-    .fts-winner .fw-body h5 { font-size: 13px; font-weight: 700; color: #424245; margin: 10px 0 4px; }
-    .fts-winner .fw-empty { font-size: 14px; color: #d93025; font-style: italic; }
+    .fts-winner .fw-body { margin-top: 12px; font-size: 14.5px; line-height: 1.75; color: var(--text); }
+    .fts-winner .fw-body h5 { font-size: 13px; font-weight: 700; color: var(--text-muted); margin: 10px 0 4px; }
+    .fts-winner .fw-empty { font-size: 14px; color: var(--danger); font-style: italic; }
 
     .fts-pin-row {
       display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
@@ -822,57 +933,57 @@
     }
     .fts-pin-row select {
       flex: 1; min-width: 200px; padding: 6px 10px;
-      border: 1px solid #d2d2d7; border-radius: 8px; font-size: 13px;
-      background: #fff;
+      border: 1px solid var(--border-strong); border-radius: 8px; font-size: 13px;
+      background: var(--surface-alt);
     }
     .fts-pin-row button {
       padding: 6px 12px; border: none; border-radius: 8px;
       font-size: 12px; font-weight: 600; cursor: pointer;
     }
-    .fts-pin-row .btn-pin { background: #0066cc; color: #fff; }
-    .fts-pin-row .btn-pin:hover { background: #0055b3; }
-    .fts-pin-row .btn-unpin { background: #fff; color: #d93025; border: 1px solid #d93025; }
-    .fts-pin-row .btn-unpin:hover { background: #fce8e6; }
-    .fts-pin-row .pin-info { font-size: 11px; color: #6e6e73; }
+    .fts-pin-row .btn-pin { background: var(--primary); color: var(--surface-alt); }
+    .fts-pin-row .btn-pin:hover { background: var(--primary-hover); }
+    .fts-pin-row .btn-unpin { background: var(--surface-alt); color: var(--danger); border: 1px solid var(--danger); }
+    .fts-pin-row .btn-unpin:hover { background: var(--danger-soft); }
+    .fts-pin-row .pin-info { font-size: 11px; color: var(--text-dim); }
 
     .fts-deep {
-      border-top: 1px dashed #e5e5ea; padding-top: 12px; margin-top: 8px;
+      border-top: 1px dashed var(--border); padding-top: 12px; margin-top: 8px;
     }
     .fts-deep h4 {
-      font-size: 13px; font-weight: 700; color: #0066cc; margin-bottom: 6px;
+      font-size: 13px; font-weight: 700; color: var(--primary); margin-bottom: 6px;
       display: flex; align-items: center; gap: 6px;
     }
     .fts-deep-field { margin-bottom: 12px; }
     .fts-deep-field label {
-      display: block; font-size: 12px; font-weight: 600; color: #424245;
+      display: block; font-size: 12px; font-weight: 600; color: var(--text-muted);
       margin-bottom: 4px;
     }
     .fts-deep-field textarea {
-      width: 100%; border: 1px solid #d2d2d7; border-radius: 8px;
+      width: 100%; border: 1px solid var(--border-strong); border-radius: 8px;
       padding: 8px 10px; font-size: 13px; line-height: 1.6;
       font-family: inherit; resize: vertical; min-height: 70px;
-      background: #fafafa;
+      background: var(--surface-alt);
     }
     .fts-deep-field textarea:focus {
-      outline: none; border-color: #0066cc; background: #fff;
-      box-shadow: 0 0 0 3px rgba(0,102,204,.12);
+      outline: none; border-color: var(--primary); background: var(--surface-alt);
+      box-shadow: 0 0 0 3px var(--primary-soft);
     }
     .fts-deep-meta {
-      font-size: 11px; color: #6e6e73; margin-top: 6px;
+      font-size: 11px; color: var(--text-dim); margin-top: 6px;
       display: flex; gap: 8px; align-items: center;
     }
     .fts-deep-meta .save-indicator {
       font-weight: 600;
     }
-    .save-indicator.saving { color: #b85900; }
-    .save-indicator.saved { color: #137333; }
-    .save-indicator.error { color: #d93025; }
+    .save-indicator.saving { color: var(--amber); }
+    .save-indicator.saved { color: var(--success); }
+    .save-indicator.error { color: var(--danger); }
 
     .fts-section-copy {
-      font-size: 11px; padding: 4px 10px; border: 1px solid #d2d2d7;
-      background: #fff; border-radius: 8px; cursor: pointer; color: #424245;
+      font-size: 11px; padding: 4px 10px; border: 1px solid var(--border-strong);
+      background: var(--surface-alt); border-radius: 8px; cursor: pointer; color: var(--text-muted);
     }
-    .fts-section-copy:hover { border-color: #0066cc; color: #0066cc; }
+    .fts-section-copy:hover { border-color: var(--primary); color: var(--primary); }
 
     /* ── Revision Editor ── */
     .rev-field {
@@ -896,7 +1007,7 @@
     .right-rev-panel {
       background: var(--surface); border: 1px solid var(--border);
       border-radius: 16px; padding: 18px 18px 20px;
-      box-shadow: 0 1px 3px rgba(0,0,0,.08);
+      box-shadow: 0 1px 3px var(--text-faint);
       display: none;
     }
     .app-shell.right-panel-on .right-rev-panel { display: block; }
@@ -965,65 +1076,65 @@
       display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
     }
     .rev-current-meta .rev-latest-tag {
-      background: #137333; color: #fff; padding: 1px 6px; border-radius: 6px;
+      background: var(--success); color: var(--surface-alt); padding: 1px 6px; border-radius: 6px;
       font-weight: 600; font-size: 10px;
     }
     .rev-current-meta .rev-original-tag {
-      background: #6e6e73; color: #fff; padding: 1px 6px; border-radius: 6px;
+      background: var(--text-dim); color: var(--surface-alt); padding: 1px 6px; border-radius: 6px;
       font-weight: 600; font-size: 10px;
     }
 
     .rev-actions { margin-top: 8px; display: flex; gap: 8px; flex-wrap: wrap; }
     .btn-propose {
-      padding: 6px 14px; border: none; border-radius: 8px; background: #0066cc;
-      color: #fff; font-size: 12px; font-weight: 600; cursor: pointer;
+      padding: 6px 14px; border: none; border-radius: 8px; background: var(--primary);
+      color: var(--surface-alt); font-size: 12px; font-weight: 600; cursor: pointer;
     }
-    .btn-propose:hover { background: #0055b3; }
+    .btn-propose:hover { background: var(--primary-hover); }
     .btn-history-toggle {
-      padding: 6px 12px; border: 1px solid #d2d2d7; background: #fff;
-      border-radius: 8px; font-size: 12px; color: #424245; cursor: pointer;
+      padding: 6px 12px; border: 1px solid var(--border-strong); background: var(--surface-alt);
+      border-radius: 8px; font-size: 12px; color: var(--text-muted); cursor: pointer;
     }
-    .btn-history-toggle:hover { border-color: #0066cc; color: #0066cc; }
+    .btn-history-toggle:hover { border-color: var(--primary); color: var(--primary); }
 
     .rev-editor {
-      margin-top: 10px; padding: 12px; border: 1px solid #0066cc;
-      border-radius: 10px; background: #f6fbff;
+      margin-top: 10px; padding: 12px; border: 1px solid var(--primary);
+      border-radius: 10px; background: var(--surface-alt);
     }
-    .rev-editor h5 { font-size: 14px; font-weight: 700; color: #0066cc; margin-bottom: 6px; }
+    .rev-editor h5 { font-size: 14px; font-weight: 700; color: var(--primary); margin-bottom: 6px; }
     .rev-editor .before-block {
-      background: #fff2f0; border-left: 3px solid #d93025; padding: 10px 12px;
+      background: var(--before-bg); border-left: 3px solid var(--danger); padding: 10px 12px;
       font-size: 13.5px; line-height: 1.75; white-space: pre-wrap;
-      border-radius: 6px; margin-bottom: 10px; color: #5f2120;
+      border-radius: 6px; margin-bottom: 10px; color: var(--before-text);
     }
     .rev-editor textarea {
-      width: 100%; border: 1px solid #d2d2d7; border-radius: 8px;
+      width: 100%; border: 1px solid var(--border-strong); border-radius: 8px;
       padding: 10px 12px; font-size: 14.5px; line-height: 1.75;
-      font-family: inherit; resize: vertical; min-height: 120px; background: #fff;
+      font-family: inherit; resize: vertical; min-height: 120px; background: var(--surface-alt);
     }
     .rev-editor input[type="text"] {
-      width: 100%; border: 1px solid #d2d2d7; border-radius: 8px;
-      padding: 9px 12px; font-size: 14px; font-family: inherit; background: #fff;
+      width: 100%; border: 1px solid var(--border-strong); border-radius: 8px;
+      padding: 9px 12px; font-size: 14px; font-family: inherit; background: var(--surface-alt);
     }
     .rev-editor textarea:focus, .rev-editor input[type="text"]:focus {
-      outline: none; border-color: #0066cc; box-shadow: 0 0 0 3px rgba(0,102,204,.12);
+      outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft);
     }
     .rev-editor .re-label {
-      display: block; font-size: 12.5px; font-weight: 700; color: #424245;
+      display: block; font-size: 12.5px; font-weight: 700; color: var(--text-muted);
       margin: 12px 0 6px;
     }
     .rev-editor-actions { margin-top: 10px; display: flex; gap: 8px; justify-content: flex-end; }
     .rev-editor-actions .btn-save {
-      padding: 7px 14px; border: none; border-radius: 8px; background: #0066cc;
-      color: #fff; font-size: 12px; font-weight: 700; cursor: pointer;
+      padding: 7px 14px; border: none; border-radius: 8px; background: var(--primary);
+      color: var(--surface-alt); font-size: 12px; font-weight: 700; cursor: pointer;
     }
-    .rev-editor-actions .btn-save:hover { background: #0055b3; }
+    .rev-editor-actions .btn-save:hover { background: var(--primary-hover); }
     .rev-editor-actions .btn-cancel {
-      padding: 7px 14px; border: 1px solid #6e6e73; border-radius: 8px; background: #fff;
-      color: #6e6e73; font-size: 12px; font-weight: 600; cursor: pointer;
+      padding: 7px 14px; border: 1px solid var(--text-dim); border-radius: 8px; background: var(--surface-alt);
+      color: var(--text-dim); font-size: 12px; font-weight: 600; cursor: pointer;
     }
 
     .rev-history {
-      margin: 0; background: transparent; border: none; padding: 0;
+      margin: 0; background: var(--transparent); border: none; padding: 0;
     }
     .rev-history .rh-item {
       border-top: 1px solid var(--border); padding: 14px 0; font-size: 13.5px;
@@ -1034,40 +1145,40 @@
       margin-bottom: 8px;
     }
     .rev-history .rh-editor {
-      background: #0066cc; color: #fff; padding: 2px 10px; border-radius: 10px;
+      background: var(--primary); color: var(--surface-alt); padding: 2px 10px; border-radius: 10px;
       font-weight: 600; font-size: 12.5px;
     }
-    .rev-history .rh-time { color: #6e6e73; font-size: 12.5px; }
+    .rev-history .rh-time { color: var(--text-dim); font-size: 12.5px; }
     .rev-history .btn-accept-rev,
     .rev-history .btn-delete-rev {
       border: none; padding: 4px 12px; border-radius: 14px; font-size: 12.5px;
       font-weight: 600; cursor: pointer; transition: filter .15s;
     }
-    .rev-history .btn-accept-rev { background: #34c759; color: #fff; }
+    .rev-history .btn-accept-rev { background: var(--success); color: var(--surface-alt); }
     .rev-history .btn-accept-rev:hover { filter: brightness(.92); }
-    .rev-history .btn-delete-rev { background: #fbeaea; color: #c0392b; }
-    .rev-history .btn-delete-rev:hover { background: #f5d0cd; }
+    .rev-history .btn-delete-rev { background: var(--danger-soft); color: var(--danger); }
+    .rev-history .btn-delete-rev:hover { background: var(--danger-soft); }
     .rev-history .rh-reason {
-      background: #fff7e0; padding: 10px 14px; border-radius: 8px;
-      border-left: 3px solid #f4b400; font-size: 14px; line-height: 1.75;
-      color: #5d4c00; margin: 8px 0;
+      background: var(--reason-bg); padding: 10px 14px; border-radius: 8px;
+      border-left: 3px solid var(--reason-accent); font-size: 14px; line-height: 1.75;
+      color: var(--reason-text); margin: 8px 0;
     }
     .rev-history .rh-reason::before { content: "수정 이유: "; font-weight: 700; }
     .rev-history .rh-diff {
       display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 8px;
     }
     .rev-history .rh-diff .rh-col h6 {
-      font-size: 11.5px; font-weight: 700; color: #6e6e73;
+      font-size: 11.5px; font-weight: 700; color: var(--text-dim);
       text-transform: uppercase; margin-bottom: 5px; letter-spacing: 0.3px;
     }
     .rev-history .rh-diff .rh-col .rh-text {
       padding: 10px 12px; border-radius: 8px; font-size: 13.5px; line-height: 1.75;
       white-space: pre-wrap; min-height: 56px;
     }
-    .rev-history .rh-diff .rh-before .rh-text { background: #fff2f0; color: #5f2120; }
-    .rev-history .rh-diff .rh-after .rh-text { background: #eaf7ec; color: #1e4620; }
+    .rev-history .rh-diff .rh-before .rh-text { background: var(--before-bg); color: var(--before-text); }
+    .rev-history .rh-diff .rh-after .rh-text { background: var(--after-bg); color: var(--after-text); }
     .rev-history .rh-empty {
-      color: #aeaeb2; font-size: 12px; font-style: italic; padding: 6px 0;
+      color: var(--text-faint); font-size: 12px; font-style: italic; padding: 6px 0;
     }
 
     @media (max-width: 640px) {
@@ -1075,20 +1186,20 @@
     }
 
     .rev-note-field {
-      margin-top: 16px; padding-top: 12px; border-top: 1px dashed #e5e5ea;
+      margin-top: 16px; padding-top: 12px; border-top: 1px dashed var(--border);
     }
     .rev-note-field label {
       display: flex; align-items: center; gap: 8px;
-      font-size: 13.5px; font-weight: 700; color: #424245; margin-bottom: 8px;
+      font-size: 13.5px; font-weight: 700; color: var(--text-muted); margin-bottom: 8px;
     }
     .rev-note-field textarea {
-      width: 100%; border: 1px solid #d2d2d7; border-radius: 8px;
+      width: 100%; border: 1px solid var(--border-strong); border-radius: 8px;
       padding: 10px 12px; font-size: 14.5px; line-height: 1.75;
-      font-family: inherit; resize: vertical; min-height: 80px; background: #fafafa;
+      font-family: inherit; resize: vertical; min-height: 80px; background: var(--surface-alt);
     }
     .rev-note-field textarea:focus {
-      outline: none; border-color: #0066cc; background: #fff;
-      box-shadow: 0 0 0 3px rgba(0,102,204,.12);
+      outline: none; border-color: var(--primary); background: var(--surface-alt);
+      box-shadow: 0 0 0 3px var(--primary-soft);
     }
 
     /* ── Anchor Highlight ── */
@@ -1096,11 +1207,581 @@
       animation: ftsPulse 1.6s ease-out;
     }
     @keyframes ftsPulse {
-      0%   { box-shadow: 0 0 0 5px rgba(0,102,204,.35), var(--shadow-sm); }
-      100% { box-shadow: 0 0 0 0 rgba(0,102,204,0), var(--shadow-sm); }
+      0%   { box-shadow: 0 0 0 5px var(--border-strong), var(--shadow-sm); }
+      100% { box-shadow: 0 0 0 0 var(--transparent), var(--shadow-sm); }
+    }
+
+    /* ── Detail Workspace: context / writing / preview ── */
+    .app-shell.detail-mode {
+      grid-template-columns: 280px minmax(0, 1fr);
+    }
+    .app-shell.detail-mode .main-content {
+      overflow: hidden;
+      padding-right: 0;
+    }
+    .detail-panel {
+      background: var(--transparent);
+      border-radius: 0;
+      padding: 0;
+      box-shadow: none;
+      margin-bottom: 0;
+      height: 100%;
+      min-height: 0;
+    }
+    .detail-workspace {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) clamp(420px, 26vw, 520px);
+      gap: 16px;
+      height: 100%;
+      min-height: 0;
+    }
+    .detail-compose-panel,
+    .detail-preview-panel {
+      min-height: 0;
+      max-height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      overscroll-behavior: contain;
+      border: 1px solid var(--border);
+      background: var(--surface-alt);
+      border-radius: 16px;
+      box-shadow: 0 1px 3px var(--text-faint);
+    }
+    .detail-compose-panel {
+      padding: 22px 24px 0;
+    }
+    .detail-context-panel {
+      min-height: 0;
+      overflow: visible;
+    }
+    .detail-preview-panel {
+      padding: 18px;
+      background: var(--surface);
+      display: flex;
+      flex-direction: column;
+    }
+    .detail-back {
+      margin-bottom: 16px;
+      padding: 0;
+    }
+    .detail-q-chip {
+      display: inline-flex;
+      align-items: center;
+      height: 24px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: var(--primary);
+      color: var(--surface-alt);
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .detail-header {
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .detail-header h2 {
+      font-size: 20px;
+      line-height: 1.35;
+      margin-bottom: 12px;
+    }
+    .detail-header .question,
+    .detail-header .hint {
+      padding: 0;
+      background: var(--transparent);
+      border-radius: 0;
+    }
+    .detail-header .question {
+      font-size: 13.5px;
+      line-height: 1.65;
+      color: var(--text-muted);
+    }
+    .detail-header .hint {
+      margin-top: 10px;
+      font-size: 12.5px;
+      line-height: 1.65;
+      font-style: normal;
+    }
+    .detail-status-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+    .detail-status-item {
+      min-width: 0;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--surface);
+    }
+    .detail-status-item dt {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-faint);
+      text-transform: uppercase;
+      letter-spacing: .4px;
+      margin-bottom: 4px;
+    }
+    .detail-status-item dd {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .detail-status-item.wide {
+      grid-column: 1 / -1;
+    }
+    .mini-topic-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .detail-topic-select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border-strong);
+      border-radius: 10px;
+      background: var(--surface);
+      color: var(--text);
+      font: inherit;
+      font-size: 13px;
+      margin-bottom: 14px;
+    }
+    .mini-topic-list-title {
+      margin: 4px 0 8px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-dim);
+    }
+    .mini-topic-btn {
+      width: 100%;
+      border: 0;
+      background: var(--transparent);
+      border-radius: 10px;
+      padding: 9px 10px;
+      text-align: left;
+      cursor: pointer;
+      display: grid;
+      grid-template-columns: 36px 1fr auto;
+      gap: 8px;
+      align-items: center;
+      color: var(--text-muted);
+    }
+    .mini-topic-btn:hover,
+    .mini-topic-btn.current {
+      background: var(--primary-soft);
+      color: var(--primary);
+    }
+    .mini-topic-q {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--text-dim);
+    }
+    .mini-topic-title {
+      min-width: 0;
+      font-size: 12.5px;
+      line-height: 1.35;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .mini-topic-count {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-faint);
+    }
+    .compose-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    .compose-header h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .compose-subtitle {
+      font-size: 12.5px;
+      color: var(--text-dim);
+    }
+    .detail-mode-tabs {
+      display: inline-grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3px;
+      padding: 3px;
+      margin-bottom: 16px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface);
+    }
+    .detail-mode-tab {
+      border: 0;
+      border-radius: 9px;
+      background: var(--transparent);
+      color: var(--text-dim);
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .detail-mode-tab.active {
+      background: var(--primary);
+      color: var(--surface-alt);
+    }
+    .detail-pane {
+      display: none;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    .detail-pane.show { display: block; }
+    .case-browser-toolbar {
+      display: grid;
+      grid-template-columns: minmax(180px, 1fr) 150px auto;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .case-browser-toolbar input,
+    .case-browser-toolbar select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border-strong);
+      border-radius: 10px;
+      background: var(--surface);
+      color: var(--text);
+      font: inherit;
+      font-size: 13px;
+    }
+    .btn-secondary-action {
+      border: 1px solid var(--primary);
+      border-radius: 10px;
+      background: var(--surface);
+      color: var(--primary);
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .btn-secondary-action:hover { background: var(--primary-soft); }
+    .preview-panel-toggle {
+      display: none;
+      border: 1px solid var(--border-strong);
+      border-radius: 10px;
+      background: var(--surface);
+      color: var(--text);
+      padding: 9px 12px;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .submission-form-card {
+      max-width: 920px;
+      margin: 0 auto;
+      padding-bottom: 76px;
+    }
+    .submission-meta-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .submission-meta-grid .form-group.full,
+    .submission-meta-grid .form-group.author-field {
+      grid-column: span 2;
+    }
+    .writing-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin-top: 16px;
+    }
+    .writing-grid .form-group.writing-pane {
+      grid-column: 1 / -1;
+    }
+    .writing-grid .form-group.writing-pane textarea {
+      min-height: clamp(260px, 32vh, 420px);
+      background: var(--surface);
+    }
+    .draft-action-bar {
+      position: sticky;
+      bottom: 0;
+      z-index: 8;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin: 20px -24px 0;
+      padding: 13px 24px;
+      border-top: 1px solid var(--border);
+      background: var(--surface-alt);
+      box-shadow: none;
+    }
+    .draft-action-status {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      color: var(--text-dim);
+      font-size: 12.5px;
+      font-weight: 700;
+    }
+    .draft-action-status strong {
+      color: var(--text);
+      font-size: 14px;
+      white-space: nowrap;
+    }
+    .draft-action-status span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .draft-action-status.is-pass strong { color: var(--success); }
+    .draft-action-status.is-warn strong { color: var(--warning); }
+    .draft-action-status.is-fail strong { color: var(--danger); }
+    .draft-action-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .draft-action-controls .btn-secondary-action,
+    .draft-action-controls .btn-submit {
+      min-height: 42px;
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
+    .submissions-block {
+      margin: 0;
+    }
+    .submissions-title {
+      margin-bottom: 12px;
+      font-size: 15px;
+    }
+    .submission-card {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 16px 18px;
+      cursor: pointer;
+    }
+    .submission-card.is-selected {
+      border-color: var(--primary);
+      box-shadow: inset 3px 0 0 var(--primary);
+    }
+    .submission-card .sub-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .submission-card .sub-body h4 {
+      margin-top: 0;
+    }
+    .submission-card .sub-body p {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .sub-preview-hint {
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+    .preview-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .preview-eyebrow {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--text-faint);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+    .preview-title {
+      margin-top: 4px;
+      font-size: 16px;
+      font-weight: 800;
+      line-height: 1.35;
+    }
+    .preview-meta {
+      margin-top: 5px;
+      font-size: 12.5px;
+      color: var(--text-dim);
+      line-height: 1.5;
+    }
+    .preview-close {
+      display: none;
+      align-self: flex-start;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      background: var(--surface-alt);
+      color: var(--text);
+      padding: 6px 9px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .preview-frame-slot .ad-embed {
+      margin-top: 0;
+      border-radius: 12px;
+      background: #000;
+    }
+    .preview-frame-slot .ad-embed-frame,
+    .preview-frame-slot .ad-embed-video {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16 / 9;
+      min-height: 0;
+      max-height: none;
+      object-fit: contain;
+    }
+    .preview-empty {
+      display: grid;
+      place-items: center;
+      min-height: 220px;
+      aspect-ratio: 16 / 9;
+      border: 1px dashed var(--border-strong);
+      border-radius: 12px;
+      background: var(--surface-alt);
+      color: var(--text-dim);
+      text-align: center;
+      padding: 22px;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .preview-inspector {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+      min-height: 0;
+    }
+    .inspector-empty {
+      padding: 18px;
+      border: 1px dashed var(--border-strong);
+      border-radius: 12px;
+      color: var(--text-dim);
+      background: var(--surface-alt);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+    .inspector-section {
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .inspector-section:first-child { padding-top: 0; }
+    .inspector-section:last-child { border-bottom: 0; padding-bottom: 0; }
+    .inspector-section h4 {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--text-faint);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      margin-bottom: 8px;
+    }
+    .inspector-kv {
+      display: grid;
+      grid-template-columns: 76px 1fr;
+      gap: 6px 10px;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+    .inspector-kv dt {
+      color: var(--text-dim);
+      font-weight: 700;
+    }
+    .inspector-kv dd {
+      min-width: 0;
+      color: var(--text);
+      word-break: break-word;
+    }
+    .inspector-text {
+      max-height: 180px;
+      overflow-y: auto;
+      padding: 12px;
+      border-radius: 10px;
+      background: var(--surface-alt);
+      color: var(--text-muted);
+      font-size: 13px;
+      line-height: 1.75;
+      white-space: pre-wrap;
+    }
+    .inspector-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+    .inspector-actions .vote-btn,
+    .inspector-actions .eval-btn,
+    .inspector-actions .btn-submit,
+    .inspector-actions .ad-embed-open {
+      margin: 0;
+    }
+    .draft-assist-panel .volume-checker,
+    .draft-assist-panel .dup-checker,
+    .draft-assist-panel .form-actions {
+      margin: 0 0 12px;
+    }
+    .draft-assist-panel .volume-checker,
+    .draft-assist-panel .dup-checker {
+      padding: 14px;
+      border-radius: 12px;
+      background: var(--surface-alt);
+    }
+    .draft-assist-panel .dup-checker:not(.show) {
+      display: block;
+      opacity: .72;
+    }
+    .draft-assist-panel .dup-checker:not(.show) h4 {
+      color: var(--text-faint);
+    }
+    .draft-assist-panel .form-actions {
+      display: block;
+    }
+    .draft-assist-panel .btn-submit {
+      width: 100%;
     }
 
     /* ── Responsive ── */
+    @media (max-width: 1500px) {
+      .detail-workspace {
+        grid-template-columns: minmax(0, 1fr) 420px;
+      }
+    }
+    @media (max-width: 1360px) {
+      .detail-workspace {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .detail-preview-panel {
+        display: none;
+      }
+      .preview-panel-toggle {
+        display: inline-flex;
+      }
+      .detail-panel.detail-preview-open .detail-preview-panel {
+        display: flex;
+        position: fixed;
+        right: 20px;
+        top: 20px;
+        bottom: 20px;
+        width: min(520px, calc(100vw - 40px));
+        z-index: 40;
+      }
+      .detail-panel.detail-preview-open .preview-close {
+        display: inline-flex;
+      }
+    }
     @media (max-width: 1300px) {
       /* 좁은 화면에서는 우측 패널 숨김 — 2컬럼 유지 */
       .app-shell.right-panel-on { grid-template-columns: 240px 1fr; }
@@ -1111,11 +1792,14 @@
       .detail-panel { padding: 26px 28px; }
       .app-shell,
       .app-shell.right-panel-on { grid-template-columns: 200px 1fr; gap: 18px; }
+      .app-shell.detail-mode { grid-template-columns: 260px minmax(0, 1fr); }
+      .detail-panel { padding: 0; }
     }
     @media (max-width: 900px) {
       .dashboard-columns { grid-template-columns: 1fr; gap: 20px; }
       .app-shell,
-      .app-shell.right-panel-on { grid-template-columns: 1fr; gap: 16px; }
+      .app-shell.right-panel-on,
+      .app-shell.detail-mode { grid-template-columns: 1fr; gap: 16px; }
       .sidebar {
         position: static; max-height: none;
         padding: 10px;
@@ -1134,6 +1818,37 @@
       .nav-subitem {
         flex-shrink: 0; min-width: 180px;
       }
+      .app-shell.detail-mode .main-content {
+        overflow-y: auto;
+      }
+      .detail-workspace {
+        grid-template-columns: 1fr;
+        height: auto;
+      }
+      .detail-context-panel,
+      .detail-compose-panel,
+      .detail-preview-panel {
+        max-height: none;
+      }
+      .detail-preview-panel {
+        display: block;
+        order: -1;
+        position: sticky;
+        top: 0;
+        z-index: 12;
+      }
+      .detail-panel.detail-preview-open .detail-preview-panel {
+        position: sticky;
+        inset: auto;
+        width: auto;
+      }
+      .preview-panel-toggle,
+      .preview-close {
+        display: none;
+      }
+      .submission-meta-grid {
+        grid-template-columns: 1fr 1fr;
+      }
     }
     @media (max-width: 640px) {
       .form-grid { grid-template-columns: 1fr; }
@@ -1148,104 +1863,471 @@
       .final-topic-section { padding: 22px 20px; }
       .detail-panel { padding: 22px 20px; }
       .submission-card { padding: 18px 20px; }
+      .detail-panel { padding: 0; }
+      .detail-context-panel,
+      .detail-compose-panel,
+      .detail-preview-panel {
+        border-radius: 12px;
+      }
+      .detail-compose-panel {
+        padding: 18px 18px 0;
+      }
+      .draft-action-bar {
+        margin-left: -18px;
+        margin-right: -18px;
+        padding: 12px 18px;
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .draft-action-controls {
+        width: 100%;
+      }
+      .draft-action-controls .btn-secondary-action,
+      .draft-action-controls .btn-submit {
+        flex: 1;
+        min-width: 0;
+      }
+      .submission-meta-grid,
+      .submission-meta-grid .form-group.full,
+      .submission-meta-grid .form-group.author-field,
+      .submission-card .sub-body {
+        grid-template-columns: 1fr;
+        grid-column: 1 / -1;
+      }
+      .case-browser-toolbar { grid-template-columns: 1fr; }
+    }
+
+    /* IMC Mintlify Design System override */
+    :root {
+      --bg: #ffffff;
+      --surface: #f7f8fa;
+      --surface-alt: #ffffff;
+      --surface-muted: #f7f8fa;
+      --surface-hover: #fbfbfc;
+      --surface-subtle: #f0f1f3;
+      --border: #e6e8ec;
+      --border-strong: #d5dae2;
+      --text: #0d0d0d;
+      --text-muted: #25272d;
+      --text-dim: #5d6675;
+      --text-faint: #9aa2af;
+      --primary: #0d0d0d;
+      --primary-hover: #25272d;
+      --primary-soft: #f7f8fa;
+      --primary-pale: rgba(0,212,164,.12);
+      --success: #00b98f;
+      --success-soft: rgba(0,212,164,.12);
+      --warning: #b57417;
+      --warning-soft: rgba(255,122,69,.12);
+      --danger: #f04438;
+      --danger-soft: rgba(240,68,56,.1);
+      --amber: #ff7a45;
+      --amber-soft: rgba(255,122,69,.12);
+      --shadow-sm: rgba(0,0,0,.04) 0 1px 2px;
+      --shadow-md: rgba(0,0,0,.08) 0 4px 12px;
+      --shadow-lg: rgba(0,0,0,.12) 0 24px 48px -8px;
+      --button-inset: none;
+      --focus-shadow: 0 0 0 3px rgba(0,212,164,.18);
+      --before-bg: rgba(240,68,56,.1);
+      --before-text: #b42318;
+      --after-bg: rgba(0,212,164,.12);
+      --after-text: #007f67;
+      --reason-bg: rgba(255,122,69,.12);
+      --reason-text: #9a4f14;
+      --reason-accent: #ff7a45;
+      --gradient-warm: linear-gradient(180deg, #dff3ff 0%, #fff7e8 100%);
+      --gradient-panel: #ffffff;
+      --gradient-active: #0d0d0d;
+    }
+
+    html,
+    body {
+      background:
+        linear-gradient(180deg, rgba(223,243,255,.9) 0, rgba(255,247,232,.86) 260px, #ffffff 560px),
+        #ffffff;
+      color: var(--text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+    }
+
+    body::before {
+      content: none;
+    }
+
+    .app {
+      position: relative;
+      z-index: 1;
+      padding: 20px 24px 16px;
+    }
+
+    .setup-banner,
+    .sidebar,
+    .main-content,
+    .right-rev-panel,
+    .topic-card,
+    .detail-panel,
+    .detail-context-panel,
+    .detail-compose-panel,
+    .detail-preview-panel,
+    .submission-form-card,
+    .submission-card,
+    .volume-checker,
+    .dup-checker,
+    .draft-assist-panel,
+    .detail-status-item,
+    .preview-frame-slot,
+    .preview-inspector,
+    .results-progress,
+    .result-card,
+    .final-topic-section,
+    .fts-winner,
+    .warn,
+    .eval-result,
+    .rrp-field-group,
+    .rh-item {
+      border: 1px solid var(--border);
+      background: var(--surface-alt);
+      box-shadow: none;
+    }
+
+    .sidebar,
+    .main-content,
+    .right-rev-panel {
+      border-radius: 12px;
+    }
+
+    .topic-card,
+    .submission-card,
+    .result-card,
+    .final-topic-section,
+    .detail-status-item,
+    .volume-checker,
+    .dup-checker,
+    .warn,
+    .fts-winner,
+    .rh-item,
+    .rrp-field-group {
+      border-radius: 12px;
+    }
+
+    .detail-panel,
+    .detail-context-panel,
+    .detail-compose-panel,
+    .detail-preview-panel,
+    .submission-form-card,
+    .preview-frame-slot,
+    .preview-inspector {
+      border-radius: 12px;
+    }
+
+    .topic-card:hover,
+    .submission-card:hover,
+    .result-card:hover,
+    .nav-item:hover:not(.active),
+    .btn-secondary-action:hover,
+    .preview-panel-toggle:hover,
+    .btn-export:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-item,
+    .detail-mode-tab,
+    .lang-btn,
+    .btn-submit,
+    .btn-cancel,
+    .btn-save,
+    .btn-export,
+    .btn-secondary-action,
+    .vote-btn,
+    .eval-btn,
+    .preview-panel-toggle,
+    .preview-close,
+    .detail-topic-select,
+    .form-group input,
+    .form-group textarea,
+    .form-group select,
+    .comment-form input,
+    .sub-edit-form input,
+    .sub-edit-form textarea {
+      border-radius: 9999px;
+    }
+
+    .nav-item.active,
+    .lang-btn.active,
+    .btn-submit,
+    .btn-edit-save,
+    .btn-save,
+    .btn-export.primary,
+    .vote-btn.voted,
+    .eval-btn {
+      background: var(--gradient-active);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: none;
+    }
+
+    .btn-secondary-action,
+    .btn-export.secondary,
+    .preview-panel-toggle,
+    .preview-close,
+    .detail-back,
+    .detail-mode-tab,
+    .lang-toggle,
+    .draft-restore-bar,
+    .case-browser-toolbar,
+    .detail-header .question,
+    .detail-header .hint,
+    .ad-embed,
+    .comment-item,
+    .rev-current,
+    .rh-diff,
+    .eval-summary-box,
+    .eval-improve-box {
+      border-color: var(--border);
+      background: var(--surface);
+    }
+
+    .detail-mode-tab.active {
+      color: var(--text);
+      background: var(--surface);
+      border-color: var(--border);
+    }
+
+    .topic-chip,
+    .assignee-badge,
+    .deadline-badge,
+    .detail-q-chip,
+    .result-q,
+    .fw-badge,
+    .sub-author,
+    .dup-source,
+    .eval-grade,
+    .rev-original-tag,
+    .rrp-count {
+      border-radius: 9999px;
+      box-shadow: none;
+    }
+
+    .chip-1,
+    .dup-item .dup-source.wiki {
+      background: rgba(55,114,207,.15);
+      color: #3772cf;
+    }
+
+    .chip-3 {
+      background: var(--danger-soft);
+      color: #b42318;
+    }
+
+    .chip-4,
+    .topic-vote-badge.voted {
+      background: var(--success-soft);
+      color: #007f67;
+    }
+
+    .chip-5,
+    .topic-leading {
+      background: var(--amber-soft);
+      color: #9a4f14;
+    }
+
+    .header,
+    .compose-header,
+    .preview-header,
+    .rrp-header,
+    .fts-header {
+      border-color: var(--border);
+    }
+
+    .sidebar-home strong,
+    .header h1,
+    .detail-header h2,
+    .compose-header h3,
+    .preview-title,
+    .sub-brand,
+    .result-winner,
+    .fw-brand,
+    .rrp-title {
+      color: var(--text);
+    }
+
+    .sidebar-title,
+    .page-lead,
+    .compose-subtitle,
+    .preview-meta,
+    .sub-info,
+    .sub-campaign,
+    .sub-time,
+    .final-doc-hint,
+    .rrp-sub {
+      color: var(--text-dim);
+    }
+
+    .header {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #dff3ff 0%, #fff7e8 100%);
+      box-shadow: none;
+    }
+
+    .sidebar-home,
+    .nav-item,
+    .detail-back,
+    .comments-toggle,
+    .sub-edit,
+    .sub-delete,
+    .comment-delete {
+      color: var(--text-dim);
+    }
+
+    .nav-item {
+      border-radius: 6px;
+    }
+
+    .nav-item.active {
+      position: relative;
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    .nav-item.active::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 9999px;
+      background: #00d4a4;
+      position: absolute;
+      left: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .nav-item.active .nav-icon {
+      margin-left: 8px;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select,
+    .comment-form input,
+    .sub-edit-form input,
+    .sub-edit-form textarea {
+      border: 1px solid var(--border);
+      background: var(--surface-alt);
+      color: var(--text);
+      box-shadow: none;
+      border-radius: 8px;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus,
+    .comment-form input:focus,
+    .sub-edit-form input:focus,
+    .sub-edit-form textarea:focus {
+      outline: none;
+      border-color: #00d4a4;
+      box-shadow: var(--focus-shadow);
+    }
+
+    .vc-bar,
+    .results-progress-bar,
+    .eval-crit-bar {
+      background: var(--surface-subtle);
+    }
+
+    .vc-bar-fill,
+    .results-progress-fill {
+      background: #00d4a4;
+    }
+
+    .toast,
+    .trans-badge {
+      border: 1px solid rgba(255,255,255,.16);
+      background: #101820;
+      box-shadow: var(--shadow-md);
+    }
+
+    .sub-author,
+    .deadline-badge,
+    .btn-submit,
+    .btn-edit-save,
+    .btn-save,
+    .btn-export.primary,
+    .vote-btn.voted,
+    .eval-btn {
+      color: #fff;
+    }
+
+    .btn-submit,
+    .btn-edit-save,
+    .btn-save,
+    .btn-export.primary,
+    .eval-btn {
+      min-height: 40px;
+      padding-left: 20px;
+      padding-right: 20px;
+      border-radius: 9999px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .btn-secondary-action,
+    .btn-export.secondary,
+    .preview-panel-toggle,
+    .preview-close,
+    .btn-cancel {
+      min-height: 36px;
+      border: 1px solid var(--border);
+      border-radius: 9999px;
+      background: transparent;
+      color: var(--text);
+    }
+
+    code,
+    .badge-type,
+    .eval-crit-score,
+    .section-index,
+    .vc-value {
+      font-family: 'Geist Mono', 'SF Mono', Menlo, Consolas, monospace;
+    }
+
+    .ad-embed,
+    .preview-frame-slot .ad-embed {
+      overflow: visible;
+    }
+
+    .ad-embed-frame,
+    .ad-embed-video,
+    .preview-frame-slot .ad-embed-frame,
+    .preview-frame-slot .ad-embed-video {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      max-height: none;
+      background: #000;
+      object-fit: contain;
+    }
+
+    @media (max-width: 900px) {
+      .app {
+        padding: 14px;
+      }
+
+      .sidebar,
+      .main-content,
+      .right-rev-panel {
+        border-radius: 12px;
+      }
     }
   </style>
 </head>
 <body>
   <div class="app">
-    <!-- Header -->
-    <div class="header">
-      <div class="header-row">
-        <div>
-          <h1>IMC 기말 팀 과제 위키</h1>
-          <p>기말고사 대체 팀과제 10문항 — 팀원들이 함께 광고 사례를 찾아 올리는 공간</p>
-        </div>
-        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-          <div class="lang-toggle">
-            <button class="lang-btn active" data-lang="ko" onclick="switchLanguage('ko')">한국어</button>
-            <button class="lang-btn" data-lang="my" onclick="switchLanguage('my')">မြန်မာ</button>
-          </div>
-          <span class="deadline-badge" id="deadline-badge">D-day: 6/16(화) 자정</span>
-        </div>
-      </div>
-    </div>
-
     <!-- Translation indicator -->
     <div class="trans-badge" id="trans-badge">
       <div class="trans-spinner"></div>
       <span id="trans-badge-text">ဘာသာပြန်နေသည်...</span>
-    </div>
-
-    <!-- Guide Panel -->
-    <button class="guide-toggle" id="guide-toggle" onclick="document.getElementById('guide-toggle').classList.toggle('open');document.getElementById('guide-body').classList.toggle('open')">
-      과제 안내 (제출 형식 · 선정 기준 · 마감)
-      <span class="arrow">▼</span>
-    </button>
-    <div class="guide-body" id="guide-body">
-      <h4>과제 목적</h4>
-      <p>소비자 심리 및 행동 관련 개념들이 실제 광고 활동에 어떻게 적용되는가를 스스로 점검하고, 사례광고물을 찾는 과정에서 다양한 광고물을 접하며 광고에 대한 이해를 증진하는 것.</p>
-
-      <h4>답안 작성 방법 (문제당)</h4>
-      <ul>
-        <li><strong>분량</strong>: PPT 1장 또는 A4 1/2 페이지</li>
-        <li><strong>① 개념/이론 설명</strong> — 각 문제와 관련된 개념이나 이론을 자신이 이해한 대로 서술 (강의노트·서적·자료 그대로 붙이기 금지!)</li>
-        <li><strong>② 광고 사례 분석</strong> — 이러한 개념이나 이론이 사례광고물의 어떤 장면에, 어떻게 포함되어 있는지 명확히 설명</li>
-        <li><strong>③ 배경 설명</strong> — 필요 시 브랜드·광고 배경을 간결하게 포함</li>
-      </ul>
-
-      <h4>제출 형식</h4>
-      <ul>
-        <li>PPT 또는 MS워드 등 <strong>집현캠퍼스에서 확인이 쉬운 문서 형식</strong></li>
-        <li><strong>문제 순서대로</strong> 답안 배치</li>
-      </ul>
-
-      <h4>광고 선정 기준</h4>
-      <ul>
-        <li><strong>2023년 이후</strong> 실행된 국내외 마케팅 커뮤니케이션 콘텐츠</li>
-        <li>광고 기본 정보 필수 기재: <strong>광고주, 브랜드명, 실행 시기, 실행 매체</strong></li>
-        <li>집현캠퍼스에서 확인 가능한 <strong>링크 또는 이미지</strong> 포함</li>
-        <li>집현캠퍼스 <strong>토론방에 이미 사용된 광고</strong>는 동일 문제에 사용 불가</li>
-        <li><strong>문제별로 서로 다른 광고</strong> 사례 제시</li>
-      </ul>
-
-      <h4>마감</h4>
-      <p><strong>6월 16일 (화) 밤 12시</strong> — 집현캠퍼스 기말고사 과제방 업로드 (시간 엄수, 늦은 과제 감점)</p>
-
-      <div class="warn">
-        <strong>주의!</strong> 세상은 넓고 광고는 수도 없이 많습니다. 토론방에서 이미 쓰인 광고를 그대로 가져오지 마세요. 문제마다 반드시 다른 광고를 찾아야 합니다.
-      </div>
-    </div>
-
-    <!-- AI 평가시스템 -->
-    <button class="guide-toggle" id="eval-guide-toggle" onclick="document.getElementById('eval-guide-toggle').classList.toggle('open');document.getElementById('eval-guide-body').classList.toggle('open')">
-      AI 평가시스템 (광고 사례 자동 평가 기준)
-      <span class="arrow">▼</span>
-    </button>
-    <div class="guide-body" id="eval-guide-body">
-      <h4>평가 개요</h4>
-      <p>제출된 답안/광고 사례의 <strong>AI 평가</strong> 버튼을 누르면 5개 기준으로 자동 평가합니다. 평가 결과는 참고용이며, 최종 선정은 팀 토론을 통해 결정하세요.</p>
-
-      <h4>평가 기준 (총 100점)</h4>
-      <ul>
-        <li><strong>1. 개념 적합도 (30점)</strong> — 해당 이론/개념을 정확하게 보여주는가? 개념의 핵심 메커니즘이 광고의 중심 전략으로 작동하는지 평가</li>
-        <li><strong>2. 분석 용이성 (30점)</strong> — 광고 요소(모델, 카피, 비주얼, 컬러, 오디오)에서 개념이 구체적으로 식별되는가? 3개 이상 요소에서 짚어낼 수 있으면 만점</li>
-        <li><strong>3. 배타성 (15점)</strong> — 해당 광고가 이 주제에만 적합한가? 다른 주제에도 끼워맞출 수 있는 범용 광고는 감점</li>
-        <li><strong>4. 중복 회피 (10점)</strong> — 광고 선택의 독창성. 누구나 떠올릴 법한 뻔한 광고보다 신선한 사례를 높이 평가</li>
-        <li><strong>5. 발표 임팩트 (15점)</strong> — 발표 시 설득력과 인상도. 광고 자체가 인상적이고 보자마자 개념이 와닿는 정도</li>
-      </ul>
-
-      <h4>등급 기준</h4>
-      <ul>
-        <li><strong>S (90~100)</strong> — 완벽한 사례. 이 광고로 바로 제출 가능</li>
-        <li><strong>A (75~89)</strong> — 우수한 사례. 약간의 보완으로 최종 선정 가능</li>
-        <li><strong>B (60~74)</strong> — 적절한 사례. 분석 보강 필요</li>
-        <li><strong>C (45~59)</strong> — 아쉬운 사례. 다른 광고 검토 권장</li>
-        <li><strong>D (0~44)</strong> — 부적합. 다른 광고로 교체 필요</li>
-      </ul>
-
-      <div class="warn">
-        <strong>참고:</strong> AI 평가는 제출된 텍스트 내용만으로 판단합니다. 실제 광고 영상을 보고 판단하는 것이 아니므로, 분석 내용을 상세히 작성할수록 정확한 평가를 받을 수 있습니다.
-      </div>
     </div>
 
     <!-- Setup Banner (Supabase 미연결 시 표시) -->
@@ -1257,20 +2339,67 @@
     <!-- App Shell: Sidebar Nav + Main Content -->
     <div class="app-shell" id="app-shell">
       <aside class="sidebar" id="sidebar">
-        <div class="sidebar-title">워크스페이스</div>
-        <nav class="sidebar-nav">
-          <button class="nav-item active" data-tab="topics" onclick="showTab('topics')">
-            <span class="nav-icon">📋</span><span>문제 목록</span>
-          </button>
-          <button class="nav-item" data-tab="results" onclick="showTab('results')">
-            <span class="nav-icon">🏆</span><span>선정 결과</span>
-          </button>
-          <button class="nav-item" data-tab="final" onclick="showTab('final')">
-            <span class="nav-icon">📄</span><span>최종 문서</span>
-            <span class="nav-chevron">▸</span>
-          </button>
-          <div class="nav-sublist" id="nav-final-sublist"></div>
-        </nav>
+        <button class="sidebar-home" type="button" onclick="showDashboard()">
+          <strong>IMC 기말 팀 과제위키</strong>
+          <span>홈으로 돌아가기</span>
+        </button>
+        <div class="sidebar-main" id="sidebar-main">
+          <div class="sidebar-title">워크스페이스</div>
+          <nav class="sidebar-nav">
+            <button class="nav-item active" data-tab="topics" onclick="showTab('topics')">
+              <span class="nav-icon">📋</span><span>문제 목록</span>
+            </button>
+            <button class="nav-item" data-tab="results" onclick="showTab('results')">
+              <span class="nav-icon">🏆</span><span>선정 결과</span>
+            </button>
+            <button class="nav-item" data-tab="final" onclick="showTab('final')">
+              <span class="nav-icon">📄</span><span>최종 문서</span>
+              <span class="nav-chevron">▸</span>
+            </button>
+            <div class="nav-sublist" id="nav-final-sublist"></div>
+            <button class="nav-item" data-tab="guide" onclick="showTab('guide')">
+              <span class="nav-icon">ℹ</span><span>과제 안내</span>
+            </button>
+            <button class="nav-item" data-tab="evaluation" onclick="showTab('evaluation')">
+              <span class="nav-icon">◎</span><span>AI 평가 기준</span>
+            </button>
+          </nav>
+        </div>
+        <div class="sidebar-detail" id="sidebar-detail">
+          <div class="detail-context-panel" aria-label="문제 맥락 패널">
+            <button class="detail-back" onclick="showDashboard()">← 문제 목록</button>
+            <label class="mini-topic-list-title" for="detail-topic-select">문제 선택</label>
+            <select class="detail-topic-select" id="detail-topic-select" onchange="openTopic(Number(this.value))"></select>
+            <div class="detail-header">
+              <div class="detail-q-chip" id="detail-q-chip">Q</div>
+              <h2 id="detail-title"></h2>
+              <div id="detail-question" class="question"></div>
+              <div id="detail-hint" class="hint"></div>
+            </div>
+            <dl class="detail-status-grid" id="detail-status-grid">
+              <div class="detail-status-item">
+                <dt>제출</dt>
+                <dd><span id="sub-count">0</span>건</dd>
+              </div>
+              <div class="detail-status-item">
+                <dt>투표</dt>
+                <dd id="detail-vote-state">미확인</dd>
+              </div>
+              <div class="detail-status-item wide">
+                <dt>담당자</dt>
+                <dd id="detail-assignees">미지정</dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+        <div class="sidebar-footer">
+          <div class="sidebar-footer-label">표시 언어</div>
+          <div class="lang-toggle">
+            <button class="lang-btn active" data-lang="ko" onclick="switchLanguage('ko')">한국어</button>
+            <button class="lang-btn" data-lang="my" onclick="switchLanguage('my')">မြန်မာ</button>
+          </div>
+          <span class="deadline-badge" id="deadline-badge">D-day: 6/16(화) 자정</span>
+        </div>
       </aside>
 
       <main class="main-content">
@@ -1300,6 +2429,76 @@
           <div class="results-grid" id="results-grid"></div>
         </div>
 
+        <!-- Assignment Guide Page -->
+        <section id="guide-dashboard" class="nav-page">
+          <h2>과제 안내</h2>
+          <p class="page-lead">제출 형식, 광고 선정 기준, 마감 정보를 한 곳에 정리했습니다.</p>
+
+          <h4>과제 목적</h4>
+          <p>소비자 심리 및 행동 관련 개념들이 실제 광고 활동에 어떻게 적용되는가를 스스로 점검하고, 사례광고물을 찾는 과정에서 다양한 광고물을 접하며 광고에 대한 이해를 증진하는 것.</p>
+
+          <h4>답안 작성 방법 (문제당)</h4>
+          <ul>
+            <li><strong>분량</strong>: PPT 1장 또는 A4 1/2 페이지</li>
+            <li><strong>① 개념/이론 설명</strong> — 각 문제와 관련된 개념이나 이론을 자신이 이해한 대로 서술 (강의노트·서적·자료 그대로 붙이기 금지!)</li>
+            <li><strong>② 광고 사례 분석</strong> — 이러한 개념이나 이론이 사례광고물의 어떤 장면에, 어떻게 포함되어 있는지 명확히 설명</li>
+            <li><strong>③ 배경 설명</strong> — 필요 시 브랜드·광고 배경을 간결하게 포함</li>
+          </ul>
+
+          <h4>제출 형식</h4>
+          <ul>
+            <li>PPT 또는 MS워드 등 <strong>집현캠퍼스에서 확인이 쉬운 문서 형식</strong></li>
+            <li><strong>문제 순서대로</strong> 답안 배치</li>
+          </ul>
+
+          <h4>광고 선정 기준</h4>
+          <ul>
+            <li><strong>2023년 이후</strong> 실행된 국내외 마케팅 커뮤니케이션 콘텐츠</li>
+            <li>광고 기본 정보 필수 기재: <strong>광고주, 브랜드명, 실행 시기, 실행 매체</strong></li>
+            <li>집현캠퍼스에서 확인 가능한 <strong>링크 또는 이미지</strong> 포함</li>
+            <li>집현캠퍼스 <strong>토론방에 이미 사용된 광고</strong>는 동일 문제에 사용 불가</li>
+            <li><strong>문제별로 서로 다른 광고</strong> 사례 제시</li>
+          </ul>
+
+          <h4>마감</h4>
+          <p><strong>6월 16일 (화) 밤 12시</strong> — 집현캠퍼스 기말고사 과제방 업로드 (시간 엄수, 늦은 과제 감점)</p>
+
+          <div class="warn">
+            <strong>주의!</strong> 세상은 넓고 광고는 수도 없이 많습니다. 토론방에서 이미 쓰인 광고를 그대로 가져오지 마세요. 문제마다 반드시 다른 광고를 찾아야 합니다.
+          </div>
+        </section>
+
+        <!-- AI Evaluation Guide Page -->
+        <section id="evaluation-dashboard" class="nav-page">
+          <h2>AI 평가 기준</h2>
+          <p class="page-lead">제출된 답안/광고 사례의 AI 평가는 참고용이며, 최종 선정은 팀 토론을 통해 결정하세요.</p>
+
+          <h4>평가 개요</h4>
+          <p>제출된 답안/광고 사례의 <strong>AI 평가</strong> 버튼을 누르면 5개 기준으로 자동 평가합니다. 평가는 제출된 텍스트 내용을 기준으로 이뤄집니다.</p>
+
+          <h4>평가 기준 (총 100점)</h4>
+          <ul>
+            <li><strong>1. 개념 적합도 (30점)</strong> — 해당 이론/개념을 정확하게 보여주는가? 개념의 핵심 메커니즘이 광고의 중심 전략으로 작동하는지 평가</li>
+            <li><strong>2. 분석 용이성 (30점)</strong> — 광고 요소(모델, 카피, 비주얼, 컬러, 오디오)에서 개념이 구체적으로 식별되는가? 3개 이상 요소에서 짚어낼 수 있으면 만점</li>
+            <li><strong>3. 배타성 (15점)</strong> — 해당 광고가 이 주제에만 적합한가? 다른 주제에도 끼워맞출 수 있는 범용 광고는 감점</li>
+            <li><strong>4. 중복 회피 (10점)</strong> — 광고 선택의 독창성. 누구나 떠올릴 법한 뻔한 광고보다 신선한 사례를 높이 평가</li>
+            <li><strong>5. 발표 임팩트 (15점)</strong> — 발표 시 설득력과 인상도. 광고 자체가 인상적이고 보자마자 개념이 와닿는 정도</li>
+          </ul>
+
+          <h4>등급 기준</h4>
+          <ul>
+            <li><strong>S (90~100)</strong> — 완벽한 사례. 이 광고로 바로 제출 가능</li>
+            <li><strong>A (75~89)</strong> — 우수한 사례. 약간의 보완으로 최종 선정 가능</li>
+            <li><strong>B (60~74)</strong> — 적절한 사례. 분석 보강 필요</li>
+            <li><strong>C (45~59)</strong> — 아쉬운 사례. 다른 광고 검토 권장</li>
+            <li><strong>D (0~44)</strong> — 부적합. 다른 광고로 교체 필요</li>
+          </ul>
+
+          <div class="warn">
+            <strong>참고:</strong> AI 평가는 실제 광고 영상을 보고 판단하는 것이 아니므로, 분석 내용을 상세히 작성할수록 정확한 평가를 받을 수 있습니다.
+          </div>
+        </section>
+
         <!-- Final Document Dashboard (최종 문서) -->
         <div id="final-doc-dashboard" class="final-doc-dashboard">
           <div class="final-doc-actions">
@@ -1311,93 +2510,115 @@
           <div id="final-doc-grid"></div>
         </div>
 
-        <!-- Detail Panel: 단일 문제 화면 (공유 main 내부) -->
+        <!-- Detail Panel: 단일 문제 작성 워크스페이스 -->
         <div id="detail-panel" class="detail-panel" hidden>
-      <button class="detail-back" onclick="showDashboard()">← 전체 문제로 돌아가기</button>
-      <div class="detail-header">
-        <h2 id="detail-title"></h2>
-        <div id="detail-question" class="question"></div>
-        <div id="detail-hint" class="hint"></div>
-      </div>
-      <h3 class="submissions-title">제출된 답안/광고 사례 (<span id="sub-count">0</span>건)</h3>
-      <div id="submissions-list"></div>
+          <div class="detail-workspace">
+            <section class="detail-compose-panel" aria-label="작성 및 제출 작업 영역">
+              <div class="compose-header">
+                <div>
+                  <h3>광고 사례 워크스페이스 <span class="draft-badge" id="draft-badge"></span></h3>
+                  <p class="compose-subtitle">등록된 사례를 먼저 훑고, 필요할 때 새 사례 작성으로 전환하세요.</p>
+                </div>
+                <button class="preview-panel-toggle" type="button" onclick="toggleDetailPreview()">미리보기</button>
+              </div>
 
-      <!-- Form -->
-      <div class="form-section">
-        <h3>새 답안/광고 사례 올리기 <span class="draft-badge" id="draft-badge"></span></h3>
-        <div class="draft-restore-bar" id="draft-restore-bar">
-          <span id="draft-restore-msg">이전에 작성 중이던 초안이 있습니다.</span>
-          <div>
-            <button onclick="restoreDraft()">복원</button>
-            <button class="draft-discard" onclick="discardDraft()">삭제</button>
+              <div class="detail-mode-tabs" role="tablist" aria-label="사례 작업 모드">
+                <button class="detail-mode-tab active" id="detail-cases-tab" type="button" onclick="setDetailMode('cases')">제출 사례</button>
+                <button class="detail-mode-tab" id="detail-form-tab" type="button" onclick="setDetailMode('form')">새 사례 작성</button>
+              </div>
+
+              <section class="detail-pane show" id="cases-pane">
+                <div class="case-browser-toolbar">
+                  <input id="case-search" type="search" placeholder="브랜드, 캠페인, 작성자 검색" oninput="filterSubmissionCards()" />
+                  <select id="case-sort" onchange="renderSubmissionCards()">
+                    <option value="recent">최근 제출순</option>
+                    <option value="votes">투표 많은순</option>
+                    <option value="brand">브랜드순</option>
+                  </select>
+                  <button class="btn-secondary-action" type="button" onclick="setDetailMode('form')">새 사례 작성</button>
+                </div>
+                <h3 class="submissions-title">제출된 답안/광고 사례 (<span id="sub-count-inline">0</span>건)</h3>
+                <div id="submissions-list"></div>
+              </section>
+
+              <section class="detail-pane" id="form-pane">
+                <div class="draft-restore-bar" id="draft-restore-bar">
+                  <span id="draft-restore-msg">이전에 작성 중이던 초안이 있습니다.</span>
+                  <div>
+                    <button onclick="restoreDraft()">복원</button>
+                    <button class="draft-discard" onclick="discardDraft()">삭제</button>
+                  </div>
+                </div>
+                <form id="submission-form" class="submission-form-card">
+                  <div class="form-grid submission-meta-grid">
+                    <div class="form-group author-field">
+                      <label for="f-author">작성자 이름</label>
+                      <input id="f-author" required placeholder="홍길동" />
+                    </div>
+                    <div class="form-group">
+                      <label for="f-brand">브랜드/주제</label>
+                      <input id="f-brand" required placeholder="삼성전자 또는 팀과제 회고" />
+                    </div>
+                    <div class="form-group">
+                      <label for="f-campaign">캠페인/답안 제목</label>
+                      <input id="f-campaign" required placeholder="Galaxy S25 울트라 또는 팀원별 회고" />
+                    </div>
+                    <div class="form-group">
+                      <label for="f-published">광고 실행 시기/작성 기준</label>
+                      <input id="f-published" required placeholder="2025.01 또는 2026 기말" />
+                    </div>
+                    <div class="form-group">
+                      <label for="f-medium">매체/자료 형태</label>
+                      <input id="f-medium" required placeholder="TVCF / YouTube / SNS / 회고" />
+                    </div>
+                    <div class="form-group full">
+                      <label for="f-url">광고/참고 링크 (TVCF: 검색→광고 클릭→주소창 복사)</label>
+                      <input id="f-url" type="url" placeholder="https://tvcf.co.kr/play/bh00000-000000" />
+                    </div>
+                  </div>
+
+                  <div class="writing-grid">
+                    <div class="form-group writing-pane">
+                      <label for="f-concept">개념/이론 설명 또는 느낀 점</label>
+                      <textarea id="f-concept" required rows="12" placeholder="이 문제와 관련된 개념을 자신의 말로 설명하거나, 10번은 팀원별 느낀 점을 정리..."></textarea>
+                    </div>
+                    <div class="form-group writing-pane">
+                      <label for="f-analysis">광고 사례 분석 또는 개선 의견</label>
+                      <textarea id="f-analysis" required rows="12" placeholder="광고에서는 해당 개념이 어떻게 적용되었는지, 10번은 좋았던 점/유지할 점/개선할 점을 구체적으로..."></textarea>
+                    </div>
+                  </div>
+                  <div class="draft-action-bar">
+                    <div class="draft-action-status" id="draft-action-status">
+                      <span>작성 상태</span>
+                      <strong id="draft-action-length">0자</strong>
+                    </div>
+                    <div class="draft-action-controls">
+                      <button class="btn-secondary-action" type="button" onclick="checkDuplicate()">중복 검사</button>
+                      <button type="submit" class="btn-submit" id="btn-submit" data-submit-button>작성 완료</button>
+                    </div>
+                  </div>
+                </form>
+              </section>
+            </section>
+
+            <aside class="detail-preview-panel" id="detail-preview-panel" aria-label="광고 플레이어 미리보기 패널">
+              <div class="preview-header">
+                <div>
+                  <div class="preview-eyebrow" id="preview-eyebrow">광고 플레이어</div>
+                  <div class="preview-title" id="preview-title">링크를 입력하거나 제출 카드를 선택하세요</div>
+                  <div class="preview-meta" id="preview-meta">YouTube, Vimeo, TVCF 링크는 영상 플레이어만 표시합니다.</div>
+                </div>
+                <button class="preview-close" type="button" onclick="toggleDetailPreview(false)">닫기</button>
+              </div>
+              <div class="preview-frame-slot" id="ad-preview-panel">
+                <div class="preview-empty">광고 링크를 붙여넣으면 이 영역이 즉시 미리보기 모드로 전환됩니다.</div>
+              </div>
+              <div class="preview-inspector" id="preview-inspector">
+                <div class="inspector-empty">제출 사례를 선택하면 광고 정보와 분석 내용이 여기에 표시됩니다.</div>
+              </div>
+            </aside>
           </div>
         </div>
-        <form id="submission-form">
-          <div class="form-grid">
-            <div class="form-group">
-              <label for="f-author">작성자 이름</label>
-              <input id="f-author" required placeholder="홍길동" />
-            </div>
-            <div class="form-group">
-              <label for="f-brand">브랜드/주제</label>
-              <input id="f-brand" required placeholder="삼성전자 또는 팀과제 회고" />
-            </div>
-            <div class="form-group">
-              <label for="f-campaign">캠페인/답안 제목</label>
-              <input id="f-campaign" required placeholder="Galaxy S25 울트라 또는 팀원별 회고" />
-            </div>
-            <div class="form-group">
-              <label for="f-published">광고 실행 시기/작성 기준</label>
-              <input id="f-published" required placeholder="2025.01 또는 2026 기말" />
-            </div>
-            <div class="form-group">
-              <label for="f-medium">매체/자료 형태</label>
-              <input id="f-medium" required placeholder="TVCF / YouTube / SNS / 회고" />
-            </div>
-            <div class="form-group">
-              <label for="f-url">광고/참고 링크 (TVCF: 검색→광고 클릭→주소창 복사)</label>
-              <input id="f-url" type="url" placeholder="https://tvcf.co.kr/play/bh00000-000000" />
-            </div>
-            <div class="form-group writing-pane">
-              <label for="f-concept">개념/이론 설명 또는 느낀 점</label>
-              <textarea id="f-concept" required rows="12" placeholder="이 문제와 관련된 개념을 자신의 말로 설명하거나, 10번은 팀원별 느낀 점을 정리..."></textarea>
-            </div>
-            <div class="form-group writing-pane">
-              <label for="f-analysis">광고 사례 분석 또는 개선 의견</label>
-              <textarea id="f-analysis" required rows="12" placeholder="광고에서는 해당 개념이 어떻게 적용되었는지, 10번은 좋았던 점/유지할 점/개선할 점을 구체적으로..."></textarea>
-            </div>
-          </div>
-          <!-- Duplicate Checker -->
-          <div class="dup-checker" id="dup-checker">
-            <h4><span class="dup-icon" id="dup-icon"></span> <span id="dup-title">중복 검사 중...</span></h4>
-            <div id="dup-results"></div>
-          </div>
-
-          <div class="form-actions">
-            <button type="submit" class="btn-submit" id="btn-submit">제출하기</button>
-          </div>
-        </form>
-
-        <!-- Volume Checker -->
-        <div class="volume-checker" id="volume-checker">
-          <h4>분량 체커 (PPT 1장 / A4 반 페이지 기준)</h4>
-          <div class="vc-row">
-            <span class="vc-label">개념/이론 설명 또는 느낀 점</span>
-            <span class="vc-value" id="vc-concept">0자</span>
-          </div>
-          <div class="vc-row">
-            <span class="vc-label">사례 분석 또는 개선 의견</span>
-            <span class="vc-value" id="vc-analysis">0자</span>
-          </div>
-          <div class="vc-row">
-            <span class="vc-label">합산</span>
-            <span class="vc-value" id="vc-total">0자</span>
-          </div>
-          <div class="vc-bar"><div class="vc-bar-fill" id="vc-bar-fill"></div></div>
-          <div class="vc-summary" id="vc-summary">내용을 입력하면 분량이 표시됩니다</div>
-        </div>
-      </div>
-    </div>
       </main>
 
       <!-- Right Panel: 수정 이력 전용 (최종 문서 탭에서만 노출) -->
@@ -1427,6 +2648,8 @@
     const SUPABASE_KEY = 'sb_publishable_KSv29b6X75xsbt23Nwc9Fg_JY5WbvK3';
     const ASSIGNMENT_ID = 'final-2026';
     const ASSIGNMENT_START_ISO = '2026-06-09T00:00:00+09:00';
+    const SUBMIT_READY_LABEL = '작성 완료';
+    const TVCF_THUMB_PROXY = 'https://api.codetabs.com/v1/proxy?quest=';
 
     // ================================================================
     // Init
@@ -1434,9 +2657,82 @@
     let sb = null;
     let topics = [];
     let currentTopicId = null;
+    let currentSubmissions = [];
+    let selectedSubmissionId = null;
+    let previewMode = 'empty';
+    let previewMediaKey = '';
+    let detailMode = 'cases';
+    let submissionVoteCounts = {};
+    let submissionMyVote = null;
     let localVotes = [];
     try { localVotes = JSON.parse(localStorage.getItem(`${ASSIGNMENT_ID}-votes`) || '[]'); } catch { localVotes = []; }
     function saveLocalVotes() { localStorage.setItem(`${ASSIGNMENT_ID}-votes`, JSON.stringify(localVotes)); }
+    let tvcfThumbCache = {};
+    try { tvcfThumbCache = JSON.parse(localStorage.getItem(`${ASSIGNMENT_ID}-tvcf-thumbnails`) || '{}'); } catch { tvcfThumbCache = {}; }
+    function saveTvcfThumbCache() { localStorage.setItem(`${ASSIGNMENT_ID}-tvcf-thumbnails`, JSON.stringify(tvcfThumbCache)); }
+
+    const VALID_APP_TABS = new Set(['topics', 'results', 'final', 'guide', 'evaluation']);
+    let routeUpdateInProgress = false;
+
+    function normalizeTab(tab) {
+      return VALID_APP_TABS.has(tab) ? tab : 'topics';
+    }
+
+    function readRouteFromLocation() {
+      const params = new URLSearchParams(window.location.search);
+      const topicId = Number(params.get('topic'));
+      if (Number.isInteger(topicId) && topicId > 0) {
+        return { view: 'topic', topicId };
+      }
+      return { view: 'tab', tab: normalizeTab(params.get('tab') || 'topics') };
+    }
+
+    function routeToUrl(route) {
+      const url = new URL(window.location.href);
+      url.searchParams.delete('topic');
+      url.searchParams.delete('tab');
+      url.hash = '';
+
+      if (route?.view === 'topic') {
+        url.searchParams.set('topic', String(route.topicId));
+      } else {
+        const tab = normalizeTab(route?.tab || 'topics');
+        if (tab !== 'topics') url.searchParams.set('tab', tab);
+      }
+
+      return url;
+    }
+
+    function writeRoute(route, { replace = false } = {}) {
+      if (routeUpdateInProgress) return;
+      const method = replace ? 'replaceState' : 'pushState';
+      const nextUrl = routeToUrl(route);
+      const currentUrl = new URL(window.location.href);
+      const nextPath = `${nextUrl.pathname}${nextUrl.search}${nextUrl.hash}`;
+      const currentPath = `${currentUrl.pathname}${currentUrl.search}${currentUrl.hash}`;
+      const state = { imcRoute: route };
+
+      if (nextPath === currentPath) {
+        history.replaceState(state, '', nextUrl);
+        return;
+      }
+
+      history[method](state, '', nextUrl);
+    }
+
+    async function applyRoute(route) {
+      routeUpdateInProgress = true;
+      try {
+        if (route?.view === 'topic' && topics.some(t => t.id === route.topicId)) {
+          await openTopic(route.topicId, { pushRoute: false });
+          return;
+        }
+
+        showTab(normalizeTab(route?.tab || 'topics'), { pushRoute: false });
+      } finally {
+        routeUpdateInProgress = false;
+      }
+    }
 
     function initSupabase() {
       if (!SUPABASE_URL || !SUPABASE_KEY) {
@@ -1614,22 +2910,288 @@
     // ================================================================
     // Topic Detail
     // ================================================================
-    async function openTopic(topicId) {
+    async function renderDetailMiniList(activeTopicId) {
+      const counts = await getSubmissionCounts();
+      const select = document.getElementById('detail-topic-select');
+      if (!select) return;
+      select.innerHTML = topics.map(t => `
+        <option value="${t.id}" ${t.id === activeTopicId ? 'selected' : ''}>Q${t.question_num} · ${esc(t.title)} (${counts[t.id] || 0}건)</option>
+      `).join('');
+    }
+
+    async function renderDetailStatus(topicId, subs = null, topicVotes = null) {
+      const topic = topics.find(t => t.id === topicId);
+      const submissions = subs || await loadSubmissions(topicId);
+      const votes = topicVotes || await getVotesForTopic(topicId);
+      const voter = localStorage.getItem('imc-author');
+      const myVote = votes.find(v => v.voter === voter)?.submission_id || null;
+      const votedSub = submissions.find(s => s.id === myVote);
+      const subCount = submissions.length;
+
+      const subCountEl = document.getElementById('sub-count');
+      const subCountInlineEl = document.getElementById('sub-count-inline');
+      const voteStateEl = document.getElementById('detail-vote-state');
+      const assigneesEl = document.getElementById('detail-assignees');
+      if (subCountEl) subCountEl.textContent = subCount;
+      if (subCountInlineEl) subCountInlineEl.textContent = subCount;
+      if (voteStateEl) voteStateEl.textContent = votedSub ? `${votedSub.brand} 선택` : '미투표';
+      if (assigneesEl) assigneesEl.textContent = (topic?.assignees || []).join(', ') || '미지정';
+    }
+
+    function toggleDetailPreview(force) {
+      const panel = document.getElementById('detail-panel');
+      if (!panel) return;
+      const next = typeof force === 'boolean' ? force : !panel.classList.contains('detail-preview-open');
+      panel.classList.toggle('detail-preview-open', next);
+    }
+
+    function setSubmitButtons({ disabled, text } = {}) {
+      document.querySelectorAll('[data-submit-button]').forEach(btn => {
+        if (typeof disabled === 'boolean') btn.disabled = disabled;
+        if (text !== undefined) btn.textContent = text;
+      });
+    }
+
+    function setDetailMode(mode) {
+      detailMode = mode === 'form' ? 'form' : 'cases';
+      document.getElementById('detail-cases-tab')?.classList.toggle('active', detailMode === 'cases');
+      document.getElementById('detail-form-tab')?.classList.toggle('active', detailMode === 'form');
+      document.getElementById('cases-pane')?.classList.toggle('show', detailMode === 'cases');
+      document.getElementById('form-pane')?.classList.toggle('show', detailMode === 'form');
+
+      if (detailMode === 'form') {
+        renderDraftInspector();
+        updateVolumeChecker();
+        updateDraftPreview();
+      } else {
+        renderSubmissionCards();
+        const selected = currentSubmissions.find(s => s.id === selectedSubmissionId);
+        if (selected) {
+          renderAdPreview({
+            url: selected.watch_url,
+            title: `${selected.brand} — ${selected.campaign}`,
+            meta: `${selected.published_at || ''} · ${selected.medium || ''} · 작성자 ${selected.author || ''}`,
+            mode: 'selected',
+            submission: selected,
+          });
+        } else {
+          renderPreviewEmpty();
+        }
+      }
+    }
+
+    function renderPreviewEmpty(message = '광고 링크를 붙여넣으면 이 영역이 즉시 미리보기 모드로 전환됩니다.') {
+      document.getElementById('preview-eyebrow').textContent = '광고 플레이어';
+      document.getElementById('preview-title').textContent = '링크를 입력하거나 제출 카드를 선택하세요';
+      document.getElementById('preview-meta').textContent = 'YouTube, Vimeo, TVCF 링크는 영상 플레이어만 표시합니다.';
+      document.getElementById('ad-preview-panel').innerHTML = `<div class="preview-empty">${esc(message)}</div>`;
+      document.getElementById('preview-inspector').innerHTML = '<div class="inspector-empty">제출 사례를 선택하면 광고 정보와 분석 내용이 여기에 표시됩니다.</div>';
+      previewMode = 'empty';
+      previewMediaKey = '';
+    }
+
+    function renderAdPreview({ url, title, meta, mode, submission }) {
+      const fixedUrl = fixTvcfUrl((url || '').trim());
+      const nextMode = mode || 'selected';
+      const nextTitle = title || '광고 미리보기';
+      const playerTitle = title || '광고 재생';
+      const mediaKey = fixedUrl || '__empty__';
+      const panel = document.getElementById('ad-preview-panel');
+      const wasMode = previewMode;
+      const eyebrow = mode === 'draft' ? '미리보기 모드' : '선택한 제출 광고';
+      document.getElementById('preview-eyebrow').textContent = eyebrow;
+      document.getElementById('preview-title').textContent = nextTitle;
+      document.getElementById('preview-meta').textContent = meta || '영상 플레이어만 표시합니다.';
+      if (panel && mediaKey !== previewMediaKey) {
+        panel.innerHTML = fixedUrl
+          ? renderAdEmbed(fixedUrl, playerTitle)
+          : '<div class="preview-empty">광고 링크가 없습니다.</div>';
+        previewMediaKey = mediaKey;
+      } else if (panel && fixedUrl) {
+        const embedTitle = panel.querySelector('.ad-embed-title');
+        const frame = panel.querySelector('.ad-embed-frame');
+        if (embedTitle) embedTitle.textContent = playerTitle;
+        if (frame) frame.title = playerTitle;
+      }
+      if (mode === 'draft') {
+        if (wasMode !== 'draft' || !document.getElementById('volume-checker')) renderDraftInspector();
+        updateVolumeChecker();
+      }
+      else if (submission) renderSelectedInspector(submission);
+      previewMode = nextMode;
+    }
+
+    function renderDraftInspector() {
+      const inspector = document.getElementById('preview-inspector');
+      if (!inspector) return;
+      inspector.innerHTML = `
+        <div class="draft-assist-panel">
+          <div class="inspector-section">
+            <h4>작성 상태</h4>
+            <div class="volume-checker" id="volume-checker">
+              <h4>분량 체커 (PPT 1장 / A4 반 페이지 기준)</h4>
+              <div class="vc-row">
+                <span class="vc-label">개념/이론 설명 또는 느낀 점</span>
+                <span class="vc-value" id="vc-concept">0자</span>
+              </div>
+              <div class="vc-row">
+                <span class="vc-label">사례 분석 또는 개선 의견</span>
+                <span class="vc-value" id="vc-analysis">0자</span>
+              </div>
+              <div class="vc-row">
+                <span class="vc-label">합산</span>
+                <span class="vc-value" id="vc-total">0자</span>
+              </div>
+              <div class="vc-bar"><div class="vc-bar-fill" id="vc-bar-fill"></div></div>
+              <div class="vc-summary" id="vc-summary">내용을 입력하면 분량이 표시됩니다</div>
+            </div>
+          </div>
+          <div class="inspector-section">
+            <h4>검사</h4>
+            <div class="dup-checker" id="dup-checker">
+              <h4><span class="dup-icon" id="dup-icon"></span> <span id="dup-title">중복 검사 대기 중</span></h4>
+              <div id="dup-results"></div>
+            </div>
+          </div>
+          <div class="inspector-section">
+            <h4>제출</h4>
+            <div class="form-actions">
+              <button type="submit" form="submission-form" class="btn-submit" data-submit-button>작성 완료</button>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    function renderSelectedInspector(sub) {
+      const inspector = document.getElementById('preview-inspector');
+      if (!inspector) return;
+      const vc = submissionVoteCounts[sub.id] || 0;
+      const isMyVote = submissionMyVote === sub.id;
+      inspector.innerHTML = `
+        <div class="inspector-section">
+          <h4>광고 정보</h4>
+          <dl class="inspector-kv">
+            <dt>브랜드</dt><dd>${esc(sub.brand)}</dd>
+            <dt>캠페인</dt><dd>${esc(sub.campaign)}</dd>
+            <dt>매체</dt><dd>${esc(sub.medium)}</dd>
+            <dt>시기</dt><dd>${esc(sub.published_at)}</dd>
+            <dt>작성자</dt><dd>${esc(sub.author)}</dd>
+            <dt>제출</dt><dd>${new Date(sub.created_at).toLocaleString('ko-KR')}</dd>
+          </dl>
+        </div>
+        <div class="inspector-section">
+          <h4>개념 설명</h4>
+          <div class="inspector-text">${esc(sub.concept_summary || '내용 없음')}</div>
+        </div>
+        <div class="inspector-section">
+          <h4>사례 분석</h4>
+          <div class="inspector-text">${esc(sub.case_analysis || '내용 없음')}</div>
+        </div>
+        <div class="inspector-section">
+          <h4>액션</h4>
+          <div class="inspector-actions">
+            <button class="vote-btn ${isMyVote ? 'voted' : ''}" onclick="castVote(${sub.topic_id}, '${sub.id}')">${isMyVote ? '&#10003; 선정됨' : '&#9734; 이 답안 선정'}</button>
+            <span class="vote-count"><strong>${vc}</strong>명 투표</span>
+            <button class="eval-btn" onclick="evaluateSubmission('${sub.id}')">AI 평가</button>
+            ${sub.watch_url ? `<a class="ad-embed-open" href="${esc(sub.watch_url)}" target="_blank" rel="noopener">원본 열기</a>` : ''}
+          </div>
+        </div>`;
+    }
+
+    function updateDraftPreview() {
+      if (!currentTopicId) return;
+      const url = document.getElementById('f-url')?.value.trim() || '';
+      if (!url) {
+        if (detailMode === 'form') {
+          const panel = document.getElementById('ad-preview-panel');
+          document.getElementById('preview-eyebrow').textContent = '미리보기 모드';
+          document.getElementById('preview-title').textContent = '광고 링크를 입력하세요';
+          document.getElementById('preview-meta').textContent = '링크가 들어오면 이 영역에서 플레이어를 먼저 확인합니다.';
+          if (panel && previewMediaKey !== '__draft-empty__') {
+            panel.innerHTML = '<div class="preview-empty">광고 링크를 붙여넣으면 플레이어 미리보기가 표시됩니다.</div>';
+            previewMediaKey = '__draft-empty__';
+          }
+          if (previewMode !== 'draft' || !document.getElementById('volume-checker')) renderDraftInspector();
+          previewMode = 'draft';
+          updateVolumeChecker();
+          return;
+        }
+        const selected = currentSubmissions.find(s => s.id === selectedSubmissionId && s.watch_url);
+        if (selected) {
+          renderAdPreview({
+            url: selected.watch_url,
+            title: `${selected.brand} — ${selected.campaign}`,
+            meta: `${selected.published_at || ''} · ${selected.medium || ''} · 작성자 ${selected.author || ''}`,
+            mode: 'selected',
+            submission: selected,
+          });
+        } else {
+          renderPreviewEmpty();
+        }
+        return;
+      }
+
+      const brand = document.getElementById('f-brand')?.value.trim();
+      const campaign = document.getElementById('f-campaign')?.value.trim();
+      renderAdPreview({
+        url,
+        title: [brand, campaign].filter(Boolean).join(' — ') || '작성 중인 광고',
+        meta: '입력한 링크 기준으로 즉시 표시합니다.',
+        mode: 'draft',
+      });
+      toggleDetailPreview(true);
+    }
+
+    function selectSubmissionForPreview(id) {
+      const sub = currentSubmissions.find(s => s.id === id);
+      if (!sub) return;
+      selectedSubmissionId = id;
+      document.querySelectorAll('.submission-card').forEach(card => {
+        card.classList.toggle('is-selected', card.id === 'sub-' + id);
+      });
+      renderAdPreview({
+        url: sub.watch_url,
+        title: `${sub.brand} — ${sub.campaign}`,
+        meta: `${sub.published_at || ''} · ${sub.medium || ''} · 작성자 ${sub.author || ''}`,
+        mode: 'selected',
+        submission: sub,
+      });
+      toggleDetailPreview(true);
+    }
+
+    async function openTopic(topicId, { pushRoute = true } = {}) {
       currentTopicId = topicId;
       const topic = topics.find(t => t.id === topicId);
       if (!topic) return;
+      if (pushRoute) writeRoute({ view: 'topic', topicId });
 
       document.getElementById('dashboard').hidden = true;
+      document.getElementById('dashboard').style.display = 'none';
       document.getElementById('results-dashboard').classList.remove('show');
       document.getElementById('final-doc-dashboard').classList.remove('show');
-      document.getElementById('sidebar').style.display = 'none';
+      document.getElementById('guide-dashboard').classList.remove('show');
+      document.getElementById('evaluation-dashboard').classList.remove('show');
+      document.getElementById('sidebar').style.display = '';
       document.getElementById('app-shell').classList.add('detail-mode');
       document.getElementById('app-shell').classList.remove('right-panel-on');
       document.getElementById('detail-panel').hidden = false;
+      document.getElementById('detail-panel').classList.remove('detail-preview-open');
+      document.getElementById('detail-q-chip').textContent = `Q${topic.question_num}`;
       document.getElementById('detail-title').textContent = `Q${topic.question_num}. ${topic.title}`;
       document.getElementById('detail-question').textContent = topic.description;
       document.getElementById('detail-hint').textContent = topic.concept_hint;
+      document.querySelectorAll('.nav-item').forEach(el => {
+        el.classList.remove('active');
+        if (el.dataset.tab === 'final') el.classList.remove('expanded');
+      });
+      document.getElementById('nav-final-sublist').classList.remove('show');
+      document.querySelector('.app').classList.remove('compact-top');
+      selectedSubmissionId = null;
+      currentSubmissions = [];
+      renderPreviewEmpty();
+      setDetailMode('cases');
 
+      await renderDetailMiniList(topicId);
       await renderSubmissions(topicId);
 
       // Restore saved author name
@@ -1638,6 +3200,143 @@
 
       // 초안 복원 체크
       checkAndShowDraftBar(topicId);
+      updateDraftPreview();
+    }
+
+    function getTvcfVideoId(parsed) {
+      const host = parsed.hostname.replace(/^www\./, '').toLowerCase();
+      const parts = parsed.pathname.split('/').filter(Boolean);
+
+      if (host === 'play.tvcf.co.kr') {
+        return parts.find((part) => /^\d+$/.test(part)) || null;
+      }
+
+      if (!host.endsWith('tvcf.co.kr')) return null;
+
+      const playIndex = parts.indexOf('play');
+      const playSlug = playIndex >= 0 ? parts[playIndex + 1] : null;
+      if (!playSlug) return null;
+
+      const numericOnly = playSlug.match(/^\d+$/);
+      if (numericOnly) return numericOnly[0];
+
+      const slugId = playSlug.match(/-(\d+)$/);
+      return slugId ? slugId[1] : null;
+    }
+
+    function getYoutubeVideoId(parsed) {
+      const host = parsed.hostname.replace(/^www\./, '').toLowerCase();
+      const pathname = parsed.pathname;
+
+      if (host === 'youtu.be') {
+        return pathname.split('/').filter(Boolean)[0] || null;
+      }
+
+      if (host.endsWith('youtube.com') || host.endsWith('youtube-nocookie.com')) {
+        return parsed.searchParams.get('v') || pathname.match(/\/(?:shorts|embed|live)\/([^/?#]+)/)?.[1] || null;
+      }
+
+      return null;
+    }
+
+    function getVimeoVideoId(parsed) {
+      const host = parsed.hostname.replace(/^www\./, '').toLowerCase();
+      if (!host.endsWith('vimeo.com')) return null;
+      return parsed.pathname.split('/').filter(Boolean).find((part) => /^\d+$/.test(part)) || null;
+    }
+
+    function getAdThumbnailUrl(url) {
+      if (!url) return null;
+      let parsed;
+      try {
+        parsed = new URL(url);
+      } catch (e) {
+        return null;
+      }
+
+      const youtubeId = getYoutubeVideoId(parsed);
+      if (youtubeId) {
+        return 'https://i.ytimg.com/vi/' + encodeURIComponent(youtubeId) + '/hqdefault.jpg';
+      }
+
+      const vimeoId = getVimeoVideoId(parsed);
+      if (vimeoId) {
+        return 'https://vumbnail.com/' + encodeURIComponent(vimeoId) + '.jpg';
+      }
+
+      const tvcfId = getTvcfVideoId(parsed);
+      if (tvcfId && tvcfThumbCache[tvcfId]) {
+        return tvcfThumbCache[tvcfId];
+      }
+
+      return null;
+    }
+
+    function getTvcfIdFromUrl(url) {
+      if (!url) return null;
+      try {
+        return getTvcfVideoId(new URL(url));
+      } catch (e) {
+        return null;
+      }
+    }
+
+    async function fetchJsonWithTimeout(url, timeoutMs = 7000) {
+      if (typeof fetch !== 'function') return null;
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), timeoutMs);
+      try {
+        const res = await fetch(url, { signal: controller.signal });
+        if (!res.ok) return null;
+        return await res.json();
+      } catch (e) {
+        return null;
+      } finally {
+        clearTimeout(timer);
+      }
+    }
+
+    async function loadTvcfThumbnail(tvcfId) {
+      if (!tvcfId) return null;
+      if (tvcfThumbCache[tvcfId]) return tvcfThumbCache[tvcfId];
+
+      const apiUrl = 'https://play.tvcf.co.kr/rest/api/embed/' + encodeURIComponent(tvcfId);
+      const sources = [
+        TVCF_THUMB_PROXY + encodeURIComponent(apiUrl),
+      ];
+
+      for (const source of sources) {
+        const data = await fetchJsonWithTimeout(source);
+        const cut = data?.cut;
+        if (typeof cut === 'string' && /^https?:\/\//i.test(cut)) {
+          tvcfThumbCache[tvcfId] = cut;
+          saveTvcfThumbCache();
+          return cut;
+        }
+      }
+
+      return null;
+    }
+
+    function applyResultCardThumbnail(card, thumbnail) {
+      if (!card || !thumbnail) return;
+      card.style.setProperty('--result-thumb', `url("${thumbnail.replace(/"/g, '%22')}")`);
+      card.classList.add('has-thumb');
+    }
+
+    function hydrateResultThumbnails() {
+      document.querySelectorAll('.result-card[data-result-thumb]').forEach(card => {
+        applyResultCardThumbnail(card, card.dataset.resultThumb);
+      });
+
+      document.querySelectorAll('.result-card[data-tvcf-thumb-id]').forEach(card => {
+        const tvcfId = card.dataset.tvcfThumbId;
+        if (!tvcfId) return;
+        loadTvcfThumbnail(tvcfId).then(thumbnail => {
+          applyResultCardThumbnail(card, thumbnail);
+          if (thumbnail) card.removeAttribute('data-tvcf-thumb-id');
+        });
+      });
     }
 
     function getEmbeddedAdUrl(url) {
@@ -1649,41 +3348,42 @@
         return null;
       }
 
-      const host = parsed.hostname.replace(/^www\./, '').toLowerCase();
-      const pathname = parsed.pathname;
-
-      if (host === 'youtu.be') {
-        const id = pathname.split('/').filter(Boolean)[0];
-        return id ? { type: 'iframe', src: 'https://www.youtube.com/embed/' + encodeURIComponent(id) } : null;
+      const tvcfId = getTvcfVideoId(parsed);
+      if (tvcfId) {
+        return { type: 'iframe', src: 'https://play.tvcf.co.kr/embed/' + encodeURIComponent(tvcfId) };
       }
 
-      if (host.endsWith('youtube.com')) {
-        const id = parsed.searchParams.get('v') || pathname.match(/\/(?:shorts|embed)\/([^/?#]+)/)?.[1];
-        return id ? { type: 'iframe', src: 'https://www.youtube.com/embed/' + encodeURIComponent(id) } : null;
-      }
+      const youtubeId = getYoutubeVideoId(parsed);
+      if (youtubeId) return { type: 'iframe', src: 'https://www.youtube.com/embed/' + encodeURIComponent(youtubeId) };
 
-      if (host.endsWith('vimeo.com')) {
-        const id = pathname.split('/').filter(Boolean).find((part) => /^\d+$/.test(part));
-        return id ? { type: 'iframe', src: 'https://player.vimeo.com/video/' + encodeURIComponent(id) } : null;
-      }
+      const vimeoId = getVimeoVideoId(parsed);
+      if (vimeoId) return { type: 'iframe', src: 'https://player.vimeo.com/video/' + encodeURIComponent(vimeoId) };
 
       if (/\.(mp4|webm|ogg)(?:$|[?#])/i.test(url)) {
         return { type: 'video', src: url };
       }
 
-      return { type: 'iframe', src: url };
+      return null;
     }
 
     function renderAdEmbed(url, title = '광고 재생') {
       const embed = getEmbeddedAdUrl(url);
-      if (!embed) return '';
+      if (!embed) {
+        return '<div class="ad-embed ad-embed-fallback">' +
+          '<div class="ad-embed-header">' +
+            '<span class="ad-embed-title">' + esc(title) + '</span>' +
+            '<a class="ad-embed-open" href="' + esc(url) + '" target="_blank" rel="noopener">새 창으로 열기</a>' +
+          '</div>' +
+          '<div class="ad-embed-note">이 링크는 영상 원본을 확인할 수 없어 페이지 전체를 가져오지 않았습니다. YouTube, Vimeo, TVCF 플레이 링크 또는 mp4/webm 파일 링크를 넣으면 사이트 안에서 영상만 재생됩니다.</div>' +
+        '</div>';
+      }
 
       const escapedUrl = esc(url);
       const escapedSrc = esc(embed.src);
-      const needsTvcfFix = /tvcf\.co\.kr\/play\/\d+$/.test(url);
-      const note = needsTvcfFix
-        ? '<div class="ad-embed-note">TVCF 숫자 전용 링크는 로그인이 필요할 수 있습니다. 광고 상세 페이지의 bh...-... 형식 URL로 수정하면 더 안정적으로 재생됩니다.</div>'
-        : '<div class="ad-embed-note">사이트가 임베드를 차단하면 이 영역 안에서 재생되지 않을 수 있습니다. 그 경우에만 새 창으로 열어 확인하세요.</div>';
+      const isTvcf = /(^|\/\/)(?:www\.)?(?:play\.)?tvcf\.co\.kr/i.test(url);
+      const note = isTvcf
+        ? '<div class="ad-embed-note">TVCF 상세 페이지가 아니라 영상 플레이어만 불러옵니다.</div>'
+        : '<div class="ad-embed-note">광고 페이지 전체가 아니라 영상 플레이어만 불러옵니다.</div>';
       const media = embed.type === 'video'
         ? '<video class="ad-embed-video" src="' + escapedSrc + '" controls playsinline preload="metadata"></video>'
         : '<iframe class="ad-embed-frame" src="' + escapedSrc + '" title="' + esc(title) + '" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>';
@@ -1695,31 +3395,49 @@
         '</div>' + media + note + '</div>';
     }
 
-    async function renderSubmissions(topicId) {
-      const subs = await loadSubmissions(topicId);
-      document.getElementById('sub-count').textContent = subs.length;
-      const list = document.getElementById('submissions-list');
+    function getSortedVisibleSubmissions() {
+      const q = (document.getElementById('case-search')?.value || '').trim().toLowerCase();
+      const sort = document.getElementById('case-sort')?.value || 'recent';
+      let items = currentSubmissions.filter(s => {
+        if (!q) return true;
+        return [s.author, s.brand, s.campaign, s.medium, s.published_at]
+          .some(v => (v || '').toLowerCase().includes(q));
+      });
 
-      if (subs.length === 0) {
+      items = [...items].sort((a, b) => {
+        if (sort === 'votes') return (submissionVoteCounts[b.id] || 0) - (submissionVoteCounts[a.id] || 0);
+        if (sort === 'brand') return (a.brand || '').localeCompare(b.brand || '', 'ko');
+        return new Date(b.created_at) - new Date(a.created_at);
+      });
+      return items;
+    }
+
+    function filterSubmissionCards() {
+      renderSubmissionCards();
+    }
+
+    function renderSubmissionCards() {
+      const list = document.getElementById('submissions-list');
+      if (!list) return;
+      const items = getSortedVisibleSubmissions();
+      if (currentSubmissions.length === 0) {
         list.innerHTML = '<div class="no-submissions">아직 제출된 답안/사례가 없습니다. 첫 번째로 올려보세요!</div>';
         return;
       }
+      if (items.length === 0) {
+        list.innerHTML = '<div class="no-submissions">검색 조건에 맞는 제출 사례가 없습니다.</div>';
+        return;
+      }
 
-      // Load votes for this topic
-      const topicVotes = await getVotesForTopic(topicId);
-      const voter = localStorage.getItem('imc-author');
-      const myVote = topicVotes.find(v => v.voter === voter)?.submission_id || null;
-      const voteCounts = {};
-      topicVotes.forEach(v => { voteCounts[v.submission_id] = (voteCounts[v.submission_id] || 0) + 1; });
-
-      list.innerHTML = subs.map(s => {
-        const vc = voteCounts[s.id] || 0;
-        const isMyVote = myVote === s.id;
+      list.innerHTML = items.map(s => {
+        const vc = submissionVoteCounts[s.id] || 0;
+        const isMyVote = submissionMyVote === s.id;
+        const isSelected = selectedSubmissionId === s.id;
         return `
-        <div class="submission-card" id="sub-${s.id}">
+        <div class="submission-card ${isSelected ? 'is-selected' : ''}" id="sub-${s.id}" onclick="selectSubmissionForPreview('${s.id}')">
           <div class="sub-actions">
-            <button class="sub-edit" onclick="toggleEdit('${s.id}')" title="수정">수정</button>
-            <button class="sub-delete" onclick="deleteSub('${s.id}')" title="삭제">×</button>
+            <button class="sub-edit" onclick="event.stopPropagation(); toggleEdit('${s.id}')" title="수정">수정</button>
+            <button class="sub-delete" onclick="event.stopPropagation(); deleteSub('${s.id}')" title="삭제">×</button>
           </div>
           <div class="sub-meta">
             <span class="sub-author">${esc(s.author)}</span>
@@ -1728,22 +3446,26 @@
           </div>
           <div class="sub-info">${esc(s.published_at)} · ${esc(s.medium)}</div>
           <div class="sub-body">
-            <h4>개념/이론 설명 또는 느낀 점</h4>
-            <p>${esc(s.concept_summary)}</p>
-            <h4>사례 분석 또는 개선 의견</h4>
-            <p>${esc(s.case_analysis)}</p>
+            <div>
+              <h4>개념/이론 설명 또는 느낀 점</h4>
+              <p>${esc(s.concept_summary)}</p>
+            </div>
+            <div>
+              <h4>사례 분석 또는 개선 의견</h4>
+              <p>${esc(s.case_analysis)}</p>
+            </div>
           </div>
-          ${s.watch_url ? renderAdEmbed(s.watch_url, `${s.brand} 광고 재생`) : ''}
+          <div class="sub-preview-hint">${s.watch_url ? '카드를 선택하면 우측 inspector에서 영상과 상세를 확인합니다.' : '등록된 광고 링크가 없습니다.'}</div>
           <div class="sub-time">${new Date(s.created_at).toLocaleString('ko-KR')}</div>
           <div style="margin-top:10px;">
-            <button class="eval-btn" id="eval-btn-${s.id}" onclick="evaluateSubmission('${s.id}')">AI 평가</button>
+            <button class="eval-btn" id="eval-btn-${s.id}" onclick="event.stopPropagation(); evaluateSubmission('${s.id}')">AI 평가</button>
           </div>
           <div class="eval-result" id="eval-result-${s.id}" style="display:none;"></div>
           <div class="vote-area">
-            <button class="vote-btn ${isMyVote ? 'voted' : ''}" onclick="castVote(${topicId}, '${s.id}')">${isMyVote ? '&#10003; 선정됨' : '&#9734; 이 답안 선정'}</button>
+            <button class="vote-btn ${isMyVote ? 'voted' : ''}" onclick="event.stopPropagation(); castVote(${s.topic_id}, '${s.id}')">${isMyVote ? '&#10003; 선정됨' : '&#9734; 이 답안 선정'}</button>
             <span class="vote-count"><strong>${vc}</strong>명 투표</span>
           </div>
-          <div class="sub-edit-form" id="edit-form-${s.id}" hidden>
+          <div class="sub-edit-form" id="edit-form-${s.id}" hidden onclick="event.stopPropagation()">
             <div class="form-grid">
               <div class="form-group"><label>브랜드/주제</label><input id="edit-brand-${s.id}" value="${esc(s.brand)}" /></div>
               <div class="form-group"><label>캠페인/답안 제목</label><input id="edit-campaign-${s.id}" value="${esc(s.campaign)}" /></div>
@@ -1758,7 +3480,7 @@
               <button class="btn-edit-cancel" onclick="toggleEdit('${s.id}')">취소</button>
             </div>
           </div>
-          <div class="comments-section">
+          <div class="comments-section" onclick="event.stopPropagation()">
             <button class="comments-toggle" onclick="toggleComments('${s.id}')">
               <span id="comment-count-${s.id}">...</span> 댓글
             </button>
@@ -1773,6 +3495,45 @@
           </div>
         </div>
       `}).join('');
+      items.forEach(s => loadCommentCount(s.id));
+    }
+
+    async function renderSubmissions(topicId) {
+      const subs = await loadSubmissions(topicId);
+      currentSubmissions = subs;
+      document.getElementById('sub-count').textContent = subs.length;
+      const inlineCount = document.getElementById('sub-count-inline');
+      if (inlineCount) inlineCount.textContent = subs.length;
+      const list = document.getElementById('submissions-list');
+
+      if (subs.length === 0) {
+        list.innerHTML = '<div class="no-submissions">아직 제출된 답안/사례가 없습니다. 첫 번째로 올려보세요!</div>';
+        selectedSubmissionId = null;
+        submissionVoteCounts = {};
+        submissionMyVote = null;
+        await renderDetailStatus(topicId, subs, []);
+        await renderDetailMiniList(topicId);
+        renderPreviewEmpty('아직 제출된 광고가 없습니다. 링크를 입력하면 미리보기를 확인할 수 있습니다.');
+        return;
+      }
+
+      // Load votes for this topic
+      const topicVotes = await getVotesForTopic(topicId);
+      const voter = localStorage.getItem('imc-author');
+      const myVote = topicVotes.find(v => v.voter === voter)?.submission_id || null;
+      const voteCounts = {};
+      topicVotes.forEach(v => { voteCounts[v.submission_id] = (voteCounts[v.submission_id] || 0) + 1; });
+      submissionVoteCounts = voteCounts;
+      submissionMyVote = myVote;
+      await renderDetailStatus(topicId, subs, topicVotes);
+      await renderDetailMiniList(topicId);
+
+      if (!subs.some(s => s.id === selectedSubmissionId)) {
+        const firstPlayable = subs.find(s => s.watch_url);
+        selectedSubmissionId = firstPlayable?.id || null;
+      }
+
+      renderSubmissionCards();
 
       // Load comment counts for all visible submissions
       for (const s of subs) { loadCommentCount(s.id); }
@@ -1788,14 +3549,29 @@
         const isStale = cached.content_snapshot !== currentSnapshot;
         renderEvalResult(s.id, cached.result, isStale);
       }
+
+      const selected = subs.find(s => s.id === selectedSubmissionId && s.watch_url);
+      if ((previewMode !== 'draft' || !(document.getElementById('f-url')?.value || '').trim()) && selected) {
+        renderAdPreview({
+          url: selected.watch_url,
+          title: `${selected.brand} — ${selected.campaign}`,
+          meta: `${selected.published_at || ''} · ${selected.medium || ''} · 작성자 ${selected.author || ''}`,
+          mode: 'selected',
+          submission: selected,
+        });
+      }
     }
 
-    function showDashboard() {
+    function showDashboard({ pushRoute = true } = {}) {
+      if (pushRoute) writeRoute({ view: 'tab', tab: 'topics' });
       document.getElementById('dashboard').hidden = false;
       document.getElementById('dashboard').style.display = '';
       document.getElementById('detail-panel').hidden = true;
+      document.getElementById('detail-panel').classList.remove('detail-preview-open');
       document.getElementById('results-dashboard').classList.remove('show');
       document.getElementById('final-doc-dashboard').classList.remove('show');
+      document.getElementById('guide-dashboard').classList.remove('show');
+      document.getElementById('evaluation-dashboard').classList.remove('show');
       document.getElementById('sidebar').style.display = '';
       document.getElementById('app-shell').classList.remove('detail-mode');
       document.getElementById('app-shell').classList.remove('right-panel-on');
@@ -1805,6 +3581,10 @@
       });
       document.getElementById('nav-final-sublist').classList.remove('show');
       currentTopicId = null;
+      currentSubmissions = [];
+      selectedSubmissionId = null;
+      previewMode = 'empty';
+      previewMediaKey = '';
       renderDashboard();
     }
 
@@ -1813,19 +3593,17 @@
     // ================================================================
     document.getElementById('submission-form').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const btn = document.getElementById('btn-submit');
-      btn.disabled = true;
-      btn.textContent = '제출 중...';
+      setSubmitButtons({ disabled: true, text: '제출 중...' });
 
       // 제출 전 중복 체크 재실행 (최종 확인)
       await checkDuplicate();
       const dupEl = document.getElementById('dup-checker');
       if (dupEl.classList.contains('dup-block')) {
         toast('중복 광고입니다. 다른 광고를 선택해주세요.');
-        btn.disabled = false;
-        btn.textContent = '중복 광고 — 제출 불가';
+        setSubmitButtons({ disabled: true, text: '중복 광고 — 제출 불가' });
         return;
       }
+      setSubmitButtons({ disabled: true, text: '제출 중...' });
 
       const record = {
         topic_id:        currentTopicId,
@@ -1844,7 +3622,7 @@
 
       // Auto-translate Burmese input to Korean before saving
       if (isBurmese(record.concept_summary) || isBurmese(record.case_analysis)) {
-        btn.textContent = wikiLang === 'my' ? 'ဘာသာပြန်ပြီး တင်ပို့နေသည်...' : '번역 후 제출 중...';
+        setSubmitButtons({ text: wikiLang === 'my' ? 'ဘာသာပြန်ပြီး တင်ပို့နေသည်...' : '번역 후 제출 중...' });
         if (isBurmese(record.concept_summary)) {
           record.concept_summary = await translateSingle(record.concept_summary, 'my', 'ko');
         }
@@ -1861,7 +3639,7 @@
 
       if (sb) {
         const { error } = await sb.from('submissions').insert([record]);
-        if (error) { toast('제출 실패: ' + error.message); btn.disabled = false; btn.textContent = '제출하기'; return; }
+        if (error) { toast('제출 실패: ' + error.message); setSubmitButtons({ disabled: false, text: SUBMIT_READY_LABEL }); return; }
       } else {
         record.id = crypto.randomUUID();
         record.created_at = new Date().toISOString();
@@ -1872,8 +3650,7 @@
       toast('제출 완료!');
       e.target.reset();
       document.getElementById('f-author').value = localStorage.getItem('imc-author') || '';
-      btn.disabled = false;
-      btn.textContent = '제출하기';
+      setSubmitButtons({ disabled: false, text: SUBMIT_READY_LABEL });
       // 중복 체커 리셋
       const dupEl2 = document.getElementById('dup-checker');
       dupEl2.classList.remove('show', 'dup-block', 'dup-warn', 'dup-pass');
@@ -1881,6 +3658,7 @@
       // 초안 삭제
       clearDraftAfterSubmit();
       await renderSubmissions(currentTopicId);
+      setDetailMode('cases');
     });
 
     // ================================================================
@@ -1983,7 +3761,7 @@
       if (!list) return;
 
       if (comments.length === 0) {
-        list.innerHTML = '<div style="font-size:13px;color:#aeaeb2;padding:6px 0;">아직 댓글이 없습니다.</div>';
+        list.innerHTML = '<div style="font-size:13px;color:var(--text-faint);padding:6px 0;">아직 댓글이 없습니다.</div>';
       } else {
         list.innerHTML = comments.map(c => `
           <div class="comment-item">
@@ -2203,19 +3981,32 @@
     // ================================================================
     // Dashboard Tabs & Results
     // ================================================================
-    function showTab(tab) {
+    function showTab(tab, { pushRoute = true } = {}) {
+      tab = normalizeTab(tab);
+      if (pushRoute) writeRoute({ view: 'tab', tab });
       document.querySelectorAll('.nav-item').forEach(el => {
         const isActive = el.dataset.tab === tab;
         el.classList.toggle('active', isActive);
         if (el.dataset.tab === 'final') el.classList.toggle('expanded', tab === 'final');
       });
+      document.getElementById('dashboard').hidden = false;
       document.getElementById('dashboard').style.display = tab === 'topics' ? '' : 'none';
       document.getElementById('results-dashboard').classList.toggle('show', tab === 'results');
       document.getElementById('final-doc-dashboard').classList.toggle('show', tab === 'final');
+      document.getElementById('guide-dashboard').classList.toggle('show', tab === 'guide');
+      document.getElementById('evaluation-dashboard').classList.toggle('show', tab === 'evaluation');
       document.getElementById('nav-final-sublist').classList.toggle('show', tab === 'final');
       document.getElementById('detail-panel').hidden = true;
+      document.getElementById('detail-panel').classList.remove('detail-preview-open');
+      document.getElementById('sidebar').style.display = '';
+      document.getElementById('app-shell').classList.remove('detail-mode');
       document.getElementById('app-shell').classList.toggle('right-panel-on', tab === 'final');
       document.querySelector('.app').classList.toggle('compact-top', tab === 'final');
+      currentTopicId = null;
+      currentSubmissions = [];
+      selectedSubmissionId = null;
+      previewMode = 'empty';
+      previewMediaKey = '';
       if (tab === 'results') renderResultsDashboard();
       if (tab === 'final') {
         renderFinalDocDashboard();
@@ -2274,20 +4065,30 @@
         }
 
         const winner = resolution.submission;
+        const isDecided = resolution.kind === 'pinned' || !resolution.isTie;
+        const thumbnail = isDecided ? getAdThumbnailUrl(winner.watch_url) : null;
+        const tvcfId = isDecided && !thumbnail ? getTvcfIdFromUrl(winner.watch_url) : null;
+        const cardClasses = [
+          'result-card',
+          isDecided ? 'decided' : 'undecided',
+          thumbnail ? 'has-thumb' : '',
+        ].filter(Boolean).join(' ');
+        const thumbAttr = thumbnail ? ` data-result-thumb="${esc(thumbnail)}"` : '';
+        const tvcfThumbAttr = tvcfId ? ` data-tvcf-thumb-id="${esc(tvcfId)}"` : '';
         const badge = resolution.kind === 'pinned'
-          ? `<span class="fw-badge pinned" style="font-size:10px;padding:2px 6px;border-radius:6px;background:#fff4e5;color:#b85900;font-weight:700;margin-left:4px;">📌 확정</span>`
+          ? `<span class="fw-badge pinned" style="font-size:10px;padding:2px 6px;border-radius:6px;background:var(--amber-soft);color:var(--amber);font-weight:700;margin-left:4px;">📌 확정</span>`
           : '';
         const voteLine = resolution.kind === 'vote'
           ? `<div class="rw-votes">${resolution.maxVotes}/${resolution.totalVoters}표${resolution.isTie ? ' (동점)' : ''}</div>`
           : `<div class="rw-votes">최종 확정됨</div>`;
 
-        return `<div class="result-card ${resolution.kind === 'pinned' || !resolution.isTie ? 'decided' : 'undecided'}" onclick="openTopic(${t.id})">
+        return `<div class="${cardClasses}"${thumbAttr}${tvcfThumbAttr} onclick="openTopic(${t.id})">
           <span class="result-q ${chipClass}">Q${t.question_num} · ${t.chapter}</span>${badge}
           <h4>${esc(t.title)}</h4>
           <div class="result-winner">
             <span class="rw-brand">${esc(winner.brand)}</span>
             <span class="rw-author">${esc(winner.author)}</span>
-            <div style="font-size:12px;color:#6e6e73;margin-top:2px;">${esc(winner.campaign)}</div>
+            <div class="rw-campaign">${esc(winner.campaign)}</div>
             ${voteLine}
           </div>
         </div>`;
@@ -2297,6 +4098,7 @@
         <div class="results-progress-bar"><div class="results-progress-fill" style="width:${decidedCount * 10}%"></div></div>
         <span class="results-progress-text">${decidedCount}/10 선정 완료</span>`;
       document.getElementById('results-grid').innerHTML = cards;
+      hydrateResultThumbnails();
     }
 
     // ================================================================
@@ -2638,7 +4440,7 @@
             const hasContent = (original || '').trim().length > 0;
             const meta = revCount === 0
               ? `<span class="rev-original-tag">원본</span><span>작성자: ${esc(w.author)}</span>`
-              : `<span class="rev-original-tag">원본</span><span>작성자: ${esc(w.author)}</span><span style="color:#34c759;font-weight:600;">· 제안 ${revCount}건 (우측 패널에서 확인)</span>`;
+              : `<span class="rev-original-tag">원본</span><span>작성자: ${esc(w.author)}</span><span style="color:var(--success);font-weight:600;">· 제안 ${revCount}건 (우측 패널에서 확인)</span>`;
 
             return `
               <div class="rev-field">
@@ -2668,7 +4470,7 @@
 
         const noteHtml = resolution.kind === 'none' ? '' : `
           <div class="rev-note-field">
-            <label>💬 팀 메모 · 발표 포인트 <span style="font-size:11px;color:#6e6e73;font-weight:400;">(자동 저장, 공유)</span></label>
+            <label>💬 팀 메모 · 발표 포인트 <span style="font-size:11px;color:var(--text-dim);font-weight:400;">(자동 저장, 공유)</span></label>
             <textarea data-topic="${t.id}" data-field="presentation_note" placeholder="발표 포인트 / 예상 질문 / 팀원 피드백 요약 등 자유롭게...">${esc(deep.presentation_note || '')}</textarea>
             <div class="fts-deep-meta">
               <span id="save-indicator-${t.id}" class="save-indicator">${deep.updated_by ? `✓ 저장됨 · ${esc(deep.updated_by)} · ${new Date(deep.updated_at).toLocaleString('ko-KR')}` : '입력하면 자동 저장됩니다'}</span>
@@ -3150,6 +4952,7 @@
       toast('초안이 복원되었습니다');
       updateVolumeChecker();
       debouncedDupCheck();
+      updateDraftPreview();
     }
 
     function discardDraft() {
@@ -3219,13 +5022,15 @@
       const elIcon = document.getElementById('dup-icon');
       const elTitle = document.getElementById('dup-title');
       const elResults = document.getElementById('dup-results');
-      const btn = document.getElementById('btn-submit');
+      if (!el || !elIcon || !elTitle || !elResults) {
+        setSubmitButtons({ disabled: false, text: SUBMIT_READY_LABEL });
+        return;
+      }
 
       // 입력이 부족하면 숨김
       if (!brand && !campaign) {
         el.classList.remove('show', 'dup-block', 'dup-warn', 'dup-pass');
-        btn.disabled = false;
-        btn.textContent = '제출하기';
+        setSubmitButtons({ disabled: false, text: SUBMIT_READY_LABEL });
         return;
       }
 
@@ -3296,24 +5101,20 @@
         el.classList.add('dup-block');
         elIcon.textContent = '\u26D4';
         elTitle.textContent = '중복 광고 감지 — 제출 불가';
-        btn.disabled = true;
-        btn.textContent = '중복 광고 — 제출 불가';
+        setSubmitButtons({ disabled: true, text: '중복 광고 — 제출 불가' });
       } else if (hasWarn) {
         el.classList.add('dup-warn');
         elIcon.textContent = '\u26A0\uFE0F';
         elTitle.textContent = '유사 광고 발견 — 확인 필요';
-        btn.disabled = false;
-        btn.textContent = '제출하기';
+        setSubmitButtons({ disabled: false, text: SUBMIT_READY_LABEL });
       } else if (nBrand && nCampaign) {
         el.classList.add('dup-pass');
         elIcon.textContent = '\u2705';
         elTitle.textContent = '중복 없음 — 사용 가능한 광고입니다';
-        btn.disabled = false;
-        btn.textContent = '제출하기';
+        setSubmitButtons({ disabled: false, text: SUBMIT_READY_LABEL });
       } else {
         el.classList.remove('show');
-        btn.disabled = false;
-        btn.textContent = '제출하기';
+        setSubmitButtons({ disabled: false, text: SUBMIT_READY_LABEL });
       }
 
       // 중복 없으면 결과 목록 비우기
@@ -3345,6 +5146,9 @@
     document.getElementById('f-brand')?.addEventListener('input', debouncedDupCheck);
     document.getElementById('f-campaign')?.addEventListener('input', debouncedDupCheck);
     document.getElementById('f-url')?.addEventListener('input', debouncedDupCheck);
+    document.getElementById('f-brand')?.addEventListener('input', updateDraftPreview);
+    document.getElementById('f-campaign')?.addEventListener('input', updateDraftPreview);
+    document.getElementById('f-url')?.addEventListener('input', updateDraftPreview);
 
     // ================================================================
     // Volume Checker
@@ -3367,6 +5171,30 @@
       const elT = document.getElementById('vc-total');
       const elBar = document.getElementById('vc-bar-fill');
       const elSum = document.getElementById('vc-summary');
+      const actionStatus = document.getElementById('draft-action-status');
+      const actionLength = document.getElementById('draft-action-length');
+      if (actionStatus && actionLength) {
+        actionLength.textContent = total + '자';
+        actionStatus.className = 'draft-action-status';
+        if (total === 0) {
+          actionStatus.querySelector('span').textContent = '작성 상태';
+        } else if (total < VC_MIN) {
+          actionStatus.classList.add('is-fail');
+          actionStatus.querySelector('span').textContent = '보강 필요';
+        } else if (total < VC_GOOD) {
+          actionStatus.classList.add('is-warn');
+          actionStatus.querySelector('span').textContent = '조금 짧음';
+        } else if (total <= VC_MAX) {
+          actionStatus.classList.add('is-pass');
+          actionStatus.querySelector('span').textContent = '적정 분량';
+        } else if (total <= VC_OVER) {
+          actionStatus.classList.add('is-warn');
+          actionStatus.querySelector('span').textContent = '조금 김';
+        } else {
+          actionStatus.classList.add('is-fail');
+          actionStatus.querySelector('span').textContent = '줄이기';
+        }
+      }
       if (!elC) return;
 
       function classify(len, min) {
@@ -3386,32 +5214,32 @@
 
       if (total === 0) {
         elT.className = 'vc-value';
-        elBar.style.background = '#e5e5ea';
+        elBar.style.background = 'var(--border)';
         elSum.textContent = '내용을 입력하면 분량이 표시됩니다';
         elSum.className = 'vc-summary';
       } else if (total < VC_MIN) {
         elT.className = 'vc-value vc-fail';
-        elBar.style.background = '#ff3b30';
+        elBar.style.background = 'var(--danger)';
         elSum.textContent = '너무 짧습니다. 개념 설명과 사례 분석을 더 보강하세요.';
         elSum.className = 'vc-summary vc-fail';
       } else if (total < VC_GOOD) {
         elT.className = 'vc-value vc-warn';
-        elBar.style.background = '#ff9500';
+        elBar.style.background = 'var(--amber)';
         elSum.textContent = '조금 더 보강하면 좋겠습니다.';
         elSum.className = 'vc-summary vc-warn';
       } else if (total <= VC_MAX) {
         elT.className = 'vc-value vc-pass';
-        elBar.style.background = '#34c759';
+        elBar.style.background = 'var(--success)';
         elSum.textContent = '적정 분량입니다. PPT 1장 / A4 반 페이지에 딱 맞습니다.';
         elSum.className = 'vc-summary vc-pass';
       } else if (total <= VC_OVER) {
         elT.className = 'vc-value vc-warn';
-        elBar.style.background = '#ff9500';
+        elBar.style.background = 'var(--amber)';
         elSum.textContent = '약간 길지만 괜찮습니다. 핵심만 남기면 더 좋아요.';
         elSum.className = 'vc-summary vc-warn';
       } else {
         elT.className = 'vc-value vc-fail';
-        elBar.style.background = '#ff3b30';
+        elBar.style.background = 'var(--danger)';
         elSum.textContent = '너무 깁니다! PPT 1장에 안 들어갑니다. 줄여주세요.';
         elSum.className = 'vc-summary vc-fail';
       }
@@ -3433,7 +5261,7 @@
 
       if (diff <= 0) {
         badge.textContent = '마감 종료';
-        badge.style.background = '#6e6e73';
+        badge.style.background = 'var(--text-dim)';
         badge.classList.remove('urgent');
         return;
       }
@@ -3450,7 +5278,7 @@
         badge.textContent = `${totalHours}시간 ${mins}분 남음`;
         badge.classList.add('urgent');
         if (totalHours < 6) {
-          badge.style.background = '#ff2d55';
+          badge.style.background = 'var(--danger)';
         }
       }
     }
@@ -4057,10 +5885,10 @@
 
       function barColor(score, max) {
         const pct = score / max;
-        if (pct >= 0.8) return '#34c759';
-        if (pct >= 0.6) return '#0066cc';
-        if (pct >= 0.4) return '#ff9500';
-        return '#ff3b30';
+        if (pct >= 0.8) return 'var(--success)';
+        if (pct >= 0.6) return 'var(--primary)';
+        if (pct >= 0.4) return 'var(--amber)';
+        return 'var(--danger)';
       }
 
       const grade = (result.grade || 'C').charAt(0);
@@ -4110,6 +5938,16 @@
         subscribeRealtime();
       }
       await renderDashboard();
+
+      let initialRoute = readRouteFromLocation();
+      if (initialRoute.view === 'topic' && !topics.some(t => t.id === initialRoute.topicId)) {
+        initialRoute = { view: 'tab', tab: 'topics' };
+      }
+      writeRoute(initialRoute, { replace: true });
+      await applyRoute(initialRoute);
+      window.addEventListener('popstate', (event) => {
+        applyRoute(event.state?.imcRoute || readRouteFromLocation());
+      });
 
       // Init language toggle state
       document.querySelectorAll('.lang-btn').forEach(btn => {
