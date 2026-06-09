@@ -2384,10 +2384,30 @@
       background: #ffffff;
     }
 
-    .app-shell {
+    .app-shell,
+    .app-shell.right-panel-on,
+    .app-shell.detail-mode {
       gap: 24px !important;
-      max-width: 1440px;
-      margin: 0 auto;
+      width: 100%;
+      max-width: none;
+      margin: 0;
+      grid-template-columns: 240px minmax(0, 1fr) !important;
+      align-items: stretch;
+    }
+
+    .sidebar {
+      position: sticky !important;
+      top: 0 !important;
+      width: 240px !important;
+      min-width: 240px !important;
+      max-width: 240px !important;
+      height: calc(100vh - 44px) !important;
+      align-self: start;
+    }
+
+    .main-content {
+      min-width: 0 !important;
+      width: 100% !important;
     }
 
     .sidebar,
@@ -2440,6 +2460,17 @@
     .right-rev-panel {
       border-left: 1px solid var(--surface-subtle) !important;
       padding-left: 18px !important;
+    }
+
+    .app-shell.right-panel-on .right-rev-panel {
+      position: fixed !important;
+      top: 24px !important;
+      right: clamp(16px, 3vw, 48px) !important;
+      bottom: 20px !important;
+      z-index: 30;
+      width: min(380px, calc(100vw - 48px)) !important;
+      max-height: calc(100vh - 44px) !important;
+      overflow: auto !important;
     }
 
     .main-content {
@@ -2520,6 +2551,32 @@
     .rh-item {
       padding: 24px !important;
       background: var(--surface) !important;
+    }
+
+    .detail-panel,
+    .detail-compose-panel,
+    .submission-form-card {
+      border: 0 !important;
+      background: transparent !important;
+      box-shadow: none !important;
+    }
+
+    .detail-panel,
+    .detail-compose-panel {
+      padding: 0 !important;
+    }
+
+    .submission-form-card {
+      max-width: none !important;
+      margin: 0 !important;
+      padding: 0 0 76px !important;
+    }
+
+    .detail-mode-tabs {
+      padding: 0 !important;
+      border: 0 !important;
+      background: transparent !important;
+      box-shadow: none !important;
     }
 
     .topic-card:hover,
@@ -2763,6 +2820,7 @@
       .app-shell,
       .app-shell.right-panel-on,
       .app-shell.detail-mode {
+        grid-template-columns: 240px minmax(0, 1fr) !important;
         gap: 18px !important;
       }
 
@@ -2774,6 +2832,26 @@
     @media (max-width: 900px) {
       .app {
         padding: 14px !important;
+      }
+
+      .app-shell,
+      .app-shell.right-panel-on,
+      .app-shell.detail-mode {
+        grid-template-columns: 1fr !important;
+      }
+
+      .sidebar {
+        position: static !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: none !important;
+        height: auto !important;
+      }
+
+      .app-shell.right-panel-on .right-rev-panel {
+        position: static !important;
+        width: 100% !important;
+        max-height: none !important;
       }
 
       .sidebar,
