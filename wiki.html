@@ -335,6 +335,15 @@
       outline: none; border-color: #0066cc; background: #fff;
     }
     .form-group textarea { resize: vertical; min-height: 80px; }
+    .form-group.writing-pane {
+      grid-column: auto;
+    }
+    .form-group.writing-pane textarea {
+      min-height: 280px;
+      line-height: 1.75;
+      font-size: 15px;
+      padding: 14px 16px;
+    }
     .form-actions { margin-top: 14px; display: flex; gap: 10px; }
     .btn-submit {
       background: #0066cc; color: #fff; border: none; padding: 12px 28px;
@@ -1128,6 +1137,8 @@
     }
     @media (max-width: 640px) {
       .form-grid { grid-template-columns: 1fr; }
+      .form-group.writing-pane { grid-column: 1 / -1; }
+      .form-group.writing-pane textarea { min-height: 220px; }
       .dashboard-columns { grid-template-columns: 1fr; }
       .header { padding: 20px 22px; }
       .header h1 { font-size: 20px; }
@@ -1347,13 +1358,13 @@
               <label for="f-url">광고/참고 링크 (TVCF: 검색→광고 클릭→주소창 복사)</label>
               <input id="f-url" type="url" placeholder="https://tvcf.co.kr/play/bh00000-000000" />
             </div>
-            <div class="form-group full">
+            <div class="form-group writing-pane">
               <label for="f-concept">개념/이론 설명 또는 느낀 점</label>
-              <textarea id="f-concept" required rows="3" placeholder="이 문제와 관련된 개념을 자신의 말로 설명하거나, 10번은 팀원별 느낀 점을 정리..."></textarea>
+              <textarea id="f-concept" required rows="12" placeholder="이 문제와 관련된 개념을 자신의 말로 설명하거나, 10번은 팀원별 느낀 점을 정리..."></textarea>
             </div>
-            <div class="form-group full">
+            <div class="form-group writing-pane">
               <label for="f-analysis">광고 사례 분석 또는 개선 의견</label>
-              <textarea id="f-analysis" required rows="4" placeholder="광고에서는 해당 개념이 어떻게 적용되었는지, 10번은 좋았던 점/유지할 점/개선할 점을 구체적으로..."></textarea>
+              <textarea id="f-analysis" required rows="12" placeholder="광고에서는 해당 개념이 어떻게 적용되었는지, 10번은 좋았던 점/유지할 점/개선할 점을 구체적으로..."></textarea>
             </div>
           </div>
           <!-- Duplicate Checker -->
