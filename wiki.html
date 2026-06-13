@@ -211,8 +211,7 @@
       display: grid; place-items: center;
     }
     .ad-embed-open {
-      flex-shrink: 0; color: var(--text); text-decoration: underline;
-      text-decoration-thickness: 1px; text-underline-offset: 3px;
+      flex-shrink: 0; color: var(--text); text-decoration: none; font-weight: 600;
     }
     .ad-embed-frame {
       display: block; width: 100%; aspect-ratio: var(--ad-player-ratio); min-height: 220px;
@@ -1754,6 +1753,57 @@
     .inspector-actions .btn-submit,
     .inspector-actions .ad-embed-open {
       margin: 0;
+    }
+    /* ── Inspector 탭 (광고 정보 / 개념 설명 / 사례 분석) ── */
+    .inspector-tabs {
+      display: flex;
+      gap: 4px;
+      padding: 4px;
+      margin-bottom: 14px;
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+    .ins-tab {
+      flex: 1;
+      border: 0;
+      background: transparent;
+      padding: 10px 6px;
+      border-radius: 9px;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text-dim);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background .15s ease, color .15s ease;
+    }
+    .ins-tab:hover { color: var(--text); }
+    .ins-tab.active {
+      background: var(--surface);
+      color: var(--text);
+      box-shadow: 0 1px 3px var(--text-faint);
+    }
+    .ins-tab:focus-visible { outline: 2px solid var(--text-dim); outline-offset: 1px; }
+    .ins-panel { display: none; }
+    .ins-panel.active { display: block; animation: insFade .18s ease; }
+    @keyframes insFade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+    .ins-panel .inspector-text {
+      max-height: 46vh;
+      font-size: 15px;
+      line-height: 1.85;
+      padding: 15px 16px;
+      color: var(--text);
+    }
+    .ins-panel .inspector-kv {
+      grid-template-columns: 62px 1fr;
+      gap: 10px 12px;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+    .inspector-actions-section {
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
     }
     .draft-assist-panel .volume-checker,
     .draft-assist-panel .dup-checker,
@@ -3686,23 +3736,38 @@
               <div id="dup-results"></div>
             </div>
           </div>
-          <div class="inspector-section">
-            <h4>제출</h4>
-            <div class="form-actions">
-              <button type="submit" form="submission-form" class="btn-submit" data-submit-button>작성 완료</button>
-            </div>
-          </div>
         </div>`;
     }
 
+    let inspectorTab = 'info';
+    function setInspectorTab(key) {
+      inspectorTab = key;
+      const root = document.getElementById('preview-inspector');
+      if (!root) return;
+      root.querySelectorAll('.ins-tab').forEach(b => {
+        const on = b.dataset.insTab === key;
+        b.classList.toggle('active', on);
+        b.setAttribute('aria-selected', on ? 'true' : 'false');
+      });
+      root.querySelectorAll('.ins-panel').forEach(p => {
+        p.classList.toggle('active', p.dataset.insPanel === key);
+      });
+    }
     function renderSelectedInspector(sub) {
       const inspector = document.getElementById('preview-inspector');
       if (!inspector) return;
       const vc = submissionVoteCounts[sub.id] || 0;
       const isMyVote = submissionMyVote === sub.id;
+      const T = (inspectorTab === 'concept' || inspectorTab === 'case') ? inspectorTab : 'info';
+      const on = (k) => T === k ? 'active' : '';
+      const sel = (k) => T === k ? 'true' : 'false';
       inspector.innerHTML = `
-        <div class="inspector-section">
-          <h4>광고 정보</h4>
+        <div class="inspector-tabs" role="tablist" aria-label="광고 상세 보기">
+          <button class="ins-tab ${on('info')}" role="tab" aria-selected="${sel('info')}" data-ins-tab="info" onclick="setInspectorTab('info')">광고 정보</button>
+          <button class="ins-tab ${on('concept')}" role="tab" aria-selected="${sel('concept')}" data-ins-tab="concept" onclick="setInspectorTab('concept')">개념 설명</button>
+          <button class="ins-tab ${on('case')}" role="tab" aria-selected="${sel('case')}" data-ins-tab="case" onclick="setInspectorTab('case')">사례 분석</button>
+        </div>
+        <div class="ins-panel ${on('info')}" data-ins-panel="info" role="tabpanel">
           <dl class="inspector-kv">
             <dt>브랜드</dt><dd>${esc(sub.brand)}</dd>
             <dt>캠페인</dt><dd>${esc(sub.campaign)}</dd>
@@ -3712,16 +3777,13 @@
             <dt>제출</dt><dd>${new Date(sub.created_at).toLocaleString('ko-KR')}</dd>
           </dl>
         </div>
-        <div class="inspector-section">
-          <h4>개념 설명</h4>
+        <div class="ins-panel ${on('concept')}" data-ins-panel="concept" role="tabpanel">
           <div class="inspector-text">${esc(sub.concept_summary || '내용 없음')}</div>
         </div>
-        <div class="inspector-section">
-          <h4>사례 분석</h4>
+        <div class="ins-panel ${on('case')}" data-ins-panel="case" role="tabpanel">
           <div class="inspector-text">${esc(sub.case_analysis || '내용 없음')}</div>
         </div>
-        <div class="inspector-section">
-          <h4>액션</h4>
+        <div class="inspector-actions-section">
           <div class="inspector-actions">
             <button class="vote-btn ${isMyVote ? 'voted' : ''}" onclick="castVote(${sub.topic_id}, '${sub.id}')">${isMyVote ? '선정됨' : '이 답안 선정'}</button>
             <span class="vote-count"><strong>${vc}</strong>명 투표</span>
