@@ -1225,8 +1225,8 @@
     }
     .detail-workspace {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) clamp(420px, 26vw, 520px);
-      gap: 16px;
+      grid-template-columns: minmax(320px, 1fr) 16px var(--detail-preview-w, clamp(420px, 26vw, 520px));
+      gap: 0;
       height: 100%;
       min-height: 0;
     }
@@ -1255,6 +1255,34 @@
       display: flex;
       flex-direction: column;
     }
+    /* ── Draggable splitter: 작성 영역 ↔ 미리보기 영역 너비 조절 ── */
+    .detail-resizer {
+      align-self: stretch;
+      position: relative;
+      cursor: col-resize;
+      touch-action: none;
+      user-select: none;
+      border-radius: 8px;
+      background: transparent;
+      transition: background .15s ease;
+    }
+    .detail-resizer::before {
+      content: "";
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 4px; height: 44px;
+      border-radius: 4px;
+      background: var(--border);
+      transition: background .15s ease, height .15s ease;
+    }
+    .detail-resizer:hover,
+    .detail-resizer.dragging { background: var(--surface); }
+    .detail-resizer:hover::before,
+    .detail-resizer.dragging::before { background: var(--text-dim); height: 72px; }
+    .detail-resizer:focus-visible { outline: 2px solid var(--text-dim); outline-offset: 2px; }
+    body.detail-resizing { cursor: col-resize; user-select: none; }
+    body.detail-resizing iframe { pointer-events: none; }
     .detail-back {
       margin-bottom: 16px;
       padding: 0;
@@ -1755,12 +1783,15 @@
     /* ── Responsive ── */
     @media (max-width: 1500px) {
       .detail-workspace {
-        grid-template-columns: minmax(0, 1fr) 420px;
+        grid-template-columns: minmax(300px, 1fr) 16px var(--detail-preview-w, 420px);
       }
     }
     @media (max-width: 1360px) {
       .detail-workspace {
         grid-template-columns: minmax(0, 1fr);
+      }
+      .detail-resizer {
+        display: none;
       }
       .detail-preview-panel {
         display: none;
@@ -3202,6 +3233,8 @@
                 </form>
               </section>
             </section>
+
+            <div class="detail-resizer" id="detail-resizer" role="separator" aria-orientation="vertical" aria-label="작성 영역과 미리보기 영역 너비 조절 (드래그 또는 좌우 화살표키, 더블클릭 시 초기화)" tabindex="0"></div>
 
             <aside class="detail-preview-panel" id="detail-preview-panel" aria-label="광고 플레이어 미리보기 패널">
               <div class="preview-header">
@@ -6575,6 +6608,108 @@
       if (wikiLang === 'my') {
         setTimeout(() => translatePage(), 500);
       }
+    })();
+  </script>
+  <!-- ================================================================
+       작성 영역 ↔ 미리보기 영역 너비 드래그 조절 (순수 프론트엔드)
+       - localStorage에만 사용자 선호 너비 저장. DB/Supabase 미사용.
+       ================================================================ -->
+  <script>
+    (function initDetailResizer() {
+      const STORE_KEY = 'imc-detail-preview-w';
+      const resizer = document.getElementById('detail-resizer');
+      const workspace = document.querySelector('.detail-workspace');
+      if (!resizer || !workspace) return;
+
+      const MIN_PREVIEW = 300;   // 미리보기 최소 너비(px)
+      const MIN_COMPOSE = 360;   // 작성 패널 최소 확보 너비(px, resizer 포함)
+
+      function clampWidth(px) {
+        const rect = workspace.getBoundingClientRect();
+        if (rect.width === 0) return px;
+        const maxByCompose = rect.width - MIN_COMPOSE;       // 작성 패널 보호
+        const maxByRatio = rect.width * 0.6;                 // 미리보기 최대 60%
+        const upper = Math.max(MIN_PREVIEW, Math.min(maxByCompose, maxByRatio));
+        return Math.round(Math.min(Math.max(px, MIN_PREVIEW), upper));
+      }
+
+      function applyWidth(px, persist) {
+        const w = clampWidth(px);
+        workspace.style.setProperty('--detail-preview-w', w + 'px');
+        if (persist) {
+          try { localStorage.setItem(STORE_KEY, String(w)); } catch (e) {}
+        }
+        return w;
+      }
+
+      function currentWidth() {
+        const v = parseFloat(workspace.style.getPropertyValue('--detail-preview-w'));
+        if (!Number.isNaN(v)) return v;
+        // 변수 미설정 시 실제 렌더된 미리보기 너비를 기준으로
+        const panel = document.getElementById('detail-preview-panel');
+        return panel ? panel.getBoundingClientRect().width : (workspace.getBoundingClientRect().width * 0.26);
+      }
+
+      // 저장된 선호 너비 복원
+      try {
+        const saved = parseFloat(localStorage.getItem(STORE_KEY));
+        if (!Number.isNaN(saved)) workspace.style.setProperty('--detail-preview-w', saved + 'px');
+      } catch (e) {}
+
+      let dragging = false;
+
+      function onMove(e) {
+        if (!dragging) return;
+        const rect = workspace.getBoundingClientRect();
+        // 미리보기 너비 = 워크스페이스 오른쪽 끝 ~ 커서 X 까지의 거리
+        applyWidth(rect.right - e.clientX, false);
+        e.preventDefault();
+      }
+
+      function onUp() {
+        if (!dragging) return;
+        dragging = false;
+        resizer.classList.remove('dragging');
+        document.body.classList.remove('detail-resizing');
+        // 드래그 종료 시 현재 값을 클램프 후 저장
+        applyWidth(currentWidth(), true);
+        window.removeEventListener('pointermove', onMove);
+        window.removeEventListener('pointerup', onUp);
+        window.removeEventListener('pointercancel', onUp);
+      }
+
+      resizer.addEventListener('pointerdown', function (e) {
+        if (e.button !== undefined && e.button !== 0) return; // 좌클릭만
+        dragging = true;
+        resizer.classList.add('dragging');
+        document.body.classList.add('detail-resizing');
+        window.addEventListener('pointermove', onMove);
+        window.addEventListener('pointerup', onUp);
+        window.addEventListener('pointercancel', onUp);
+        e.preventDefault();
+      });
+
+      // 키보드 접근성: ←/→ 로 조절 (Shift 시 큰 폭)
+      resizer.addEventListener('keydown', function (e) {
+        const step = e.shiftKey ? 48 : 16;
+        if (e.key === 'ArrowLeft') { applyWidth(currentWidth() + step, true); e.preventDefault(); }
+        else if (e.key === 'ArrowRight') { applyWidth(currentWidth() - step, true); e.preventDefault(); }
+        else if (e.key === 'Enter' || e.key === ' ') { resetWidth(); e.preventDefault(); }
+      });
+
+      // 더블클릭 시 기본 비율로 초기화
+      function resetWidth() {
+        workspace.style.removeProperty('--detail-preview-w');
+        try { localStorage.removeItem(STORE_KEY); } catch (e) {}
+      }
+      resizer.addEventListener('dblclick', resetWidth);
+
+      // 창 크기 변경 시 저장된 너비를 현재 폭에 맞게 다시 클램프
+      window.addEventListener('resize', function () {
+        if (workspace.style.getPropertyValue('--detail-preview-w')) {
+          applyWidth(currentWidth(), false);
+        }
+      });
     })();
   </script>
 </body>
