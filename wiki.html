@@ -530,12 +530,12 @@
     }
     /* 최종 문서 탭일 때만 우측 수정이력 패널 노출 → 3컬럼 (본문:이력 = 5:5) */
     .app-shell.right-panel-on {
-      grid-template-columns: 240px minmax(0, 1fr) minmax(0, 1fr);
+      grid-template-columns: 240px minmax(0, 1fr) 320px;
     }
     /* 상세 모드: 사이드바 숨김 → 본문만 전체 폭 */
     .app-shell.detail-mode { grid-template-columns: minmax(0, 1fr); }
     @media (max-width: 1500px) {
-      .app-shell.right-panel-on { grid-template-columns: 220px minmax(0, 1fr) minmax(0, 1fr); }
+      .app-shell.right-panel-on { grid-template-columns: 220px minmax(0, 1fr) 300px; }
     }
     /* 컬럼 공통: 자기 영역에서만 스크롤 */
     .sidebar, .main-content, .right-rev-panel {
@@ -920,6 +920,14 @@
     .fts-winner .fw-body { margin-top: 12px; font-size: 14.5px; line-height: 1.75; color: var(--text); }
     .fts-winner .fw-body h5 { font-size: 13px; font-weight: 700; color: var(--text-muted); margin: 10px 0 4px; }
     .fts-winner .fw-empty { font-size: 14px; color: var(--danger); font-style: italic; }
+    /* 최종 문서에서 영상은 참고용 — 본문(개념/사례)이 주인공이므로 폭 제한 */
+    .fts-winner .ad-embed {
+      max-width: 440px; margin-top: 14px;
+      border-radius: 12px; overflow: hidden;
+      box-shadow: 0 1px 4px var(--surface-hover);
+    }
+    .fts-winner .ad-embed .ad-embed-frame,
+    .fts-winner .ad-embed .ad-embed-video { min-height: 0; }
 
     .fts-pin-row {
       display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
@@ -2477,6 +2485,40 @@
       grid-template-columns: 240px minmax(0, 1fr) !important;
       align-items: stretch;
     }
+    /* 최종 문서 탭: 본문 ↔ 우측 수정이력 패널 너비 드래그 리사이저 */
+    .final-resizer {
+      display: none;
+      align-self: stretch;
+      position: relative;
+      cursor: col-resize;
+      touch-action: none;
+      user-select: none;
+      border-radius: 8px;
+      background: transparent;
+      transition: background .15s ease;
+    }
+    .final-resizer::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 4px; height: 48px;
+      border-radius: 4px;
+      background: var(--border);
+      transition: background .15s ease, height .15s ease;
+    }
+    .final-resizer:hover, .final-resizer.dragging { background: var(--surface); }
+    .final-resizer:hover::before, .final-resizer.dragging::before { background: var(--text-dim); height: 72px; }
+    .final-resizer:focus-visible { outline: 2px solid var(--text-dim); outline-offset: 1px; }
+    body.final-resizing { cursor: col-resize; user-select: none; }
+    body.final-resizing iframe { pointer-events: none; }
+    /* 최종 문서 탭(>1300px): 본문/리사이저/우측패널을 그리드 컬럼으로 (패널 폭은 사용자 조절 변수) */
+    @media (min-width: 1301px) {
+      .app-shell.right-panel-on {
+        grid-template-columns: 240px minmax(360px, 1fr) 16px var(--final-panel-w, 320px) !important;
+      }
+      .app-shell.right-panel-on .final-resizer { display: block; }
+    }
 
     .sidebar {
       position: sticky !important;
@@ -2546,13 +2588,10 @@
     }
 
     .app-shell.right-panel-on .right-rev-panel {
-      position: fixed !important;
-      top: 24px !important;
-      right: clamp(16px, 3vw, 48px) !important;
-      bottom: 20px !important;
-      z-index: 30;
-      width: min(380px, calc(100vw - 48px)) !important;
-      max-height: calc(100vh - 44px) !important;
+      position: relative !important;
+      width: auto !important;
+      align-self: stretch;
+      max-height: 100% !important;
       overflow: auto !important;
     }
 
@@ -3306,6 +3345,8 @@
         </div>
       </main>
 
+      <div class="final-resizer" id="final-resizer" role="separator" aria-orientation="vertical" aria-label="본문과 수정이력 패널 너비 조절 (드래그 또는 좌우 화살표키, 더블클릭 시 초기화)" tabindex="0"></div>
+
       <!-- Right Panel: 수정 이력 전용 (최종 문서 탭에서만 노출) -->
       <aside class="right-rev-panel" id="right-rev-panel" aria-label="수정 제안 이력 패널">
         <div class="rrp-header">
@@ -3991,25 +4032,52 @@
       }
     }
 
+    async function fetchTextWithTimeout(url, timeoutMs = 6500) {
+      if (typeof fetch !== 'function') return null;
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), timeoutMs);
+      try {
+        const res = await fetch(url, { signal: controller.signal });
+        if (!res.ok) return null;
+        return await res.text();
+      } catch (e) {
+        return null;
+      } finally {
+        clearTimeout(timer);
+      }
+    }
+
+    // 응답이 원시 JSON이든, 문자열로 감싸 이스케이프됐든(allorigins/get),
+    // 리더가 텍스트로 감쌌든(r.jina.ai) "cut" 썸네일 URL을 뽑아낸다.
+    function extractTvcfCut(text) {
+      if (!text) return null;
+      const unescaped = text.replace(/\\\//g, '/').replace(/\\"/g, '"');
+      const m = unescaped.match(/"cut"\s*:\s*"(https?:\/\/[^"\\\s]+)"/i);
+      return (m && m[1]) ? m[1] : null;
+    }
+
+    // CORS 우회 프록시 후보 — 하나가 죽어도 다음으로 폴백한다(codetabs 단독 의존 제거).
+    const TVCF_THUMB_PROXIES = [
+      (u) => 'https://r.jina.ai/' + u,
+      (u) => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u),
+      (u) => 'https://api.allorigins.win/get?url=' + encodeURIComponent(u),
+      (u) => 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(u),
+    ];
+
     async function loadTvcfThumbnail(tvcfId) {
       if (!tvcfId) return null;
       if (tvcfThumbCache[tvcfId]) return tvcfThumbCache[tvcfId];
 
       const apiUrl = 'https://play.tvcf.co.kr/rest/api/embed/' + encodeURIComponent(tvcfId);
-      const sources = [
-        TVCF_THUMB_PROXY + encodeURIComponent(apiUrl),
-      ];
-
-      for (const source of sources) {
-        const data = await fetchJsonWithTimeout(source);
-        const cut = data?.cut;
-        if (typeof cut === 'string' && /^https?:\/\//i.test(cut)) {
+      for (const build of TVCF_THUMB_PROXIES) {
+        const text = await fetchTextWithTimeout(build(apiUrl));
+        const cut = extractTvcfCut(text);
+        if (cut) {
           tvcfThumbCache[tvcfId] = cut;
           saveTvcfThumbCache();
           return cut;
         }
       }
-
       return null;
     }
 
@@ -6776,6 +6844,97 @@
         if (workspace.style.getPropertyValue('--detail-preview-w')) {
           applyWidth(currentWidth(), false);
         }
+      });
+    })();
+
+    // ================================================================
+    // 최종 문서 탭: 본문 ↔ 우측 수정이력 패널 너비 드래그 조절 (순수 프론트엔드)
+    // 패널 폭은 localStorage에만 저장. DB/Supabase 미사용. 본문·영상은 폭에 반응형.
+    // ================================================================
+    (function initFinalResizer() {
+      const STORE_KEY = 'imc-final-panel-w';
+      const resizer = document.getElementById('final-resizer');
+      const shell = document.getElementById('app-shell');
+      if (!resizer || !shell) return;
+
+      const MIN_PANEL = 260;   // 우측 패널 최소 폭(px)
+      const MIN_MAIN = 440;    // 본문 최소 확보 폭(px)
+
+      function clampWidth(px) {
+        const rect = shell.getBoundingClientRect();
+        if (rect.width === 0) return px;
+        const maxByMain = rect.width - 240 - MIN_MAIN;   // 사이드바+본문 보호
+        const maxByRatio = rect.width * 0.5;             // 패널 최대 50%
+        const upper = Math.max(MIN_PANEL, Math.min(maxByMain, maxByRatio));
+        return Math.round(Math.min(Math.max(px, MIN_PANEL), upper));
+      }
+
+      function applyWidth(px, persist) {
+        const w = clampWidth(px);
+        shell.style.setProperty('--final-panel-w', w + 'px');
+        if (persist) { try { localStorage.setItem(STORE_KEY, String(w)); } catch (e) {} }
+        return w;
+      }
+
+      function currentWidth() {
+        const v = parseFloat(shell.style.getPropertyValue('--final-panel-w'));
+        if (!Number.isNaN(v)) return v;
+        const panel = document.getElementById('right-rev-panel');
+        return panel ? panel.getBoundingClientRect().width : 320;
+      }
+
+      try {
+        const saved = parseFloat(localStorage.getItem(STORE_KEY));
+        if (!Number.isNaN(saved)) shell.style.setProperty('--final-panel-w', saved + 'px');
+      } catch (e) {}
+
+      let dragging = false;
+
+      function onMove(e) {
+        if (!dragging) return;
+        const rect = shell.getBoundingClientRect();
+        // 패널 폭 = 셸 오른쪽 끝 ~ 커서 X
+        applyWidth(rect.right - e.clientX, false);
+        e.preventDefault();
+      }
+
+      function onUp() {
+        if (!dragging) return;
+        dragging = false;
+        resizer.classList.remove('dragging');
+        document.body.classList.remove('final-resizing');
+        applyWidth(currentWidth(), true);
+        window.removeEventListener('pointermove', onMove);
+        window.removeEventListener('pointerup', onUp);
+        window.removeEventListener('pointercancel', onUp);
+      }
+
+      resizer.addEventListener('pointerdown', function (e) {
+        if (e.button !== undefined && e.button !== 0) return;
+        dragging = true;
+        resizer.classList.add('dragging');
+        document.body.classList.add('final-resizing');
+        window.addEventListener('pointermove', onMove);
+        window.addEventListener('pointerup', onUp);
+        window.addEventListener('pointercancel', onUp);
+        e.preventDefault();
+      });
+
+      resizer.addEventListener('keydown', function (e) {
+        const step = e.shiftKey ? 48 : 16;
+        if (e.key === 'ArrowLeft') { applyWidth(currentWidth() + step, true); e.preventDefault(); }       // 핸들 ← : 패널 넓게
+        else if (e.key === 'ArrowRight') { applyWidth(currentWidth() - step, true); e.preventDefault(); } // 핸들 → : 패널 좁게
+        else if (e.key === 'Enter' || e.key === ' ') { resetWidth(); e.preventDefault(); }
+      });
+
+      function resetWidth() {
+        shell.style.removeProperty('--final-panel-w');
+        try { localStorage.removeItem(STORE_KEY); } catch (e) {}
+      }
+      resizer.addEventListener('dblclick', resetWidth);
+
+      window.addEventListener('resize', function () {
+        if (shell.style.getPropertyValue('--final-panel-w')) applyWidth(currentWidth(), false);
       });
     })();
   </script>
