@@ -752,7 +752,7 @@
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
-      background: #172033;
+      background: linear-gradient(160deg, #1f2a40 0%, #141b2c 100%);
       border-color: rgba(23,32,51,.12);
       color: var(--surface-alt);
       box-shadow: inset 0 0 0 1px rgba(255,255,255,.16), 0 1px 2px rgba(23,32,51,.08);
@@ -800,7 +800,9 @@
       background: rgba(0,0,0,.50);
       border: 1px solid rgba(255,255,255,.16);
       box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+      color: var(--surface-alt);
     }
+    .result-card.has-thumb .rw-brand { color: var(--surface-alt); }
     .result-winner .rw-brand { font-weight: 700; font-size: 15.5px; }
     .result-winner .rw-author {
       font-size: 12px; font-weight: 600; background: var(--primary); color: var(--surface-alt);
@@ -815,14 +817,8 @@
     .result-card.has-thumb .rw-campaign { color: rgba(255,255,255,.84); }
     .result-winner .rw-votes { font-size: 13px; color: var(--success); font-weight: 600; margin-top: 6px; }
     .result-card.has-thumb .rw-votes { color: #b9f2c6; }
-    /* 동점·미선정 등 실제 썸네일이 없을 때도 카드 배경을 채워 그리드를 정돈 */
-    .result-card.no-thumb-fill {
-      min-height: 210px;
-      display: flex; flex-direction: column; justify-content: flex-end;
-      background:
-        radial-gradient(130% 90% at 100% 0%, var(--surface-hover) 0%, transparent 58%),
-        linear-gradient(180deg, var(--surface-muted) 0%, var(--surface-alt) 100%);
-    }
+    /* 미선정 안내 문구도 어두운 배경 위에서 보이도록 밝게 */
+    .result-card.has-thumb .result-no-votes { color: rgba(255,255,255,.82); }
     .result-no-votes { font-size: 14px; color: var(--text-faint); font-style: italic; padding: 10px 0; }
     .results-progress {
       margin-bottom: 22px; padding: 18px 24px; border-radius: 14px;
@@ -5006,10 +5002,11 @@
         const hasThumb = !!(thumbnail || tvcfId);
         const thumbAttr = thumbnail ? ` data-result-thumb="${esc(thumbnail)}"` : '';
         const tvcfThumbAttr = tvcfId ? ` data-tvcf-thumb-id="${esc(tvcfId)}"` : '';
+        // 모든 결과 카드를 어두운 채움 스타일로 통일(흰색 텍스트). 썸네일이 있으면 이미지 배경, 없으면 다크 그라데이션.
         const cardClasses = [
           'result-card',
           isDecided ? 'decided' : 'undecided',
-          hasThumb ? 'has-thumb' : 'no-thumb-fill',
+          'has-thumb',
         ].join(' ');
 
         if (resolution.kind === 'none') {
