@@ -622,6 +622,39 @@
     }
     .sidebar-main { min-height: 0; display: flex; flex-direction: column; flex: 1; }
     .sidebar-nav { display: flex; flex-direction: column; gap: 2px; }
+
+    /* 과제 단계 토글 (기말 / 중간 / 전체) */
+    .phase-toggle {
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 3px;
+      background: var(--surface-muted); border: 1px solid var(--border);
+      border-radius: 9px; padding: 3px; margin: 0 4px 12px;
+    }
+    .phase-toggle-btn {
+      appearance: none; border: 0; background: transparent; cursor: pointer;
+      font-size: 12px; font-weight: 700; color: var(--text-dim);
+      padding: 6px 4px; border-radius: 6px; transition: all .15s ease;
+    }
+    .phase-toggle-btn:hover:not(.active) { color: var(--primary); background: var(--surface-alt); }
+    .phase-toggle-btn.active {
+      background: var(--primary); color: var(--surface-alt);
+      box-shadow: 0 1px 4px var(--border-strong);
+    }
+    /* 중간고사(읽기 전용) 표시 태그 */
+    .phase-tag {
+      display: inline-block; font-size: 9px; font-weight: 800; line-height: 1;
+      padding: 2px 5px; border-radius: 5px; margin-right: 5px; vertical-align: middle;
+      letter-spacing: .3px;
+    }
+    .phase-tag.midterm { background: var(--amber-soft, #fde68a); color: var(--amber, #b45309); }
+    .topic-card.is-readonly { opacity: .92; }
+    .final-topic-section.is-readonly .fts-q { filter: none; }
+    /* 읽기 전용 토픽: '새 사례 작성' 탭 숨김 */
+    .detail-panel.readonly-topic #detail-form-tab { display: none; }
+    .detail-panel.readonly-topic .detail-mode-tabs::after {
+      content: '중간고사 · 읽기 전용'; align-self: center; margin-left: 8px;
+      font-size: 10px; font-weight: 800; color: var(--amber, #b45309);
+      background: var(--amber-soft, #fde68a); padding: 2px 7px; border-radius: 5px;
+    }
     .sidebar-footer {
       margin-top: auto; padding: 12px 10px 2px;
       border-top: 1px solid var(--border);
@@ -3066,6 +3099,12 @@
           <span>홈으로 돌아가기</span>
         </button>
         <div class="sidebar-main" id="sidebar-main">
+          <div class="sidebar-title">과제 구분</div>
+          <div class="phase-toggle" role="group" aria-label="과제 구분 선택">
+            <button class="phase-toggle-btn active" data-phase="final" onclick="setViewPhase('final')">기말</button>
+            <button class="phase-toggle-btn" data-phase="midterm" onclick="setViewPhase('midterm')">중간</button>
+            <button class="phase-toggle-btn" data-phase="all" onclick="setViewPhase('all')">전체</button>
+          </div>
           <div class="sidebar-title">워크스페이스</div>
           <nav class="sidebar-nav">
             <button class="nav-item active" data-tab="topics" onclick="showTab('topics')">
@@ -3130,14 +3169,14 @@
           <div class="dashboard-columns">
             <div class="dash-column">
               <div class="column-header">
-                <span>Q1 ~ Q5</span>
+                <span id="col-head-left">Q1 ~ Q5</span>
                 <div class="column-assignees" id="assignees-left"></div>
               </div>
               <div id="topics-col-left"></div>
             </div>
             <div class="dash-column">
               <div class="column-header">
-                <span>Q6 ~ Q10</span>
+                <span id="col-head-right">Q6 ~ Q10</span>
                 <div class="column-assignees" id="assignees-right"></div>
               </div>
               <div id="topics-col-right"></div>
@@ -3383,6 +3422,8 @@
     let sb = null;
     let topics = [];
     let currentTopicId = null;
+    let currentTopicReadOnly = false;   // 중간고사 토픽(읽기 전용) 여부
+    let currentTab = 'topics';          // 현재 활성 리스트 탭
     let currentSubmissions = [];
     let selectedSubmissionId = null;
     let previewMode = 'empty';
@@ -3449,7 +3490,7 @@
     async function applyRoute(route) {
       routeUpdateInProgress = true;
       try {
-        if (route?.view === 'topic' && topics.some(t => t.id === route.topicId)) {
+        if (route?.view === 'topic' && TOPIC_META.has(Number(route.topicId))) {
           await openTopic(route.topicId, { pushRoute: false });
           return;
         }
@@ -3485,10 +3526,67 @@
       { id:9,  question_num:9,  chapter:'세대 소비', title:'X세대 타깃 광고', description:'X 세대를 겨냥한 광고 사례를 찾아서 광고의 메시지에 X세대의 특성이 어떻게 반영되어 있는 지 설명하시오.', concept_hint:'독립성, 실용성, 아날로그와 디지털 경험의 공존, 가족/커리어 맥락 등 X세대 특성과 메시지 연결.' },
       { id:10, question_num:10, chapter:'회고', title:'팀과제 회고', description:'IMC와 소비자 수업 광고 찾기 팀과제를 하면서 느낀 점을 팀원 모두 서술하시오. 과제를 하면서 좋았던 점, 유지하면 좋은 점, 개선이 필요하다고 생각한 점을 포함하시오.', concept_hint:'팀원별로 좋았던 점, 유지할 점, 개선이 필요한 점을 구체적으로 기록.' },
     ];
+
+    // ── 중간고사(읽기 전용) 토픽 — 2026-06-09 기말 전환 전 자료.
+    //    DB의 topic_id 1~10을 기말과 공유하며 created_at < 기준일(PHASE_CUTOFF)로 구분된다.
+    const MIDTERM_TOPICS = [
+      { question_num:1,  chapter:'1장', title:'해석주의적 관점', description:'사회와 소비자의 관계를 해석주의적 관점에서 바라본 광고 사례를 찾아서, 해석주의적 관점의 사회와 소비자에 대한 가정이 포함된 부분을 구체적으로 설명하시오.', concept_hint:'소비자를 의미 해석자로 봄. 기능 정보보다 상징·분위기·관계의 메시지가 설득의 중심.' },
+      { question_num:2,  chapter:'3장', title:'오감 자극: 청각', description:'광고물에서 소비자의 오감 중 청각을 집중 사용하도록 자극하는 광고 사례를 찾아서, 해당 감각을 어떤 방식으로 처리하고 있는지 구체적으로 설명하시오.', concept_hint:'청각 단서(탄산 소리, ASMR, 조리 소리 등)가 맛·온도·식감의 상상을 촉발하는 교차감각.' },
+      { question_num:3,  chapter:'3장', title:'차등적 식역 (JND)', description:'차등적 식역(differential threshold)의 개념을 설명하고, 소비자가 자극의 차이를 인식하기를 의도하는 메시지를 찾아서 구체적으로 서술하시오.', concept_hint:'JND = 차이를 인식할 수 있는 최소 변화량. Weber의 법칙. 광고에서 "X배 더", "전작 대비" 등 구체적 수치로 차이 인식 유도.' },
+      { question_num:4,  chapter:'3장', title:'자극물의 주의 요인 (2개+)', description:'광고자극물 자체에 소비자의 주의를 높일 것을 목적으로 처리된 요인을 2개 이상 찾아서, 어떤 요인이며, 왜 그런지 구체적으로 설명하시오.', concept_hint:'크기, 색 대비, 움직임, 독특함 등 자극의 물리적 특성이 선택적 주의를 유도.' },
+      { question_num:5,  chapter:'4장', title:'의미적 부호화', description:'단기기억의 증진을 위한 의미적 부호화를 설명하고, 이러한 기제를 사용한 광고를 찾아서 어떻게 부호화하고 있는지 구체적으로 설명하시오.', concept_hint:'의미 있는 맥락/범주에 연결하면 단기기억 처리 향상. 익숙한 스키마 활용.' },
+      { question_num:6,  chapter:'4장', title:'절차기억 (스크립트)', description:'장기기억 중 절차기억(스크립트)의 개념을 설명하고, 이러한 기억이 광고에서 브랜드나 제품과 어떻게 연관되고 있는지 구체적으로 설명하시오.', concept_hint:'순서화된 일상 행동 흐름의 기억. 광고가 행동 순서를 재현하면 서비스 사용법을 자연스럽게 학습.' },
+      { question_num:7,  chapter:'4장', title:'재인적 단서', description:'기억을 측정하는 개념으로 재인을 설명하고, 재인적 단서가 포함된 광고를 찾아서 어떤 부분인지 구체적으로 설명하시오.', concept_hint:'재인 = 단서를 보고 알아보는 기억. 패키지, 로고, 실루엣 같은 시각 단서가 핵심.' },
+      { question_num:8,  chapter:'5장', title:'고전적 조건화', description:'고전적 조건화 과정에서 무조건자극으로 모델이나 음악 이외의 자극이 사용된 사례를 찾아서, 조건화 과정을 그림으로 설명하시오.', concept_hint:'US(무조건자극)와 NS(중립자극=브랜드)를 반복 결합 → CS(조건자극)로 변화. 모델/음악 외 자극 필수.' },
+      { question_num:9,  chapter:'5장', title:'부정적 강화', description:'부정적 강화의 개념을 설명하고, 광고에 적용된 사례를 찾아서 그 내용을 구체적으로 설명하시오.', concept_hint:'부정적 강화 ≠ 처벌. 불쾌 자극 제거 → 행동 빈도 증가. 진통제, 탈취제, 보험 광고가 전형적.' },
+      { question_num:10, chapter:'5장', title:'고정비율 강화', description:'고정비율 강화를 광고의 주장에 사용한 사례를 찾아서 개념이 어떻게 광고내용에 포함되어 있는지 설명하시오.', concept_hint:'일정 반응 횟수 후 예측 가능한 보상. 적립, 쿠폰, 스탬프 같은 보상 언어.' },
+    ];
+
+    // ── 과제 구분(phase) 모델 ──────────────────────────────────────
+    // 중간/기말은 동일한 Supabase 테이블(topic_id 1~10 공유)을 쓰고 created_at 기준으로만 구분된다.
+    // UI에서 둘을 동시에 다루기 위해 중간 토픽에는 1000+question_num 의 별도 uid를 부여한다.
+    const PHASE_CUTOFF = ASSIGNMENT_START_ISO;   // 이 시각 이상=기말, 미만=중간
+    const MIDTERM_UID_BASE = 1000;
+    const ALL_TOPICS = [
+      ...FINAL_TOPICS.map(t => ({ ...t, id: t.id, dbId: t.id, phase: 'final' })),
+      ...MIDTERM_TOPICS.map(t => ({ ...t, id: MIDTERM_UID_BASE + t.question_num, dbId: t.question_num, phase: 'midterm' })),
+    ];
+    const TOPIC_META = new Map(ALL_TOPICS.map(t => [t.id, t]));
+    function topicMeta(uid) { return TOPIC_META.get(Number(uid)); }
+    function topicPhase(uid) { return topicMeta(uid)?.phase || 'final'; }
+    function topicDbId(uid) { const m = topicMeta(uid); return m ? m.dbId : Number(uid); }
+    function isReadOnlyTopic(uid) { return topicPhase(uid) === 'midterm'; }
+    function uidForSubmission(dbId, createdAt) {
+      return (createdAt && createdAt < PHASE_CUTOFF) ? (MIDTERM_UID_BASE + Number(dbId)) : Number(dbId);
+    }
+    function applyPhaseRange(query, phase) {
+      return phase === 'midterm' ? query.lt('created_at', PHASE_CUTOFF) : query.gte('created_at', PHASE_CUTOFF);
+    }
+    const PHASE_LABEL = { final: '기말', midterm: '중간', all: '중간·기말' };
+
+    // 현재 표시 중인 과제 단계: 'final' | 'midterm' | 'all'
+    let viewPhase = 'final';
+    try {
+      const _vp = localStorage.getItem('imc-view-phase');
+      if (_vp === 'final' || _vp === 'midterm' || _vp === 'all') viewPhase = _vp;
+    } catch {}
+    let dbAssigneesByQ = new Map();   // DB topics.assignees (question_num → 담당자[]) · 기말 기준
+
+    function topicsForView() {
+      // 'all'은 ALL_TOPICS 순서(기말 10개 → 중간 10개) 그대로 사용
+      return viewPhase === 'all' ? ALL_TOPICS : ALL_TOPICS.filter(t => t.phase === viewPhase);
+    }
+    function rebuildTopics() {
+      topics = topicsForView().map(t => ({
+        ...t,
+        assignees: t.phase === 'final' ? (dbAssigneesByQ.get(t.question_num) || []) : [],
+      }));
+    }
+
     let localSubmissions = [];
 
     function loadFallbackData() {
-      topics = FINAL_TOPICS.map(t => ({ ...t, assignees: [] }));
+      rebuildTopics();
       try {
         localSubmissions = JSON.parse(localStorage.getItem(`${ASSIGNMENT_ID}-submissions`) || '[]');
       } catch { localSubmissions = []; }
@@ -3506,39 +3604,37 @@
       if (!sb) return;
       const { data, error } = await sb.from('topics').select('*').order('question_num');
       if (error) { console.error(error); return; }
-      const byQuestion = new Map((data || []).map(t => [t.question_num, t]));
-      topics = FINAL_TOPICS.map(t => ({
-        ...t,
-        assignees: byQuestion.get(t.question_num)?.assignees || [],
-      }));
+      dbAssigneesByQ = new Map((data || []).map(t => [t.question_num, t.assignees || []]));
+      rebuildTopics();
     }
 
     async function loadSubmissions(topicId) {
+      const dbId = topicDbId(topicId);
+      const phase = topicPhase(topicId);
       if (!sb) {
-        return localSubmissions.filter(s => s.topic_id === topicId);
+        return localSubmissions.filter(s => uidForSubmission(s.topic_id, s.created_at) === Number(topicId));
       }
-      const { data, error } = await sb
-        .from('submissions')
-        .select('*')
-        .eq('topic_id', topicId)
-        .gte('created_at', ASSIGNMENT_START_ISO)
-        .order('created_at', { ascending: false });
+      const { data, error } = await applyPhaseRange(
+        sb.from('submissions').select('*').eq('topic_id', dbId), phase
+      ).order('created_at', { ascending: false });
       if (error) { console.error(error); return []; }
       return data;
     }
 
     async function getSubmissionCounts() {
+      // 모든 제출물을 created_at 기준으로 phase 버킷(uid)에 집계
+      const counts = {};
+      const bump = (dbId, createdAt) => {
+        const uid = uidForSubmission(dbId, createdAt);
+        counts[uid] = (counts[uid] || 0) + 1;
+      };
       if (!sb) {
-        const counts = {};
-        localSubmissions.forEach(s => {
-          counts[s.topic_id] = (counts[s.topic_id] || 0) + 1;
-        });
+        localSubmissions.forEach(s => bump(s.topic_id, s.created_at));
         return counts;
       }
-      const { data, error } = await sb.from('submissions').select('topic_id').gte('created_at', ASSIGNMENT_START_ISO);
+      const { data, error } = await sb.from('submissions').select('topic_id, created_at');
       if (error) return {};
-      const counts = {};
-      data.forEach(s => { counts[s.topic_id] = (counts[s.topic_id] || 0) + 1; });
+      data.forEach(s => bump(s.topic_id, s.created_at));
       return counts;
     }
 
@@ -3554,6 +3650,14 @@
     }
 
     function renderAssignees() {
+      // 담당자 지정은 활성 과제(기말)에서만. 중간/전체 보기에서는 숨김.
+      if (viewPhase !== 'final') {
+        ['left', 'right'].forEach(side => {
+          const el = document.getElementById('assignees-' + side);
+          if (el) el.innerHTML = '';
+        });
+        return;
+      }
       ['left', 'right'].forEach(side => {
         const el = document.getElementById('assignees-' + side);
         const names = getColumnAssignees(side);
@@ -3596,8 +3700,22 @@
     async function renderDashboard() {
       const counts = await getSubmissionCounts();
       const voteSummary = await getAllVoteSummary();
-      const leftTopics = topics.filter(t => t.question_num <= 5);
-      const rightTopics = topics.filter(t => t.question_num > 5);
+
+      // 'all' 모드: 좌=기말 10개 / 우=중간 10개. 단일 모드: 좌=Q1~5 / 우=Q6~10.
+      let leftTopics, rightTopics, leftHead, rightHead;
+      if (viewPhase === 'all') {
+        leftTopics  = topics.filter(t => t.phase === 'final');
+        rightTopics = topics.filter(t => t.phase === 'midterm');
+        leftHead = '기말 10문제'; rightHead = '중간 10문제 (읽기 전용)';
+      } else {
+        leftTopics  = topics.filter(t => t.question_num <= 5);
+        rightTopics = topics.filter(t => t.question_num > 5);
+        leftHead = 'Q1 ~ Q5'; rightHead = 'Q6 ~ Q10';
+      }
+      const lh = document.getElementById('col-head-left');
+      const rh = document.getElementById('col-head-right');
+      if (lh) lh.textContent = leftHead;
+      if (rh) rh.textContent = rightHead;
 
       function renderColumn(items, side) {
         return items.map(t => {
@@ -3605,14 +3723,15 @@
           const chipClass = 'chip-' + t.chapter.charAt(0);
           const badgeCls = side === 'right' ? 'assignee-badge right' : 'assignee-badge';
           const assigneeHtml = (t.assignees || []).map(a => `<span class="${badgeCls}" style="font-size:10px;padding:1px 6px;margin-left:4px;">${esc(a)}</span>`).join('');
+          const phaseTag = (viewPhase === 'all' && t.phase === 'midterm') ? `<span class="phase-tag midterm">중간</span>` : '';
           const myVotedSub = voteSummary.myVotes[t.id];
           const topicVC = voteSummary.byTopic[t.id] || {};
           let maxV = 0;
           for (const cnt of Object.values(topicVC)) { if (cnt > maxV) maxV = cnt; }
           return `
-            <div class="topic-card" onclick="openTopic(${t.id})">
+            <div class="topic-card${t.phase === 'midterm' ? ' is-readonly' : ''}" onclick="openTopic(${t.id})">
               <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
-                <span class="topic-chip ${chipClass}">Q${t.question_num} · ${t.chapter}</span>
+                <span class="topic-chip ${chipClass}">${phaseTag}Q${t.question_num} · ${t.chapter}</span>
                 <div>${assigneeHtml}</div>
               </div>
               <h3>${t.title}</h3>
@@ -3679,6 +3798,8 @@
     }
 
     function setDetailMode(mode) {
+      // 중간고사(읽기 전용) 토픽은 작성 폼을 막고 항상 사례 보기로 고정
+      if (currentTopicReadOnly) mode = 'cases';
       detailMode = mode === 'form' ? 'form' : 'cases';
       document.getElementById('detail-cases-tab')?.classList.toggle('active', detailMode === 'cases');
       document.getElementById('detail-form-tab')?.classList.toggle('active', detailMode === 'form');
@@ -3896,9 +4017,24 @@
     }
 
     async function openTopic(topicId, { pushRoute = true } = {}) {
-      currentTopicId = topicId;
-      const topic = topics.find(t => t.id === topicId);
+      topicId = Number(topicId);
+      // 현재 보기에 없는 토픽(예: 딥링크/토글 불일치)이면 해당 과제 단계로 전환
+      let topic = topics.find(t => t.id === topicId);
+      if (!topic) {
+        const meta = topicMeta(topicId);
+        if (meta && meta.phase !== viewPhase && viewPhase !== 'all') {
+          viewPhase = meta.phase;
+          try { localStorage.setItem('imc-view-phase', viewPhase); } catch {}
+          rebuildTopics();
+          updatePhaseToggleUI();
+          topic = topics.find(t => t.id === topicId);
+        }
+      }
       if (!topic) return;
+      currentTopicId = topicId;
+      currentTopicReadOnly = isReadOnlyTopic(topicId);
+      const detailPanel = document.getElementById('detail-panel');
+      if (detailPanel) detailPanel.classList.toggle('readonly-topic', currentTopicReadOnly);
       if (pushRoute) writeRoute({ view: 'topic', topicId });
 
       document.getElementById('dashboard').hidden = true;
@@ -4177,16 +4313,17 @@
         return;
       }
 
+      const readOnly = currentTopicReadOnly;
       list.innerHTML = items.map(s => {
         const vc = submissionVoteCounts[s.id] || 0;
         const isMyVote = submissionMyVote === s.id;
         const isSelected = selectedSubmissionId === s.id;
         return `
         <div class="submission-card ${isSelected ? 'is-selected' : ''}" id="sub-${s.id}" onclick="selectSubmissionForPreview('${s.id}')">
-          <div class="sub-actions">
+          ${readOnly ? '' : `<div class="sub-actions">
             <button class="sub-edit" onclick="event.stopPropagation(); toggleEdit('${s.id}')" title="수정">수정</button>
             <button class="sub-delete" onclick="event.stopPropagation(); deleteSub('${s.id}')" title="삭제">×</button>
-          </div>
+          </div>`}
           <div class="sub-meta">
             <span class="sub-author">${esc(s.author)}</span>
             <span class="sub-brand">${esc(s.brand)}</span>
@@ -4205,15 +4342,15 @@
           </div>
           <div class="sub-preview-hint">${s.watch_url ? '카드를 선택하면 우측 inspector에서 영상과 상세를 확인합니다.' : '등록된 광고 링크가 없습니다.'}</div>
           <div class="sub-time">${new Date(s.created_at).toLocaleString('ko-KR')}</div>
-          <div style="margin-top:10px;">
+          ${readOnly ? '' : `<div style="margin-top:10px;">
             <button class="eval-btn" id="eval-btn-${s.id}" onclick="event.stopPropagation(); evaluateSubmission('${s.id}')">AI 평가</button>
-          </div>
+          </div>`}
           <div class="eval-result" id="eval-result-${s.id}" style="display:none;"></div>
           <div class="vote-area">
-            <button class="vote-btn ${isMyVote ? 'voted' : ''}" onclick="event.stopPropagation(); castVote(${s.topic_id}, '${s.id}')">${isMyVote ? '선정됨' : '이 답안 선정'}</button>
+            ${readOnly ? '' : `<button class="vote-btn ${isMyVote ? 'voted' : ''}" onclick="event.stopPropagation(); castVote(${s.topic_id}, '${s.id}')">${isMyVote ? '선정됨' : '이 답안 선정'}</button>`}
             <span class="vote-count"><strong>${vc}</strong>명 투표</span>
           </div>
-          <div class="sub-edit-form" id="edit-form-${s.id}" hidden onclick="event.stopPropagation()">
+          ${readOnly ? '' : `<div class="sub-edit-form" id="edit-form-${s.id}" hidden onclick="event.stopPropagation()">
             <div class="form-grid">
               <div class="form-group"><label>브랜드/주제</label><input id="edit-brand-${s.id}" value="${esc(s.brand)}" /></div>
               <div class="form-group"><label>캠페인/답안 제목</label><input id="edit-campaign-${s.id}" value="${esc(s.campaign)}" /></div>
@@ -4227,18 +4364,18 @@
               <button class="btn-edit-save" onclick="saveEdit('${s.id}')">저장</button>
               <button class="btn-edit-cancel" onclick="toggleEdit('${s.id}')">취소</button>
             </div>
-          </div>
+          </div>`}
           <div class="comments-section" onclick="event.stopPropagation()">
             <button class="comments-toggle" onclick="toggleComments('${s.id}')">
               <span id="comment-count-${s.id}">...</span> 댓글
             </button>
             <div id="comments-area-${s.id}" hidden>
               <div class="comments-list" id="comments-list-${s.id}"></div>
-              <form class="comment-form" onsubmit="postComment(event, '${s.id}')">
+              ${readOnly ? '' : `<form class="comment-form" onsubmit="postComment(event, '${s.id}')">
                 <input name="c-author" required placeholder="이름" value="${esc(localStorage.getItem('imc-author') || '')}" />
                 <input name="c-body" required placeholder="댓글을 입력하세요..." />
                 <button type="submit">등록</button>
-              </form>
+              </form>`}
             </div>
           </div>
         </div>
@@ -4311,6 +4448,7 @@
     }
 
     function showDashboard({ pushRoute = true } = {}) {
+      currentTab = 'topics';
       if (pushRoute) writeRoute({ view: 'tab', tab: 'topics' });
       document.getElementById('dashboard').hidden = false;
       document.getElementById('dashboard').style.display = '';
@@ -4329,6 +4467,7 @@
       });
       document.getElementById('nav-final-sublist').classList.remove('show');
       currentTopicId = null;
+      currentTopicReadOnly = false;
       currentSubmissions = [];
       selectedSubmissionId = null;
       previewMode = 'empty';
@@ -4341,6 +4480,7 @@
     // ================================================================
     document.getElementById('submission-form').addEventListener('submit', async (e) => {
       e.preventDefault();
+      if (currentTopicReadOnly) { toast('중간고사 자료는 읽기 전용입니다'); return; }
       setSubmitButtons({ disabled: true, text: '제출 중...' });
 
       // 제출 전 중복 체크 재실행 (최종 확인)
@@ -4354,7 +4494,7 @@
       setSubmitButtons({ disabled: true, text: '제출 중...' });
 
       const record = {
-        topic_id:        currentTopicId,
+        topic_id:        topicDbId(currentTopicId),
         author:          document.getElementById('f-author').value.trim(),
         brand:           document.getElementById('f-brand').value.trim(),
         campaign:        document.getElementById('f-campaign').value.trim(),
@@ -4645,19 +4785,23 @@
     // Votes
     // ================================================================
     async function getVotesForTopic(topicId) {
+      const dbId = topicDbId(topicId);
+      const phase = topicPhase(topicId);
       if (sb) {
-        const { data, error } = await sb.from('votes').select('*').eq('topic_id', topicId).gte('created_at', ASSIGNMENT_START_ISO);
+        const { data, error } = await applyPhaseRange(
+          sb.from('votes').select('*').eq('topic_id', dbId), phase
+        );
         if (error) { console.error(error); return []; }
         return data;
       }
-      return localVotes.filter(v => v.topic_id === topicId);
+      return localVotes.filter(v => uidForSubmission(v.topic_id, v.created_at) === Number(topicId));
     }
 
     async function getAllVoteSummary() {
       const voter = localStorage.getItem('imc-author');
       let votes = [];
       if (sb) {
-        const { data, error } = await sb.from('votes').select('topic_id, submission_id, voter').gte('created_at', ASSIGNMENT_START_ISO);
+        const { data, error } = await sb.from('votes').select('topic_id, submission_id, voter, created_at');
         if (!error && data) votes = data;
       } else {
         votes = localVotes;
@@ -4669,14 +4813,16 @@
       const byTopic = {};
       const myVotes = {};
       for (const v of votes) {
-        if (!byTopic[v.topic_id]) byTopic[v.topic_id] = {};
-        byTopic[v.topic_id][v.submission_id] = (byTopic[v.topic_id][v.submission_id] || 0) + 1;
-        if (voter && v.voter === voter) myVotes[v.topic_id] = v.submission_id;
+        const uid = uidForSubmission(v.topic_id, v.created_at);
+        if (!byTopic[uid]) byTopic[uid] = {};
+        byTopic[uid][v.submission_id] = (byTopic[uid][v.submission_id] || 0) + 1;
+        if (voter && v.voter === voter) myVotes[uid] = v.submission_id;
       }
       return { byTopic, myVotes };
     }
 
     async function castVote(topicId, submissionId) {
+      if (currentTopicReadOnly) { toast('중간고사 자료는 읽기 전용입니다'); return; }
       let voter = localStorage.getItem('imc-author');
       if (!voter) {
         const name = prompt('투표를 위해 이름을 입력하세요:');
@@ -4736,6 +4882,7 @@
     // ================================================================
     function showTab(tab, { pushRoute = true } = {}) {
       tab = normalizeTab(tab);
+      currentTab = tab;
       if (pushRoute) writeRoute({ view: 'tab', tab });
       document.querySelectorAll('.nav-item').forEach(el => {
         const isActive = el.dataset.tab === tab;
@@ -4756,6 +4903,7 @@
       document.getElementById('app-shell').classList.toggle('right-panel-on', tab === 'final');
       document.querySelector('.app').classList.toggle('compact-top', tab === 'final');
       currentTopicId = null;
+      currentTopicReadOnly = false;
       currentSubmissions = [];
       selectedSubmissionId = null;
       previewMode = 'empty';
@@ -4767,11 +4915,31 @@
       }
     }
 
+    // 과제 단계 토글 (기말 / 중간 / 전체)
+    function setViewPhase(phase) {
+      if (!['final', 'midterm', 'all'].includes(phase)) phase = 'final';
+      if (phase === viewPhase) return;
+      viewPhase = phase;
+      try { localStorage.setItem('imc-view-phase', phase); } catch {}
+      rebuildTopics();
+      updatePhaseToggleUI();
+      // 상세 패널이 열려 있으면 목록으로 복귀(뷰 불일치/읽기전용 상태 방지)
+      if (!document.getElementById('detail-panel').hidden) { showDashboard(); return; }
+      if (currentTab === 'results') renderResultsDashboard();
+      else if (currentTab === 'final') { renderFinalDocDashboard(); renderFinalSublist(); }
+      else renderDashboard();
+    }
+    function updatePhaseToggleUI() {
+      document.querySelectorAll('.phase-toggle-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.phase === viewPhase);
+      });
+    }
+
     function renderFinalSublist() {
       const subMap = {};
       const list = topics.map(t => `
         <button class="nav-subitem" data-topic="${t.id}" onclick="jumpToTopic(${t.id})">
-          <span class="nav-sub-q">Q${t.question_num}</span>
+          <span class="nav-sub-q">${viewPhase === 'all' && t.phase === 'midterm' ? '중간 ' : ''}Q${t.question_num}</span>
           <span class="nav-sub-title">${esc(t.title)}</span>
         </button>
       `).join('');
@@ -4804,6 +4972,7 @@
       const cards = topics.map(t => {
         const resolution = resolveWinner(t.id, voteSummary, subMap);
         const chipClass = 'chip-' + t.chapter.charAt(0);
+        const phaseTag = (viewPhase === 'all' && t.phase === 'midterm') ? `<span class="phase-tag midterm">중간</span>` : '';
 
         if (resolution.kind === 'pinned' || (resolution.kind === 'vote' && !resolution.isTie)) {
           decidedCount++;
@@ -4811,7 +4980,7 @@
 
         if (resolution.kind === 'none') {
           return `<div class="result-card undecided" onclick="openTopic(${t.id})">
-            <span class="result-q ${chipClass}">Q${t.question_num} · ${t.chapter}</span>
+            <span class="result-q ${chipClass}">${phaseTag}Q${t.question_num} · ${t.chapter}</span>
             <h4>${esc(t.title)}</h4>
             <div class="result-no-votes">아직 선정되지 않았습니다</div>
           </div>`;
@@ -4836,7 +5005,7 @@
           : `<div class="rw-votes">최종 확정됨</div>`;
 
         return `<div class="${cardClasses}"${thumbAttr}${tvcfThumbAttr} onclick="openTopic(${t.id})">
-          <span class="result-q ${chipClass}">Q${t.question_num} · ${t.chapter}</span>${badge}
+          <span class="result-q ${chipClass}">${phaseTag}Q${t.question_num} · ${t.chapter}</span>${badge}
           <h4>${esc(t.title)}</h4>
           <div class="result-winner">
             <span class="rw-brand">${esc(winner.brand)}</span>
@@ -4847,9 +5016,10 @@
         </div>`;
       }).join('');
 
+      const totalTopics = topics.length || 1;
       document.getElementById('results-progress').innerHTML = `
-        <div class="results-progress-bar"><div class="results-progress-fill" style="width:${decidedCount * 10}%"></div></div>
-        <span class="results-progress-text">${decidedCount}/10 선정 완료</span>`;
+        <div class="results-progress-bar"><div class="results-progress-fill" style="width:${Math.round(decidedCount / totalTopics * 100)}%"></div></div>
+        <span class="results-progress-text">${decidedCount}/${topics.length} 선정 완료</span>`;
       document.getElementById('results-grid').innerHTML = cards;
       hydrateResultThumbnails();
     }
@@ -4899,6 +5069,7 @@
     }
 
     async function proposeRevision(topicId, submissionId, field) {
+      if (isReadOnlyTopic(topicId)) { toast('중간고사 자료는 읽기 전용입니다'); return; }
       const taAfter = document.getElementById(`rev-after-${submissionId}-${field}`);
       const inReason = document.getElementById(`rev-reason-${submissionId}-${field}`);
       if (!taAfter || !inReason) return;
@@ -5033,9 +5204,10 @@
     }
 
     async function getSubmissionsMap() {
+      // 제출물은 id가 전역 고유하므로 중간·기말 모두 담아도 충돌 없음. (uid는 별도 그룹핑 시 계산)
       const subMap = {};
       if (sb) {
-        const { data } = await sb.from('submissions').select('*').gte('created_at', ASSIGNMENT_START_ISO);
+        const { data } = await sb.from('submissions').select('*');
         (data || []).forEach(s => { subMap[s.id] = s; });
       } else {
         localSubmissions.forEach(s => { subMap[s.id] = s; });
@@ -5044,11 +5216,15 @@
     }
 
     async function getSubmissionsForTopic(topicId) {
+      const dbId = topicDbId(topicId);
+      const phase = topicPhase(topicId);
       if (sb) {
-        const { data } = await sb.from('submissions').select('*').eq('topic_id', topicId).gte('created_at', ASSIGNMENT_START_ISO).order('created_at');
+        const { data } = await applyPhaseRange(
+          sb.from('submissions').select('*').eq('topic_id', dbId), phase
+        ).order('created_at');
         return data || [];
       }
-      return localSubmissions.filter(s => s.topic_id === topicId);
+      return localSubmissions.filter(s => uidForSubmission(s.topic_id, s.created_at) === Number(topicId));
     }
 
     function resolveWinner(topicId, voteSummary, subMap) {
@@ -5070,6 +5246,7 @@
     }
 
     async function pinSubmission(topicId, submissionId) {
+      if (isReadOnlyTopic(topicId)) { toast('중간고사 자료는 읽기 전용입니다'); return; }
       let who = localStorage.getItem('imc-author');
       if (!who) {
         const name = prompt('최종 확정을 위해 이름을 입력하세요:');
@@ -5116,6 +5293,7 @@
     }
 
     async function saveDeepAnalysis(topicId, field, value) {
+      if (isReadOnlyTopic(topicId)) return;
       let who = localStorage.getItem('imc-author') || '익명';
       const current = deepAnalyses[topicId] || { topic_id: topicId, concept_deep: '', analysis_deep: '', presentation_note: '' };
       const updated = { ...current, [field]: value, updated_by: who, updated_at: new Date().toISOString(), topic_id: topicId };
@@ -5151,14 +5329,16 @@
       const voteSummary = await getAllVoteSummary();
       const subMap = await getSubmissionsMap();
 
-      // Group submissions by topic for the pin dropdown
+      // Group submissions by topic(uid) for the pin dropdown
       const byTopic = {};
       Object.values(subMap).forEach(s => {
-        if (!byTopic[s.topic_id]) byTopic[s.topic_id] = [];
-        byTopic[s.topic_id].push(s);
+        const uid = uidForSubmission(s.topic_id, s.created_at);
+        if (!byTopic[uid]) byTopic[uid] = [];
+        byTopic[uid].push(s);
       });
 
       const sections = topics.map(t => {
+        const ro = (t.phase === 'midterm');   // 중간고사: 읽기 전용
         const resolution = resolveWinner(t.id, voteSummary, subMap);
         const topicSubs = (byTopic[t.id] || []).slice().sort((a, b) =>
           new Date(a.created_at) - new Date(b.created_at)
@@ -5200,7 +5380,7 @@
                 <h4>${REV_FIELD_LABEL[field]} <button class="fts-section-copy" onclick="copyRevisionText('${w.id}','${field}')">원본 복사</button></h4>
                 <div class="rev-current ${hasContent ? '' : 'no-content'}">${hasContent ? esc(original).replace(/\n/g,'<br>') : '(내용 없음)'}</div>
                 <div class="rev-current-meta">${meta}</div>
-                <div class="rev-actions">
+                ${ro ? '' : `<div class="rev-actions">
                   <button class="btn-propose" onclick="toggleRevisionEditor('${w.id}','${field}')">수정 제안 추가</button>
                 </div>
                 <div class="rev-editor" id="rev-editor-${w.id}-${field}" style="display:none;">
@@ -5214,14 +5394,14 @@
                     <button class="btn-cancel" onclick="toggleRevisionEditor('${w.id}','${field}')">취소</button>
                     <button class="btn-save" onclick="proposeRevision(${t.id},'${w.id}','${field}')">제안 저장</button>
                   </div>
-                </div>
+                </div>`}
               </div>`;
           }).join('');
         }
 
         // 선정이 모두 완료되어 pin/unpin/타이브레이크 UI는 제거됨
 
-        const noteHtml = resolution.kind === 'none' ? '' : `
+        const noteHtml = (resolution.kind === 'none' || ro) ? '' : `
           <div class="rev-note-field">
             <label>팀 메모 · 발표 포인트 <span style="font-size:11px;color:var(--text-dim);font-weight:400;">(자동 저장, 공유)</span></label>
             <textarea data-topic="${t.id}" data-field="presentation_note" placeholder="발표 포인트 / 예상 질문 / 팀원 피드백 요약 등 자유롭게...">${esc(deep.presentation_note || '')}</textarea>
@@ -5231,9 +5411,9 @@
           </div>`;
 
         return `
-          <div class="final-topic-section" id="fts-${t.id}">
+          <div class="final-topic-section${ro ? ' is-readonly' : ''}" id="fts-${t.id}">
             <div class="fts-header">
-              <span class="fts-q">Q${t.question_num} · ${esc(t.chapter)}</span>
+              <span class="fts-q">${ro ? '<span class="phase-tag midterm">중간</span>' : ''}Q${t.question_num} · ${esc(t.chapter)}</span>
               <h3>${esc(t.title)}</h3>
               <details class="fts-desc-wrap">
                 <summary>문제 전문 보기</summary>
@@ -5403,7 +5583,7 @@
 
       const today = new Date().toLocaleDateString('ko-KR');
       const lines = [];
-      lines.push(`# IMC 기말 팀 과제 — 최종 선정 광고 문서`);
+      lines.push(`# IMC ${PHASE_LABEL[viewPhase]} 팀 과제 — 최종 선정 광고 문서`);
       lines.push('');
       lines.push(`_작성일: ${today}_`);
       lines.push('');
@@ -5861,7 +6041,7 @@
         if (sub.topic_id === currentTopicId) continue;
         const sBrand = normStr(sub.brand);
         const sCampaign = normStr(sub.campaign);
-        const topic = topics.find(t => t.id === sub.topic_id);
+        const topic = topicMeta(uidForSubmission(sub.topic_id, sub.created_at));
         const qLabel = `위키 Q${topic?.question_num || '?'}`;
 
         if (watchUrl && sub.watch_url && watchUrl === sub.watch_url) {
@@ -6481,7 +6661,7 @@
         btn.disabled = false; btn.textContent = 'AI 평가'; return;
       }
 
-      const topic = topics.find(t => t.id === sub.topic_id);
+      const topic = topicMeta(uidForSubmission(sub.topic_id, sub.created_at));
       if (!topic) {
         evalInProgress = false;
         btn.disabled = false; btn.textContent = 'AI 평가'; return;
@@ -6722,11 +6902,14 @@
       if (ok) {
         await loadTopics();
         subscribeRealtime();
+      } else {
+        rebuildTopics();
       }
+      updatePhaseToggleUI();
       await renderDashboard();
 
       let initialRoute = readRouteFromLocation();
-      if (initialRoute.view === 'topic' && !topics.some(t => t.id === initialRoute.topicId)) {
+      if (initialRoute.view === 'topic' && !TOPIC_META.has(Number(initialRoute.topicId))) {
         initialRoute = { view: 'tab', tab: 'topics' };
       }
       writeRoute(initialRoute, { replace: true });
