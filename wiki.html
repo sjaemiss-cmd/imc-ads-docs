@@ -620,7 +620,7 @@
       text-transform: uppercase; letter-spacing: 0.6px;
       padding: 4px 10px 8px;
     }
-    .sidebar-main { min-height: 0; display: flex; flex-direction: column; flex: 1; }
+    .sidebar-main { min-height: 0; display: flex; flex-direction: column; flex: 1; overflow-y: auto; overflow-x: hidden; }
     .sidebar-nav { display: flex; flex-direction: column; gap: 2px; }
 
     /* 과제 단계 토글 (기말 / 중간 / 전체) */
@@ -815,6 +815,14 @@
     .result-card.has-thumb .rw-campaign { color: rgba(255,255,255,.84); }
     .result-winner .rw-votes { font-size: 13px; color: var(--success); font-weight: 600; margin-top: 6px; }
     .result-card.has-thumb .rw-votes { color: #b9f2c6; }
+    /* 동점·미선정 등 실제 썸네일이 없을 때도 카드 배경을 채워 그리드를 정돈 */
+    .result-card.no-thumb-fill {
+      min-height: 210px;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      background:
+        radial-gradient(130% 90% at 100% 0%, var(--surface-hover) 0%, transparent 58%),
+        linear-gradient(180deg, var(--surface-muted) 0%, var(--surface-alt) 100%);
+    }
     .result-no-votes { font-size: 14px; color: var(--text-faint); font-style: italic; padding: 10px 0; }
     .results-progress {
       margin-bottom: 22px; padding: 18px 24px; border-radius: 14px;
@@ -4968,35 +4976,50 @@
       const subMap = await getSubmissionsMap();
       await loadFinalSelections();
 
+      // 주제(uid)별 제출물 — 미선정/동점 카드도 후보 썸네일로 배경을 채우기 위함
+      const subsByUid = {};
+      Object.values(subMap).forEach(s => {
+        const uid = uidForSubmission(s.topic_id, s.created_at);
+        (subsByUid[uid] = subsByUid[uid] || []).push(s);
+      });
+      const isThumbable = s => !!(s && s.watch_url && (getAdThumbnailUrl(s.watch_url) || getTvcfIdFromUrl(s.watch_url)));
+      // 우선 winner 본인, 없으면 썸네일 가능한 아무 후보, 그래도 없으면 첫 후보
+      const pickThumbSub = (uid, preferred) => {
+        if (isThumbable(preferred)) return preferred;
+        const list = subsByUid[uid] || [];
+        return list.find(isThumbable) || preferred || list[0] || null;
+      };
+
       let decidedCount = 0;
       const cards = topics.map(t => {
         const resolution = resolveWinner(t.id, voteSummary, subMap);
         const chipClass = 'chip-' + t.chapter.charAt(0);
         const phaseTag = (viewPhase === 'all' && t.phase === 'midterm') ? `<span class="phase-tag midterm">중간</span>` : '';
+        const winner = resolution.submission || null;
+        const isDecided = resolution.kind === 'pinned' || (resolution.kind === 'vote' && !resolution.isTie);
+        if (isDecided) decidedCount++;
 
-        if (resolution.kind === 'pinned' || (resolution.kind === 'vote' && !resolution.isTie)) {
-          decidedCount++;
-        }
+        // 썸네일 소스: 선정작은 본인 썸네일, 동점/미선정은 아무 후보나 가져와 배경을 채운다
+        const thumbSub = isDecided ? winner : pickThumbSub(t.id, winner);
+        const thumbnail = thumbSub ? getAdThumbnailUrl(thumbSub.watch_url) : null;
+        const tvcfId = (thumbSub && !thumbnail) ? getTvcfIdFromUrl(thumbSub.watch_url) : null;
+        const hasThumb = !!(thumbnail || tvcfId);
+        const thumbAttr = thumbnail ? ` data-result-thumb="${esc(thumbnail)}"` : '';
+        const tvcfThumbAttr = tvcfId ? ` data-tvcf-thumb-id="${esc(tvcfId)}"` : '';
+        const cardClasses = [
+          'result-card',
+          isDecided ? 'decided' : 'undecided',
+          hasThumb ? 'has-thumb' : 'no-thumb-fill',
+        ].join(' ');
 
         if (resolution.kind === 'none') {
-          return `<div class="result-card undecided" onclick="openTopic(${t.id})">
+          return `<div class="${cardClasses}"${thumbAttr}${tvcfThumbAttr} onclick="openTopic(${t.id})">
             <span class="result-q ${chipClass}">${phaseTag}Q${t.question_num} · ${t.chapter}</span>
             <h4>${esc(t.title)}</h4>
             <div class="result-no-votes">아직 선정되지 않았습니다</div>
           </div>`;
         }
 
-        const winner = resolution.submission;
-        const isDecided = resolution.kind === 'pinned' || !resolution.isTie;
-        const thumbnail = isDecided ? getAdThumbnailUrl(winner.watch_url) : null;
-        const tvcfId = isDecided && !thumbnail ? getTvcfIdFromUrl(winner.watch_url) : null;
-        const cardClasses = [
-          'result-card',
-          isDecided ? 'decided' : 'undecided',
-          thumbnail ? 'has-thumb' : '',
-        ].filter(Boolean).join(' ');
-        const thumbAttr = thumbnail ? ` data-result-thumb="${esc(thumbnail)}"` : '';
-        const tvcfThumbAttr = tvcfId ? ` data-tvcf-thumb-id="${esc(tvcfId)}"` : '';
         const badge = resolution.kind === 'pinned'
           ? `<span class="fw-badge pinned" style="font-size:10px;padding:2px 6px;border-radius:6px;background:var(--amber-soft);color:var(--amber);font-weight:700;margin-left:4px;">PIN</span>`
           : '';
